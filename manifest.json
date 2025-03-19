@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "TabCycle",
+    "version": "1.0",
+    "description": "Cycles through open tabs at a set time interval.",
+    "permissions": ["tabs"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "TabCycle"
+    },
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+  }
+}
