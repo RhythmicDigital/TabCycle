@@ -3,7 +3,7 @@
     "name": "TabCycle",
     "version": "1.0",
     "description": "Cycles through open tabs at a set time interval.",
-    "permissions": ["tabs"],
+    "permissions": [],
     "background": {
         "service_worker": "background.js"
     },
