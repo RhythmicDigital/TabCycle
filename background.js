@@ -1,5 +1,12 @@
 let intervalId = null;
-let intervalSeconds = 5; // Default interval in seconds
+let intervalSeconds = 5; // Default value
+
+chrome.storage.local.set({ intervalSeconds });
+
+function updateInterval(newInterval) {
+  intervalSeconds = newInterval;
+  chrome.storage.local.set({ intervalSeconds }); // Save to storage
+}
 
 // Function to cycle through tabs
 async function cycleTabs() {
@@ -36,5 +43,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } else if (message.command === "stop") {
         stopCycling();
     }
+    if (message.action === "setInterval") {
+        updateInterval(message.value);
+        sendResponse({ success: true });
+      }
     sendResponse({ success: true });
 });
