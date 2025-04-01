@@ -1,5 +1,5 @@
 let intervalId = null;
-let intervalSeconds = 5; // Default value
+let intervalSeconds = 15; // Default value
 
 chrome.storage.local.set({ intervalSeconds });
 
