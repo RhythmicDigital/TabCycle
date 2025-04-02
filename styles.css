@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: left;
+}
+
+h1 {
+    color: #007bff;
+    text-align: center;
+}
+
+p {
+    line-height: 1.6;
+}
+
+kbd {
+    background-color: #eee;
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}

@@ -11,6 +11,12 @@
         "default_popup": "popup.html",
         "default_title": "TabCycle"
     },
+    "web_accessible_resources": [
+        {
+        "resources": ["styles.css"],
+        "matches": ["<all_urls>"]
+        }
+    ],
     "icons": {
         "16": "icon16.png",
         "48": "icon48.png",

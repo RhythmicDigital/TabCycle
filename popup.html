@@ -1,29 +1,21 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Tab Cycle</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 10px;
-            }
-            button {
-                margin: 5px;
-                padding: 10px;
-            }
-            input {
-                width: 50px;
-
-            }
-        </style>
-    </head>
-    <body>
-        <h3>Tab Cycle</h3>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TabCycle</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <h3>TabCycle</h3>
         <label for="interval">Interval (seconds):</label>
-        <input id="interval" type="number" min="1" />
-        <button id="start">Start</button>
-        <button id="stop">Stop</button>
-
-        <script src="popup.js"></script>
-    </body>
+        <input id="interval" type="number" min="1" value="15">
+        <div class="button-group">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
 </html>

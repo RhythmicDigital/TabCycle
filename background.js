@@ -3,6 +3,14 @@ let intervalSeconds = 15; // Default value
 
 chrome.storage.local.set({ intervalSeconds });
 
+chrome.runtime.onInstalled.addListener(({reason}) => {
+    if (reason === 'install') {z
+        chrome.tabs.create({
+            url: 'onboarding.html'
+        });
+    }
+});
+
 function updateInterval(newInterval) {
   intervalSeconds = newInterval;
   chrome.storage.local.set({ intervalSeconds }); // Save to storage
