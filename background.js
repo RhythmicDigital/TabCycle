@@ -4,7 +4,7 @@ let intervalSeconds = 15; // Default value
 chrome.storage.local.set({ intervalSeconds });
 
 chrome.runtime.onInstalled.addListener(({reason}) => {
-    if (reason === 'install') {z
+    if (reason === 'install') {
         chrome.tabs.create({
             url: 'onboarding.html'
         });
@@ -26,10 +26,14 @@ async function cycleTabs() {
     chrome.tabs.update(tabs[nextTabIndex].id, { active: true});
 }
 
+function setIntervalId(handler, interval) {
+    intervalId = setInterval(handler, interval * 1000);
+}
+
 // Start cycling
 function startCycling() {
     if (!intervalId) {
-        intervalId = setInterval(cycleTabs, intervalSeconds * 1000);
+        setIntervalId(cycleTabs, intervalSeconds);
         console.log(`Started cycling every ${intervalSeconds} seconds.`);
     }
 }
@@ -53,6 +57,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
     if (message.action === "setInterval") {
         updateInterval(message.value);
+        stopCycling();
+        startCycling();
         sendResponse({ success: true });
       }
     sendResponse({ success: true });
