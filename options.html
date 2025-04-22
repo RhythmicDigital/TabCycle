@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Scheduled Tab Options</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div id="toast" class="toast">Saved!</div>
+  <h1>TabCycle Options</h1>
+  <h2>Current Scheduled Tab Configurations</h2>
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+    <button id="save-all">💾 Save</button>
+    <span style="font-size: 1em; color: black;">Changes are saved automatically.</span>
+  </div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Active</th>
+        <th>Name</th>
+        <th>URL</th>
+        <th>Time & Days</th>
+        <th>Auto-Close (sec)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+      <tbody id="schedule-body">
+    </tbody>
+  </table>
+  
+  <button id="add-schedule">➕ Add New Tab</button>
+
+  <script src="options.js"></script>
+</body>
+</html>

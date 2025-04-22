@@ -6,16 +6,46 @@
     <title>TabCycle</title>
     <link rel="stylesheet" href="popup.css">
 </head>
+<style>
+    body {
+      width: 500px;
+      max-width: 100%;
+      padding: 10px;
+    }
+</style>
 <body>
     <div class="container">
-        <h3>TabCycle</h3>
-        <label for="interval">Interval (seconds):</label>
+        <h1>TabCycle <span id="version" style="font-size: 0.6em; opacity: 0.7;"></span></h1>
+        <label for="interval">Cycle Interval (in seconds):</label>
         <input id="interval" type="number" min="1" value="15">
         <div class="button-group">
-            <button id="start">Start</button>
-            <button id="stop">Stop</button>
-        </div>
+            <button id="toggle-cycle">
+                <span id="toggle-icon">▶️</span> <span id="toggle-text">Start</span>
+              </button>
+          </div>
     </div>
+
+    <h2 style="display: flex; justify-content: space-between; align-items: center; margin-top: 1em;">
+        Scheduled Tabs
+        <button class="popup-button small" id="preview">Open All</button>
+    </h2>
+  <div id="schedule-list"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>Active</th>
+        <th>Name</th>
+        <th>Date & Time to Open</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="popup-table-body"></tbody>
+  </table>
+  
+  <div class="popup-buttons">
+    <button class="popup-button large" id="options">Configure Tabs</button>
+  </div>
+
     <script src="popup.js"></script>
 </body>
 </html>
