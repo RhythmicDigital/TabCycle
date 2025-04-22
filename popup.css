@@ -1,65 +1,241 @@
 body {
     font-family: Arial, sans-serif;
-    width: 200px;  /* Sets a fixed width for the popup */
+    width: 100%;
+    max-width: 330px;
     padding: 15px;
-    background-color: #f8f9fa;
+    background-color: #f9f9f9;
     text-align: center;
-}
+    box-sizing: border-box;
+  }
+  
+  /* Main container spacing with animation */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: clamp(1rem, 4vw, 2rem);
+    transition: margin-bottom 0.4s ease;
+  }
+  
+  h1 {
+    color: #007bff;
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  h2 {
+    text-align: left;
+    font-size: 1.2rem;
+    margin-top: clamp(0.5rem, 2vw, 1rem);
+    margin-bottom: 0.5rem;
+    transition: margin 0.15s ease;
+    opacity: 0;
+    animation: fadeSlideUp 0.2s ease forwards;
+    animation-delay: 0.05s;
+  }
+  
+  label {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  input {
+    font-size: 0.9em;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
 
-.container {
+  #interval {
+    width: 80px;
+    max-width: 100%;
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  #toggle-cycle {
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1em;
+  }
+  
+  #toggle-cycle.started {
+    background-color: #dc3545; /* Red */
+  }
+  
+  #toggle-cycle.started:hover {
+    background-color: #c82333;
+  }
+  
+  #toggle-cycle.stopped {
+    background-color: #28a745; /* Green */
+  }
+  
+  #toggle-cycle.stopped:hover {
+    background-color: #218838;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.2rem;
+    transition: margin-bottom 0.4s ease;
+  }
+  
+  button {
+    padding: 0.4em 0.8em;
+    border: none;
+    background: #007acc;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #005fa3;
+  }
+  
+  
+  /* Start/Stop Buttons */
+  #start {
+    background-color: #28a745;
+    color: white;
+  }
+  #start:hover {
+    background-color: #218838;
+  }
+  #stop {
+    background-color: #dc3545;
+    color: white;
+  }
+  #stop:hover {
+    background-color: #c82333;
+  }
+  
+  /* Scheduled Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1em;
+    opacity: 0;
+    animation: fadeSlideUp 0.2s ease forwards;
+    animation-delay: 0.1s;
+  }
+  th, td {
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  th {
+    background-color: #003366;
+    color: white;
+    font-weight: 600;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  tbody tr:hover {
+    background-color: #e0eaff;
+  }
+  
+  /* Scheduled Entry */
+  .schedule-entry {
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .schedule-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  /* Day Buttons */
+  .days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    margin-top: 0.4em;
+  }
+  .days label {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+  }
+  
+  /* Popup Buttons */
+  .popup-buttons {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-h3 {
-    color: #007bff;
-    margin-bottom: 10px;
-}
-
-label {
+    margin-top: 1em;
+  }
+  .popup-button {
+    width: 160px;
+    padding: 8px;
+    margin: 5px 0;
     font-size: 14px;
-    margin-bottom: 5px;
-}
-
-input {
-    width: 60px;
-    padding: 5px;
-    font-size: 14px;
-    text-align: center;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.button-group {
-    display: flex;
-    gap: 10px;
-}
-
-button {
-    padding: 8px 15px;
+    cursor: pointer;
+  }
+  .popup-button.small {
+    width: 16%;
+    font-size: 0.75em;
+    padding: 4px 8px;
+  }
+  .popup-button.large {
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s ease;
-}
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+  }
+  .popup-button.large:hover {
+    background-color: #1d4fa1;
+  }
+  .popup-button.large svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+  }
 
-#start {
-    background-color: #28a745;
-    color: white;
-}
-
-#start:hover {
-    background-color: #218838;
-}
-
-#stop {
-    background-color: #dc3545;
-    color: white;
-}
-
-#stop:hover {
-    background-color: #c82333;
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

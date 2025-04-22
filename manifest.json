@@ -1,9 +1,10 @@
 {
     "manifest_version": 3,
     "name": "TabCycle",
-    "version": "1.1.1",
-    "description": "Cycles through open tabs at a set time interval.",
-    "permissions": ["storage"],
+    "version": "2.0.0",
+    "description": "Cycles through open tabs at a set time interval, and schedules tabs to open at specific dates/times, with per-tab scheduling.",
+    "permissions": ["storage", "alarms", "tabs", "scripting"],
+    "host_permissions": ["<all_urls>"],
     "background": {
         "service_worker": "background.js"
     },
@@ -16,12 +17,17 @@
             "128": "icons/icon128.png"
         }
     },
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": true
+    },
     "web_accessible_resources": [
         {
         "resources": ["styles.css"],
         "matches": ["<all_urls>"]
         }
     ],
+    "options_page": "options.html",
     "icons": {
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",

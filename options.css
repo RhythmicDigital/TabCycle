@@ -1,0 +1,186 @@
+body {
+    font-family: sans-serif;
+    padding: 1em 2em;
+    max-width: 1000px;
+    margin: auto;
+    background: #f9f9f9;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 1em;
+    text-align: center;
+    opacity: 1;
+}
+h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+    text-align: center;
+    opacity: 1;
+}
+.schedule-entry {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 1em;
+    margin-bottom: 1em;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    display: grid;
+    grid-template-columns: 2fr 1fr auto auto;
+    gap: 1em;
+    align-items: center;
+}
+
+.schedule-entry input[type="url"] {
+    width: 100%;
+}
+
+.schedule-entry input[type="time"],
+.schedule-entry input[type="number"] {
+    width: 100%;
+}
+
+.schedule-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+button {
+    padding: 0.4em 0.8em;
+    border: none;
+    background: #007acc;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #005fa3;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 22px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+    background-color: #007acc;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.autofocus {
+    font-size: 0.85em;
+    margin-top: 0.5em;
+}
+
+table {
+  width: 105%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1em;
+  opacity: 1;
+}
+
+th, td {
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid #ddd; /* ✅ Adds lines between columns and rows */
+  }
+
+th {
+  background-color: #003366; /* ✅ Dark blue */
+  color: white;
+  font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* ✅ Alternating row color */
+}
+  
+tbody tr:hover {
+    background-color: #e0eaff; /* ✅ Hover highlight effect */
+}
+
+input[type="url"], input[type="text"], input[type="time"], input[type="number"] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    margin-top: 0.4em;
+}
+
+.days label {
+  background: #eee;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8em;
+}
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.5em; /* or use px like 24px */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+    z-index: 9999;
+  }
+.toast.show {
+    opacity: 1;
+}
+
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
