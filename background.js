@@ -39,6 +39,11 @@ function startCycling() {
         setIntervalId(cycleTabs, intervalSeconds);
         console.log(`Started cycling every ${intervalSeconds} seconds.`);
         isCycling = true;
+        chrome.action.setIcon({   path: {
+            16: "icons/pause16.png",
+            48: "icons/pause48.png",
+            128: "icons/pause128.png"
+        } });   
     }
 }
 
@@ -49,6 +54,11 @@ function stopCycling() {
         intervalId = null;
         console.log("Stopped cycling.");
         isCycling = false;
+        chrome.action.setIcon({   path: {
+            16: "icons/play16.png",
+            48: "icons/play48.png",
+            128: "icons/play128.png"
+        } }); 
     }
 }
 

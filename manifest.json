@@ -11,9 +11,9 @@
         "default_popup": "popup.html",
         "default_title": "TabCycle",
         "default_icon": {
-            "16": "icons/icon16.png",
-            "48": "icons/icon48.png",
-            "128": "icons/icon128.png"
+            "16": "icons/play16.png",
+            "48": "icons/play48.png",
+            "128": "icons/play128.png"
         }
     },
     "options_ui": {
@@ -22,8 +22,8 @@
     },
     "options_page": "options.html",
     "icons": {
-        "16": "icons/icon16.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
+        "16": "icons/play16.png",
+        "48": "icons/play48.png",
+        "128": "icons/play128.png"
   }
 }
