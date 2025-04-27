@@ -3,6 +3,8 @@ let intervalId = null;
 let intervalSeconds = 15; // Default value
 let isCycling = false;
 let cyclingPaused = false;
+let badgeCountdownInterval = null;
+let cycleStartTime = null;
 
 chrome.storage.local.set({ intervalSeconds });
 
@@ -15,8 +17,8 @@ chrome.runtime.onInstalled.addListener(({reason}) => {
 });
 
 function updateInterval(newInterval) {
-  intervalSeconds = newInterval;
-  chrome.storage.local.set({ intervalSeconds }); // Save to storage
+    intervalSeconds = newInterval;
+    chrome.storage.local.set({ intervalSeconds }); // Save to storage
 }
 
 // Function to cycle through tabs
@@ -33,7 +35,6 @@ function setIntervalId(handler, interval) {
     intervalId = setInterval(handler, interval * 1000);
 }
 
-// Start cycling
 function startCycling() {
     if (!intervalId) {
         setIntervalId(cycleTabs, intervalSeconds);
@@ -43,11 +44,24 @@ function startCycling() {
             16: "icons/pause16.png",
             48: "icons/pause48.png",
             128: "icons/pause128.png"
-        } });   
+        } });
+
+        // Record the start time
+        cycleStartTime = Date.now();
+
+        // Start badge countdown updater
+        badgeCountdownInterval = setInterval(() => {
+            const elapsedMs = Date.now() - cycleStartTime;
+            const elapsedSeconds = Math.floor(elapsedMs / 1000);
+            const remaining = intervalSeconds - (elapsedSeconds % intervalSeconds);
+
+            let display = remaining.toString();
+
+            chrome.action.setBadgeText({ text: display });
+        }, 200);
     }
 }
 
-// Stop cycling
 function stopCycling() {
     if (intervalId) {
         clearInterval(intervalId);
@@ -59,6 +73,12 @@ function stopCycling() {
             48: "icons/play48.png",
             128: "icons/play128.png"
         } }); 
+
+        if (badgeCountdownInterval) {
+            clearInterval(badgeCountdownInterval);
+            badgeCountdownInterval = null;
+        }
+        chrome.action.setBadgeText({ text: '' });
     }
 }
 
@@ -84,7 +104,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // Tab Scheduling
 function padTime(num) {
     return num.toString().padStart(2, '0');
-  }
+}
   
 function scheduleTabs(alarm) {
     const now = new Date();
