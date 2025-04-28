@@ -163,10 +163,12 @@ function scheduleTabs(alarm) {
         const entry = res.schedules?.[index];
 
             if (entry) {
-                // Pause cycling
-                if (isCycling) {
-                    stopCycling();
-                    cyclingPaused = true;
+                if (entry.autoclose > 0) {
+                    // Pause cycling
+                    if (isCycling) {
+                        stopCycling();
+                        cyclingPaused = true;
+                    }
                 }
                 if (
                     entry.enabled &&
@@ -188,6 +190,17 @@ function scheduleTabs(alarm) {
                                 const disableAlarmName = `autodisable-${index}`;
                                 chrome.alarms.create(disableAlarmName, {
                                     when: alarmDate.getTime()
+                                });
+                            }
+                        } else {
+                            if (entry.autoclose <= 0 && entry.cycleInterval && entry.cycleInterval > 0) {
+                                chrome.storage.local.get("tabIntervals", (res) => {
+                                    const updatedIntervals = res.tabIntervals || {};
+                                    updatedIntervals[tab.id] = entry.cycleInterval;
+                                    chrome.storage.local.set({ tabIntervals: updatedIntervals });
+                                    
+                                    stopCycling();
+                                    startCycling();
                                 });
                             }
                         }
