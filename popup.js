@@ -106,7 +106,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const nextOpenCell = document.createElement("td");
       const nextOpenText = document.createElement("span");
       let openText = getNextOpenDate(entry) != "Not scheduled" ? `Open on ${getNextOpenDate(entry)}` : `${getNextOpenDate(entry)}`;
-      nextOpenText.innerHTML = `${openText}. Display for <strong>${entry.autoclose} seconds</strong>.`;
+      let displayText = entry.autoclose <= 0 ? `Auto-close off – will display until cycled` : `Display for <strong>${entry.autoclose} seconds</strong>}`;
+      nextOpenText.innerHTML = `${openText}. ${displayText}.`;
       nextOpenCell.appendChild(nextOpenText);
       row.appendChild(nextOpenCell);
 
