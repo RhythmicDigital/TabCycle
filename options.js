@@ -3,6 +3,81 @@ const addButton = document.getElementById("add-schedule");
 const saveAllButton = document.getElementById("save-all");
 
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const tabIntervalsBody = document.getElementById("tab-intervals-body");
+
+window.addEventListener('load', function() {
+    chrome.storage.local.get(["schedules", "scrollPosition"], (res) => {
+        const savedScrollPosition = res.scrollPosition;
+
+        // Restore the page scroll position
+        window.scrollTo(0, savedScrollPosition);
+
+        const schedules = res.schedules || [];
+        schedules.forEach((sched, i) => createScheduleEntry(sched, i)); // Create schedule entries
+        loadTabIntervals();
+    });  
+});
+
+function loadTabIntervals() {
+    chrome.tabs.query({}, (tabs) => {
+        chrome.storage.local.get("tabIntervals", (res) => {
+            const tabIntervals = res.tabIntervals || {};
+
+            tabs.forEach(tab => {
+                const row = document.createElement("tr");
+
+                // Active (favicon + active status)
+                const activeCell = document.createElement("td");
+                const favicon = document.createElement("img");
+                favicon.src = tab.favIconUrl || "";
+                favicon.style.width = "16px";
+                favicon.style.height = "16px";
+                favicon.style.verticalAlign = "middle";
+                activeCell.appendChild(favicon);
+                row.appendChild(activeCell);
+
+                // Title
+                const titleCell = document.createElement("td");
+                titleCell.textContent = tab.title || "Untitled";
+                row.appendChild(titleCell);
+
+                // URL
+                const urlCell = document.createElement("td");
+                urlCell.textContent = tab.url || "";
+                row.appendChild(urlCell);
+
+                // Cycle Interval input
+                const intervalCell = document.createElement("td");
+                const intervalInput = document.createElement("input");
+                intervalInput.type = "number";
+                intervalInput.min = "1";
+                intervalInput.placeholder = "Seconds";
+                intervalInput.value = tabIntervals[tab.id] || "";
+                intervalInput.style.width = "80px";
+
+                intervalInput.addEventListener("input", debounce(() => {
+                    chrome.storage.local.get("tabIntervals", (res) => {
+                        const updatedIntervals = res.tabIntervals || {};
+                        const newInterval = parseInt(intervalInput.value);
+                        if (isNaN(newInterval) || newInterval <= 0) {
+                            delete updatedIntervals[tab.id];
+                        } else {
+                            updatedIntervals[tab.id] = newInterval;
+                        }
+                        chrome.storage.local.set({ tabIntervals: updatedIntervals }, () => {
+                            showSavedMessage();
+                        });
+                    });
+                }, 500));
+
+                intervalCell.appendChild(intervalInput);
+                row.appendChild(intervalCell);
+
+                tabIntervalsBody.appendChild(row);
+            });
+        });
+    });
+}
 
 function showSavedMessage() {
     const toast = document.getElementById("toast");
@@ -24,17 +99,18 @@ function debounce(func, delay) {
 }
 
 function createScheduleEntry(data = {
-    enabled: true,
-    name: "",
-    url: "",
-    time: "08:00",
-    days: [],
-    autoclose: 0,
-    autodisable: false,
-    focus: false
+        enabled: true,
+        name: "",
+        url: "",
+        time: "08:00",
+        days: [],
+        autoclose: 0,
+        autodisable: false,
+        focus: false,
+        cycleInterval: 0 // Add cycle interval to data
     }, index = null) {
     const row = document.createElement("tr");
-
+        
     // Active toggle
     const activeCell = document.createElement("td");
     const toggleEnabled = document.createElement("label");
@@ -118,6 +194,18 @@ function createScheduleEntry(data = {
 
     row.appendChild(autocloseCell);
 
+    // Cycle Interval
+    const cycleIntervalCell = document.createElement("td");
+    const cycleIntervalInput = document.createElement("input");
+    cycleIntervalInput.type = "number";
+    cycleIntervalInput.placeholder = "Cycle Interval (s)";
+    cycleIntervalInput.value = data.cycleInterval || 0;  // Default to 0 if no interval is provided
+    cycleIntervalInput.style.width = "50%";
+    cycleIntervalCell.appendChild(cycleIntervalInput);
+    cycleIntervalCell.style.width = "90px";
+
+    row.appendChild(cycleIntervalCell);
+    
     const save = (index, updatedEntry) => {
         chrome.storage.local.get("schedules", (res) => {
             const schedules = res.schedules || [];
@@ -128,6 +216,13 @@ function createScheduleEntry(data = {
             }
             chrome.storage.local.set({ schedules }, () => {
                 showSavedMessage();
+                
+                // Notify background.js to update cycling behavior
+                chrome.runtime.sendMessage({
+                    action: "setTabInterval",
+                    tabId: tab.id,
+                    interval: newInterval
+                });
             });
         });
     }
@@ -140,13 +235,15 @@ function createScheduleEntry(data = {
             if (index != null && index < schedules.length) {
                 schedules[index] = updatedEntry;
             }
-    
-            chrome.storage.local.set({ schedules }, () => {
+            chrome.storage.local.set({ 
+                schedules, 
+                
+            }, () => {
                 showSavedMessage();
             });
         });
     }, 1000);
-    
+
     // Event listeners for automatic saving
     const updateSchedule = () => {
         const days = [...daysDiv.querySelectorAll("input:checked")].map(cb => parseInt(cb.dataset.index));
@@ -158,7 +255,8 @@ function createScheduleEntry(data = {
             autoclose: parseInt(autocloseInput.value) || 0,
             enabled: toggleEnabled.querySelector("input").checked,
             focus: autofocusInput.checked,
-            autodisable: autodisableInput.checked
+            autodisable: autodisableInput.checked,
+            cycleInterval: parseInt(cycleIntervalInput.value) || 0  // Include cycle interval here
         };
         
         debouncedSave(index, newData);
@@ -171,6 +269,7 @@ function createScheduleEntry(data = {
     autocloseInput.addEventListener("input", updateSchedule);
     autofocusInput.addEventListener("change", updateSchedule);
     autodisableInput.addEventListener("change", updateSchedule);
+    cycleIntervalInput.addEventListener("input", updateSchedule);
     daysDiv.querySelectorAll("input").forEach(checkbox => {
         checkbox.addEventListener("change", updateSchedule);
     });
@@ -187,7 +286,11 @@ function createScheduleEntry(data = {
         const schedules = res.schedules || [];
         if (index !== null) {
             schedules.splice(index, 1);
-            chrome.storage.local.set({ schedules }, () => location.reload());
+
+            chrome.storage.local.set({ 
+                schedules, 
+                scrollPosition: document.body.scrollTop
+            }, () => location.reload());
         }
         });
     };
@@ -197,11 +300,6 @@ function createScheduleEntry(data = {
 
     document.querySelector("#schedule-body").appendChild(row);
 }
-
-chrome.storage.local.get("schedules", (res) => {
-    const schedules = res.schedules || [];
-    schedules.forEach((sched, i) => createScheduleEntry(sched, i));
-});
 
 addButton.onclick = () => {
     chrome.storage.local.get("schedules", (res) => {
@@ -216,7 +314,10 @@ addButton.onclick = () => {
             autodisable: false,
             focus: false
         });
-        chrome.storage.local.set({ schedules }, () => {
+        chrome.storage.local.set({ 
+            schedules, 
+            scrollPosition: document.body.scrollTop
+        }, () => {
             location.reload(); // Ensures the new entry is indexed properly
         });
     });
@@ -238,11 +339,15 @@ saveAllButton.onclick = () => {
         const dayCheckboxes = row.querySelectorAll("td:nth-child(4) .days input[type='checkbox']");
         const days = [...dayCheckboxes].filter(cb => cb.checked).map(cb => parseInt(cb.dataset.index));
         const autoclose = parseInt(row.querySelector("td:nth-child(5) input").value) || 0;
-        
-        updatedSchedules.push({ enabled, name, url, time, days, autoclose, focus, autodisable });
-    });
+        const cycleInterval = parseInt(row.querySelector("td:nth-child(6) input").value) || 0;  // Get cycle interval value
 
-    chrome.storage.local.set({ schedules: updatedSchedules }, () => {
+        updatedSchedules.push({ enabled, name, url, time, days, autoclose, focus, autodisable, cycleInterval });
+    });
+    
+    chrome.storage.local.set({ 
+        schedules: updatedSchedules,
+        
+    }, () => {
         showSavedMessage();
     });
 };

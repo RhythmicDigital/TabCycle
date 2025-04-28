@@ -1,36 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>Scheduled Tab Options</title>
-  <link rel="stylesheet" href="options.css" />
+<meta charset="utf-8" />
+<title>TabCycle Settings</title>
+<link rel="stylesheet" href="options.css" />
 </head>
 <body>
-  <div id="toast" class="toast">Saved!</div>
-  <h1>TabCycle Options</h1>
-  <h2>Current Scheduled Tab Configurations</h2>
-  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-    <button id="save-all">💾 Save</button>
-    <span style="font-size: 1em; color: black;">Changes are saved automatically.</span>
-  </div>
-  
-  <table>
-    <thead>
-      <tr>
-        <th>Active</th>
-        <th>Name</th>
-        <th>URL</th>
-        <th>Time & Days</th>
-        <th>Auto-Close (sec)</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-      <tbody id="schedule-body">
-    </tbody>
-  </table>
-  
-  <button id="add-schedule">➕ Add New Tab</button>
+<div id="toast" class="toast">Saved!</div>
+<h1>TabCycle Settings</h1>
+<div id="scheduled-tabs-container">
+    <h2>Scheduled Tab Configurations</h2>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <button id="save-all">💾 Save</button>
+        <span style="font-size: 1em; color: black;">Changes are saved automatically.</span>
+    </div>
+    <table id="scheduled-tabs">
+        <thead>
+        <tr>
+            <th>Active</th>
+            <th>Name</th>
+            <th>URL</th>
+            <th>Time & Days</th>
+            <th>Auto-Close (seconds)</th>
+            <th>Cycle Interval (seconds)</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="schedule-body">
+        </tbody>
+    </table>
+</div>
+<button id="add-schedule">➕ Add New Tab</button>
+<hr>
+<div id="tab-intervals-container">
+    <h2>Tab Cycling Configurations</h2>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <span style="text-align: right; font-size: 1em; color: black;">Empty cycle intervals will be set to the default cycle interval.</span>
+    </div>
+        <div class="table-scroll">
+            <table id="tab-intervals">
+                <thead>
+                    <tr>
+                    <th>Icon</th>
+                    <th>Title</th>
+                    <th>URL</th>
+                    <th>Cycle Interval (seconds)</th>
+                    </tr>
+                </thead>
+                <tbody id="tab-intervals-body"></tbody>
+            </table>
+        </div>
+    </div>
 
-  <script src="options.js"></script>
+<script src="options.js"></script>
 </body>
 </html>

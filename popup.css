@@ -1,234 +1,342 @@
 body {
-    font-family: Arial, sans-serif;
-    width: 100%;
-    max-width: 330px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    text-align: center;
-    box-sizing: border-box;
-  }
-  
-  /* Main container spacing with animation */
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: clamp(1rem, 4vw, 2rem);
-    transition: margin-bottom 0.4s ease;
-  }
-  
-  h1 {
-    color: #007bff;
-    text-align: left;
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-  }
-  
-  h2 {
-    text-align: left;
-    font-size: 1.2rem;
-    margin-top: clamp(0.5rem, 2vw, 1rem);
-    margin-bottom: 0.5rem;
-    transition: margin 0.15s ease;
-    opacity: 0;
-    animation: fadeSlideUp 0.2s ease forwards;
-    animation-delay: 0.05s;
-  }
-  
-  label {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  input {
-    font-size: 0.9em;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    margin-top: 4px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-  }
+  width: 500px;
+  max-width: 100%;
+  padding: 10px;
+  font-family: Arial, sans-serif;
 
-  #interval {
-    width: 80px;
-    max-width: 100%;
-    padding: 6px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
+  background-color: #f9f9f9;
+  text-align: left;
+  box-sizing: border-box;
+}
 
-  #toggle-cycle {
-    width: 100%;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: background-color 0.3s ease;
-    margin-bottom: 1em;
-  }
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: left;
+  margin-bottom: 20px;
+  transition: margin-bottom 0.4s ease;
+}
   
-  #toggle-cycle.started {
-    background-color: #dc3545; /* Red */
-  }
-  
-  #toggle-cycle.started:hover {
-    background-color: #c82333;
-  }
-  
-  #toggle-cycle.stopped {
-    background-color: #28a745; /* Green */
-  }
-  
-  #toggle-cycle.stopped:hover {
-    background-color: #218838;
-  }
+h1 {
+  color: #007bff;
+  text-align: left;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
 
-  .button-group {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 1.2rem;
-    transition: margin-bottom 0.4s ease;
-  }
-  
-  button {
-    padding: 0.4em 0.8em;
-    border: none;
-    background: #007acc;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background: #005fa3;
-  }
-  
-  
-  /* Start/Stop Buttons */
-  #start {
-    background-color: #28a745;
-    color: white;
-  }
-  #start:hover {
-    background-color: #218838;
-  }
-  #stop {
-    background-color: #dc3545;
-    color: white;
-  }
-  #stop:hover {
-    background-color: #c82333;
-  }
-  
-  /* Scheduled Table */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    margin-bottom: 1em;
-    opacity: 0;
-    animation: fadeSlideUp 0.2s ease forwards;
-    animation-delay: 0.1s;
-  }
-  th, td {
-    padding: 8px 10px;
-    text-align: left;
-    border: 1px solid #ddd;
-  }
-  th {
-    background-color: #003366;
-    color: white;
-    font-weight: 600;
-  }
-  tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  tbody tr:hover {
-    background-color: #e0eaff;
-  }
-  
-  /* Scheduled Entry */
-  .schedule-entry {
-    border: 1px solid #ccc;
-    padding: 8px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    background: #fff;
-  }
-  .schedule-actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  
-  /* Day Buttons */
-  .days {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3em;
-    margin-top: 0.4em;
-  }
-  .days label {
-    background: #eee;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.8em;
-  }
-  
-  /* Popup Buttons */
-  .popup-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 1em;
-  }
-  .popup-button {
-    width: 160px;
-    padding: 8px;
-    margin: 5px 0;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .popup-button.small {
-    width: 16%;
-    font-size: 0.75em;
-    padding: 4px 8px;
-  }
-  .popup-button.large {
-    width: 100%;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background-color 0.3s ease;
-  }
-  .popup-button.large:hover {
-    background-color: #1d4fa1;
-  }
-  .popup-button.large svg {
-    width: 18px;
-    height: 18px;
-    fill: white;
-  }
+h2 {
+  text-align: left;
+  font-size: 1.2rem;
+  margin-top: clamp(0.5rem, 2vw, 1rem);
+  margin-bottom: 0.5rem;
+  transition: margin 0.15s ease;
+  opacity: 0;
+  animation: fadeSlideUp 0.2s ease forwards;
+  animation-delay: 0.05s;
+}
 
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+input {
+  text-align: center;
+  font-size: 0.9em;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+#interval {
+  width: 100%;
+  max-width: 100%;
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+#toggle-cycle {
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.3s ease;
+  margin-bottom: 1em;
+}
+
+#toggle-cycle.started {
+  background-color: #dc3545; /* Red */
+}
+
+#toggle-cycle.started:hover {
+  background-color: #c82333;
+}
+
+#toggle-cycle.stopped {
+  background-color: #28a745; /* Green */
+}
+
+#toggle-cycle.stopped:hover {
+  background-color: #218838;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.2rem;
+  transition: margin-bottom 0.4s ease;
+}
+
+button {
+  padding: 0.4em 0.8em;
+  border: none;
+  background: #007acc;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #005fa3;
+}
+
+
+/* Start/Stop Buttons */
+#start {
+  background-color: #28a745;
+  color: white;
+}
+#start:hover {
+  background-color: #218838;
+}
+#stop {
+  background-color: #dc3545;
+  color: white;
+}
+#stop:hover {
+  background-color: #c82333;
+}
+
+/* Scheduled Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1em;
+  opacity: 0;
+  animation: fadeSlideUp 0.2s ease forwards;
+  animation-delay: 0.1s;
+}
+th, td {
+  padding: 8px 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #003366;
+  color: white;
+  font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+tbody tr:hover {
+  background-color: #e0eaff;
+}
+
+/* Scheduled Entry */
+.schedule-entry {
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #fff;
+}
+.schedule-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Day Buttons */
+.days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  margin-top: 0.4em;
+}
+.days label {
+  background: #eee;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8em;
+}
+
+/* Popup Buttons */
+.popup-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1em;
+}
+.popup-button {
+  width: 160px;
+  padding: 8px;
+  margin: 5px 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+.popup-button.small {
+  width: 16%;
+  font-size: 0.75em;
+  padding: 4px 8px;
+}
+.popup-button.large {
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+.popup-button.large:hover {
+  background-color: #1d4fa1;
+}
+.popup-button.large svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+/* Playlist Section */
+#playlist-section {
+  margin-top: 1rem;
+  animation: fadeSlideUp 0.2s ease forwards;
+  width: 100%;
+  margin-left: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 300px; /* Adjust as needed */
+  overflow-y: auto;  /* Adds vertical scroll if needed */
+  padding-right: 10px; /* To avoid scrollbar overlap */
+}
+
+#playlist-section ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  background: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+}
+
+#playlist-section h3 {
+  margin-top: 0;
+}
+
+#playlist-section li {
+  margin-bottom: 10px;
+}
+
+.playlist-item:hover {
+  background-color: #e0eaff;
+}
+
+.tab-favicon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.more-tabs {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  margin-top: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.more-tabs:hover {
+  color: #003366;
+  text-decoration: underline;
+}
+
+/* Playlist Loading Spinner */
+#playlist-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em 0;
+}
+
+#playlist-loading::after {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border: 3px solid #ccc;
+  border-top-color: #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.playlist-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-title {
+  font-weight: bold;
+  font-size: 0.95em;
+  color: #333;
+}
+
+.tab-interval {
+  font-size: 0.8em;
+  color: #666;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 @keyframes fadeSlideUp {
     0% {
         opacity: 0;

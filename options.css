@@ -174,6 +174,35 @@ input[type="url"], input[type="text"], input[type="time"], input[type="number"] 
     opacity: 1;
 }
 
+.table-scroll {
+    max-height: 400px; /* Or 300px if you want shorter */
+    overflow-y: auto;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+.table-scroll table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-scroll th, .table-scroll td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-scroll thead th {
+    position: sticky;
+    top: 0;
+    background-color: #003366;
+    color: white;
+    z-index: 2;
+}
+
 @keyframes fadeSlideUp {
     0% {
         opacity: 0;
