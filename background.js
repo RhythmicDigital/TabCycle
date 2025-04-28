@@ -1,10 +1,13 @@
 // Tab Cycling
 let intervalId = null;
+let timeoutId = null;
 let intervalSeconds = 15; // Default value
 let isCycling = false;
 let cyclingPaused = false;
+let badgeIntervalId = null;
 let badgeCountdownInterval = null;
 let cycleStartTime = null;
+let tabIntervals = {}; // To store the interval for each tab
 
 chrome.storage.local.set({ intervalSeconds });
 
@@ -23,63 +26,100 @@ function updateInterval(newInterval) {
 
 // Function to cycle through tabs
 async function cycleTabs() {
-    const tabs = await chrome.tabs.query({ currentWindow: true});
+    const tabs = await chrome.tabs.query({ currentWindow: true });
     const activeTab = tabs.find(tab => tab.active);
-    const nextTabIndex = (activeTab.index + 1) % tabs.length;
 
-    // Activate the next tab
-    chrome.tabs.update(tabs[nextTabIndex].id, { active: true});
+    // Ensure that we're staying on the active tab for the full interval
+    const interval = tabIntervals[activeTab.id] || intervalSeconds;
+    const nextTabIndex = (activeTab.index + 1) % tabs.length;
+    const nextTab = tabs[nextTabIndex];
+
+    // Clear any previous timeout
+    if (timeoutId) {
+        clearTimeout(timeoutId);
+    }
+
+    // Update badge countdown and set the timeout for the next tab
+    badgeCountdown = interval;
+    updateBadge();
+
+    // Wait for the cycle interval to expire before switching to the next tab
+    timeoutId = setTimeout(() => {
+        chrome.tabs.update(nextTab.id, { active: true });
+        cycleTabs(); // Recursively call cycleTabs to continue cycling
+    }, interval * 1000);
+}
+
+
+// Set per-tab cycle interval
+function setTabInterval(tabId, interval) {
+    tabIntervals[tabId] = interval; // Save the interval for this specific tab
 }
 
 function setIntervalId(handler, interval) {
+    if (intervalId) {
+        clearInterval(intervalId);
+    }
     intervalId = setInterval(handler, interval * 1000);
 }
 
 function startCycling() {
-    if (!intervalId) {
-        setIntervalId(cycleTabs, intervalSeconds);
-        console.log(`Started cycling every ${intervalSeconds} seconds.`);
-        isCycling = true;
-        chrome.action.setIcon({   path: {
-            16: "icons/pause16.png",
-            48: "icons/pause48.png",
-            128: "icons/pause128.png"
-        } });
+    if (!isCycling) {
+        chrome.storage.local.get("tabIntervals", (res) => {
+            tabIntervals = res.tabIntervals || {};
+            
+            console.log(`Started cycling every ${tabIntervals} seconds.`);
+            isCycling = true;
+            cycleTabs();
+            chrome.action.setIcon({   path: {
+                16: "icons/pause16.png",
+                48: "icons/pause48.png",
+                128: "icons/pause128.png"
+            } });
 
-        // Record the start time
-        cycleStartTime = Date.now();
-
-        // Start badge countdown updater
-        badgeCountdownInterval = setInterval(() => {
-            const elapsedMs = Date.now() - cycleStartTime;
-            const elapsedSeconds = Math.floor(elapsedMs / 1000);
-            const remaining = intervalSeconds - (elapsedSeconds % intervalSeconds);
-
-            let display = remaining.toString();
-
-            chrome.action.setBadgeText({ text: display });
-        }, 200);
+            startBadgeTimer();
+        });
     }
 }
 
 function stopCycling() {
-    if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
+    if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
         console.log("Stopped cycling.");
-        isCycling = false;
-        chrome.action.setIcon({   path: {
-            16: "icons/play16.png",
-            48: "icons/play48.png",
-            128: "icons/play128.png"
-        } }); 
-
-        if (badgeCountdownInterval) {
-            clearInterval(badgeCountdownInterval);
-            badgeCountdownInterval = null;
-        }
-        chrome.action.setBadgeText({ text: '' });
     }
+    if (badgeIntervalId) {
+        clearInterval(badgeIntervalId);
+        badgeIntervalId = null;
+    }
+    isCycling = false;
+
+    chrome.action.setIcon({   path: {
+        16: "icons/play16.png",
+        48: "icons/play48.png",
+        128: "icons/play128.png"
+    } }); 
+    chrome.action.setBadgeText({ text: '' });
+}
+
+function startBadgeTimer() {
+    if (badgeIntervalId) {
+        clearInterval(badgeIntervalId);
+    }
+    
+    badgeIntervalId = setInterval(() => {
+        if (badgeCountdown > 0) {
+            badgeCountdown--;
+            updateBadge();
+        }
+    }, 1000);
+}
+
+function updateBadge() {
+    chrome.action.setBadgeText({
+        text: badgeCountdown > 0 ? badgeCountdown.toString() : ""
+    });
+    chrome.action.setBadgeBackgroundColor({ color: "#f7f9f9" });
 }
 
 // Listens for messages from popup or other parts of the extension
@@ -92,6 +132,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
     if (message.action === "setInterval") {
         updateInterval(message.value);
+        const { tabId, interval } = message;
+        setTabInterval(tabId, interval); // Set the interval for the specific tab
+        sendResponse({ success: true });
         if (isCycling) {
             stopCycling();
             startCycling();
@@ -229,4 +272,19 @@ chrome.runtime.onMessage.addListener((msg) => {
             });
         });
     }
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "setTabInterval") {
+        const { tabId, interval } = message;
+        setTabInterval(tabId, interval); // Update the interval for the specific tab
+        sendResponse({ success: true });
+
+        // If cycling is active, restart it with the new intervals
+        if (isCycling) {
+            stopCycling();
+            startCycling();
+        }
+    }
+    sendResponse({ success: true });
 });

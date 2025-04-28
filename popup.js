@@ -5,6 +5,8 @@ const startStopbutton = document.getElementById("toggle-cycle");
 const intervalInput = document.getElementById("interval");
 const icon = document.getElementById("toggle-icon");
 const text = document.getElementById("toggle-text");
+const playlistSection = document.getElementById("playlist-section");
+const defaultCycleInterval = 15;
 
 let isCycling = false;
 
@@ -22,7 +24,7 @@ function updateToggleButton() {
   }
 }
 
-document.getElementById("toggle-cycle").addEventListener("click", () => {  
+document.getElementById("toggle-cycle").addEventListener("click", () => {
   if (!isCycling) {
     // Start tab cycling
     const interval = parseInt(document.getElementById("interval").value, 10) || 5;
@@ -40,20 +42,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const versionSpan = document.getElementById("version");
   const manifest = chrome.runtime.getManifest();
   versionSpan.textContent = `v${manifest.version}`;
-  
+
   // Get the stored interval value
   chrome.storage.local.get("intervalSeconds", (data) => {
-    intervalInput.value = data.intervalSeconds || 15; // Default to 5 if undefined
+    intervalInput.value = data.intervalSeconds || defaultCycleInterval;
   });
-  
+
   // Listen for changes and send to background
   intervalInput.addEventListener("input", () => {
     let newInterval = parseInt(intervalInput.value, 10);
     if (!isNaN(newInterval) && newInterval > 0) {
       chrome.runtime.sendMessage({ action: "setInterval", value: newInterval });
-      }
+    }
   });
-  
+
   // Stop tab cycling when opening popup
   chrome.runtime.sendMessage({ command: "stop" });
   isCycling = false;
@@ -122,21 +124,78 @@ document.addEventListener("DOMContentLoaded", () => {
       tbody.appendChild(row);
     });
   });
+
+  chrome.storage.local.get("tabIntervals", (res) => {
+    const tabIntervals = res.tabIntervals || {};
+    updatePlaylist(tabIntervals);
+  });
 });
 
-previewButton.onclick = () => {
-  chrome.runtime.sendMessage({ action: "previewNow" });
-};
+// Update the playlist section
+function updatePlaylist(tabIntervals) {
+  playlistSection.innerHTML = "<div id='playlist-loading'></div>"; // Show loading spinner
 
-optionsButton.onclick = () => {
-  chrome.runtime.openOptionsPage();
-};
+  chrome.tabs.query({}, (tabs) => {
+    chrome.storage.local.get("tabIntervals", (res) => {
+      playlistSection.innerHTML = "<h3>Tabs Currently Open</h3>"; // Remove spinner, reset section
 
-function saveSchedule(index, updatedEntry) {
-  chrome.storage.local.get("schedules", (res) => {
-    const schedules = res.schedules || [];
-    schedules[index] = updatedEntry;
-    chrome.storage.local.set({ schedules });
+      const playlistUl = document.createElement("ul");
+      const maxTabsToShow = 3;
+      let isExpanded = false;
+
+      tabs.forEach((tab, index) => {
+        const playlistItem = document.createElement("li");
+        playlistItem.classList.add("playlist-item");
+
+        const favicon = document.createElement("img");
+        favicon.src = tab.favIconUrl || "default-favicon.png";
+        favicon.className = "tab-favicon";
+
+        const textContainer = document.createElement("div");
+        textContainer.className = "playlist-text";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "tab-title";
+        titleSpan.textContent = tab.title;
+
+        const intervalSpan = document.createElement("span");
+        intervalSpan.className = "tab-interval";
+        chrome.storage.local.get("intervalSeconds", (data) => {
+          intervalSpan.textContent = `Cycle interval: ${tabIntervals[tab.id] || data.intervalSeconds} sec`;
+        });
+
+        textContainer.appendChild(titleSpan);
+        textContainer.appendChild(intervalSpan);
+
+        playlistItem.appendChild(favicon);
+        playlistItem.appendChild(textContainer);
+
+
+        if (index >= maxTabsToShow) {
+          playlistItem.style.display = "none";
+          playlistItem.classList.add("hidden-tab");
+        }
+
+        playlistUl.appendChild(playlistItem);
+      });
+
+      playlistSection.appendChild(playlistUl);
+
+      if (tabs.length > maxTabsToShow) {
+        const moreDiv = document.createElement("div");
+        moreDiv.textContent = `+${tabs.length - maxTabsToShow} more`;
+        moreDiv.className = "more-tabs";
+        playlistSection.appendChild(moreDiv);
+
+        moreDiv.addEventListener("click", () => {
+          isExpanded = !isExpanded;
+          document.querySelectorAll(".hidden-tab").forEach(item => {
+            item.style.display = isExpanded ? "flex" : "none";
+          });
+          moreDiv.textContent = isExpanded ? "Show Less" : `+${tabs.length - maxTabsToShow} more`;
+        });
+      }
+    });
   });
 }
 
@@ -159,9 +218,17 @@ function getNextOpenDate(entry) {
       const timeStr = `<strong>${nextDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>`;
 
       return `${dateStr} at ${timeStr}`;
-
     }
   }
 
   return "No valid date";
 }
+
+previewButton.onclick = () => {
+  chrome.runtime.sendMessage({ action: "previewNow" });
+};
+
+optionsButton.onclick = () => {
+  chrome.runtime.openOptionsPage();
+};
+
