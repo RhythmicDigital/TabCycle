@@ -98,7 +98,7 @@ input {
 .button-group {
   display: flex;
   gap: 10px;
-  margin-bottom: 1.2rem;
+  margin-bottom: .5rem;
   transition: margin-bottom 0.4s ease;
 }
 
