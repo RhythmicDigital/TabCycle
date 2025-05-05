@@ -7,6 +7,9 @@ body {
   background-color: #f9f9f9;
   text-align: left;
   box-sizing: border-box;
+
+  max-height: 600px;  /* Example */
+  overflow-y: auto;
 }
 
 .container {
@@ -133,6 +136,36 @@ button:hover {
 }
 
 /* Scheduled Table */
+/* Make the table body scrollable */
+#popup-table-body {
+  display: block;
+  max-height: 200px;  /* or whatever height you prefer */
+  overflow-y: auto;
+  overflow-x: hidden;  /* Prevent horizontal scrolling */
+  width: 100%;
+}
+
+#popup-table-body tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* For a clean look while scrolling */
+#popup-table-body::-webkit-scrollbar {
+  width: 6px;
+}
+#popup-table-body::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
