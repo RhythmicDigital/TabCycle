@@ -75,6 +75,20 @@ document.addEventListener("DOMContentLoaded", () => {
   chrome.storage.local.get("schedules", (res) => {
     const schedules = res.schedules || [];
 
+    // If no schedules, show a message
+    if (schedules.length === 0) {
+        const noTabsRow = document.createElement("tr");
+        const noTabsCell = document.createElement("td");
+        noTabsCell.colSpan = 4; // Span across all table columns
+        noTabsCell.textContent = "No tabs scheduled.";
+        noTabsCell.style.textAlign = "center";
+        noTabsCell.style.padding = "10px";
+        noTabsRow.appendChild(noTabsCell);
+        tbody.appendChild(noTabsRow);
+        return;  // Exit early
+    }
+
+    // Otherwise, render the table rows as normal
     schedules.forEach((entry, index) => {
       const row = document.createElement("tr");
 
