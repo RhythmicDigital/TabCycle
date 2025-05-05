@@ -8,6 +8,11 @@ let badgeIntervalId = null;
 let badgeCountdownInterval = null;
 let cycleStartTime = null;
 let tabIntervals = {}; // To store the interval for each tab
+let targetWindowId = "active"; // default
+
+chrome.storage.local.get(["selectedWindowId"], (res) => {
+    targetWindowId = res.selectedWindowId || "active";
+});
 
 chrome.storage.local.set({ intervalSeconds });
 
@@ -26,7 +31,17 @@ function updateInterval(newInterval) {
 
 // Function to cycle through tabs
 async function cycleTabs() {
-    const tabs = await chrome.tabs.query({ currentWindow: true });
+    const result = await chrome.storage.local.get("targetWindowId");
+    let query = {};
+
+    // Use specific window if chosen
+    if (result.targetWindowId && result.targetWindowId !== "active") {
+        query.windowId = parseInt(result.targetWindowId);
+    } else {
+        query.currentWindow = true;
+    }
+
+    const tabs = await chrome.tabs.query(query);
     const activeTab = tabs.find(tab => tab.active);
 
     // Ensure that we're staying on the active tab for the full interval

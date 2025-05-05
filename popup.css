@@ -36,6 +36,43 @@ h2 {
   animation-delay: 0.05s;
 }
 
+h3 {
+  text-align: left;
+  font-size: 1rem;
+  margin-top: clamp(0.5rem, 2vw, 1rem);
+  margin-bottom: 0.5rem;
+}
+
+label[for="interval"] {
+  display: inline-block;
+  margin-right: 4px;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+label[for="window-select"] {
+  display: inline-block;
+  margin-right: 4px;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+#window-select {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  max-width: 95%;
+  padding: 2px 6px;
+  font-size: 13px;
+  border-radius: 4px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+#window-select option {
+  font-size: 12px;
+}
+
 label {
   font-size: 14px;
   margin-bottom: 5px;

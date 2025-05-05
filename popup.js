@@ -7,6 +7,7 @@ const icon = document.getElementById("toggle-icon");
 const text = document.getElementById("toggle-text");
 const playlistSection = document.getElementById("playlist-section");
 const defaultCycleInterval = 15;
+const windowSelect = document.getElementById("window-select");
 
 let isCycling = false;
 
@@ -42,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const versionSpan = document.getElementById("version");
   const manifest = chrome.runtime.getManifest();
   versionSpan.textContent = `v${manifest.version}`;
-
+  
   // Get the stored interval value
   chrome.storage.local.get("intervalSeconds", (data) => {
     intervalInput.value = data.intervalSeconds || defaultCycleInterval;
@@ -233,3 +234,25 @@ optionsButton.onclick = () => {
   chrome.runtime.openOptionsPage();
 };
 
+// Populate the window list with active tab titles
+chrome.windows.getAll({ populate: true }, (windows) => {
+    let i = 1;
+    windows.forEach(win => {
+        const activeTab = win.tabs.find(tab => tab.active);
+        const option = document.createElement("option");
+        option.value = win.id;
+        const windowTitle = activeTab ? activeTab.title : "No active tab";
+        option.textContent = `[Window ${i}] Current tab: "${windowTitle}"`;
+        windowSelect.appendChild(option);
+        i++;
+    });
+
+    // Set previously selected window
+    chrome.storage.local.get("targetWindowId", (data) => {
+        windowSelect.value = data.targetWindowId || "active";
+    });
+});
+
+windowSelect.addEventListener("change", () => {
+  chrome.storage.local.set({ targetWindowId: windowSelect.value });
+});
