@@ -175,7 +175,6 @@ function scheduleTabs(alarm) {
                     entry.days.includes(currentDay) &&
                     entry.time === currentTime
                 ) {
-
                     const [hour, minute] = entry.time.split(":").map(Number);
                     chrome.tabs.create({ url: entry.url, active: entry.focus || false}, (tab) => {
                         if (entry.autoclose > 0) {
@@ -199,8 +198,10 @@ function scheduleTabs(alarm) {
                                     updatedIntervals[tab.id] = entry.cycleInterval;
                                     chrome.storage.local.set({ tabIntervals: updatedIntervals });
                                     
-                                    stopCycling();
-                                    startCycling();
+                                    if (isCycling) {
+                                        stopCycling();
+                                        startCycling();
+                                    }
                                 });
                             }
                         }
@@ -217,21 +218,51 @@ function setupAlarms() {
         schedules.forEach((entry, index) => {
             if (!entry.enabled || !entry.days?.length || !entry.time) return;
 
-            const now = new Date();
-            const [hour, minute] = entry.time.split(":").map(Number);
+            if (entry.repeat && entry.repeatEvery > 0) {
+                // If repeat is enabled for this tab
 
-            for (let i = 0; i < 7; i++) {
-                const alarmDay = (now.getDay() + i) % 7;
-                if (entry.days.includes(alarmDay)) {
-                    const alarmDate = new Date(now);
-                    alarmDate.setDate(now.getDate() + i);
-                    alarmDate.setHours(hour, minute, 0, 0);
+                // Convert the repeat interval into minutes
+                let repeatInMinutes = 0;
+                switch (entry.repeatUnit) {
+                    case "seconds":
+                        repeatInMinutes = entry.repeatEvery / 60;
+                        break;
+                    case "minutes":
+                        repeatInMinutes = entry.repeatEvery;
+                        break;
+                    case "hours":
+                        repeatInMinutes = entry.repeatEvery * 60;
+                        break;
+                    case "days":
+                        repeatInMinutes = entry.repeatEvery * 1440;
+                        break;
+                }
 
-                    if (alarmDate > now) {
-                        chrome.alarms.create(`tab-${index}-${alarmDay}`, {
-                            when: alarmDate.getTime()
-                        });
-                        break; // Only schedule the next closest time
+                if (repeatInMinutes >= 1 / 60) { // Chrome minimum alarm period is 1 second (1/60 minutes)
+                    chrome.alarms.create(`repeat-tab-${index}`, {
+                        periodInMinutes: repeatInMinutes,
+                        delayInMinutes: 0.01 // Start almost immediately
+                    });
+                }
+
+            } else if (entry.days?.length && entry.time) {
+                // Normal daily/weekly scheduled tab
+                const now = new Date();
+                const [hour, minute] = entry.time.split(":").map(Number);
+
+                for (let i = 0; i < 7; i++) {
+                    const alarmDay = (now.getDay() + i) % 7;
+                    if (entry.days.includes(alarmDay)) {
+                        const alarmDate = new Date(now);
+                        alarmDate.setDate(now.getDate() + i);
+                        alarmDate.setHours(hour, minute, 0, 0);
+
+                        if (alarmDate > now) {
+                            chrome.alarms.create(`tab-${index}-${alarmDay}`, {
+                                when: alarmDate.getTime()
+                            });
+                            break; // Only schedule the next closest time
+                        }
                     }
                 }
             }
@@ -275,6 +306,43 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             }
         });
     }
+});
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name.startsWith("tab-")) {
+        scheduleTabs(alarm);
+    }
+    else if (alarm.name.startsWith("repeat-tab-")) {
+        const match = alarm.name.match(/^repeat-tab-(\d+)$/);
+        if (match) {
+            const index = parseInt(match[1]);
+            chrome.storage.local.get("schedules", (res) => {
+                const entry = res.schedules?.[index];
+                if (entry && entry.enabled) {
+                    const now = new Date();
+                    const currentDay = now.getDay();
+                    const currentTime = `${padTime(now.getHours())}:${padTime(now.getMinutes())}`;
+    
+                    if (
+                        (!entry.days || entry.days.includes(currentDay)) &&
+                        (!entry.time || entry.time === currentTime)
+                    ) {
+                        chrome.tabs.create({ url: entry.url, active: entry.focus || false }, (tab) => {
+                            if (entry.autoclose > 0) {
+                                chrome.alarms.create(`autoclose-${tab.id}`, {
+                                    when: Date.now() + (entry.autoclose * 1000)
+                                });
+                            }
+                            if (isCycling) {
+                                stopCycling();
+                                startCycling();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }    
 });
 
 chrome.runtime.onMessage.addListener((msg) => {

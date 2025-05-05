@@ -106,8 +106,11 @@ function createScheduleEntry(data = {
         days: [],
         autoclose: 0,
         autodisable: false,
+        repeat: false,         
+        repeatEvery: 0,        
+        repeatUnit: "minutes", 
         focus: false,
-        cycleInterval: 0 // Add cycle interval to data
+        cycleInterval: 0,
     }, index = null) {
     const row = document.createElement("tr");
         
@@ -180,6 +183,43 @@ function createScheduleEntry(data = {
     timeCell.appendChild(autofocusLabel);
     timeCell.appendChild(autodisableLabel);
 
+    // Repeat Options
+    const repeatContainer = document.createElement("div");
+    repeatContainer.className = "repeat-container";
+    
+    const repeatLabel = document.createElement("label");
+    const repeatInput = document.createElement("input");
+    repeatInput.type = "checkbox";
+    repeatInput.checked = data.repeat;
+    repeatLabel.appendChild(repeatInput);
+    repeatLabel.append(" Repeat");
+    
+    const repeatEveryInput = document.createElement("input");
+    repeatEveryInput.type = "number";
+    repeatEveryInput.min = "1";
+    repeatEveryInput.placeholder = "Interval";
+    repeatEveryInput.value = data.repeatEvery || "";
+    repeatEveryInput.style.width = "60px";
+    repeatEveryInput.style.marginLeft = "10px";
+    
+    const repeatUnitSelect = document.createElement("select");
+    ["seconds", "minutes", "hours", "days"].forEach(unit => {
+        const option = document.createElement("option");
+        option.value = unit;
+        option.textContent = unit.charAt(0).toUpperCase() + unit.slice(1);
+        if (data.repeatUnit === unit) option.selected = true;
+        repeatUnitSelect.appendChild(option);
+    });
+    repeatUnitSelect.style.marginLeft = "5px";
+    
+    // ➔ Group repeatLabel, repeatEveryInput, repeatUnitSelect nicely together
+    repeatContainer.appendChild(repeatLabel);
+    repeatContainer.appendChild(repeatEveryInput);
+    repeatContainer.appendChild(repeatUnitSelect);
+    
+    // ➔ Then finally add it to timeCell
+    timeCell.appendChild(repeatContainer);
+
     row.appendChild(timeCell);
 
     // Auto-Close
@@ -205,7 +245,7 @@ function createScheduleEntry(data = {
     cycleIntervalCell.style.width = "90px";
 
     row.appendChild(cycleIntervalCell);
-    
+
     const save = (index, updatedEntry) => {
         chrome.storage.local.get("schedules", (res) => {
             const schedules = res.schedules || [];
@@ -256,7 +296,10 @@ function createScheduleEntry(data = {
             enabled: toggleEnabled.querySelector("input").checked,
             focus: autofocusInput.checked,
             autodisable: autodisableInput.checked,
-            cycleInterval: parseInt(cycleIntervalInput.value) || 0  // Include cycle interval here
+            cycleInterval: parseInt(cycleIntervalInput.value) || 0,  // Include cycle interval here
+            repeat: repeatInput.checked,
+            repeatEvery: parseInt(repeatEveryInput.value) || 0,
+            repeatUnit: repeatUnitSelect.value || "minutes"
         };
         
         debouncedSave(index, newData);
@@ -270,6 +313,9 @@ function createScheduleEntry(data = {
     autofocusInput.addEventListener("change", updateSchedule);
     autodisableInput.addEventListener("change", updateSchedule);
     cycleIntervalInput.addEventListener("input", updateSchedule);
+    repeatInput.addEventListener("change", updateSchedule);
+    repeatEveryInput.addEventListener("input", updateSchedule);
+    repeatUnitSelect.addEventListener("change", updateSchedule);
     daysDiv.querySelectorAll("input").forEach(checkbox => {
         checkbox.addEventListener("change", updateSchedule);
     });
@@ -338,10 +384,18 @@ saveAllButton.onclick = () => {
         const autodisable = checkboxes[checkboxes.length - 1].checked;
         const dayCheckboxes = row.querySelectorAll("td:nth-child(4) .days input[type='checkbox']");
         const days = [...dayCheckboxes].filter(cb => cb.checked).map(cb => parseInt(cb.dataset.index));
+        const repeat = checkboxes[checkboxes.length - 3].checked; // repeat checkbox is before focus/autodisable
+        const repeatEveryInput = fourthTd.querySelector("input[type='number']");
+        const repeatEvery = parseInt(repeatEveryInput?.value) || 0;
+        const repeatUnitSelect = fourthTd.querySelector("select");
+        const repeatUnit = repeatUnitSelect?.value || "minutes";
         const autoclose = parseInt(row.querySelector("td:nth-child(5) input").value) || 0;
         const cycleInterval = parseInt(row.querySelector("td:nth-child(6) input").value) || 0;  // Get cycle interval value
-
-        updatedSchedules.push({ enabled, name, url, time, days, autoclose, focus, autodisable, cycleInterval });
+        updatedSchedules.push({
+            enabled, name, url, time, days,
+            autoclose, focus, autodisable, cycleInterval,
+            repeat, repeatEvery, repeatUnit
+        });
     });
     
     chrome.storage.local.set({ 
