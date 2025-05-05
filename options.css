@@ -106,6 +106,14 @@ button:hover {
     margin-top: 0.5em;
 }
 
+.repeat-container {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+  }
+
 table {
   width: 105%;
   border-collapse: collapse;
