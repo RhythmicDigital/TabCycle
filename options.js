@@ -280,6 +280,8 @@ function createScheduleEntry(data = {
                 
             }, () => {
                 showSavedMessage();
+
+                chrome.runtime.sendMessage({ action: "refreshAlarms" });
             });
         });
     }, 1000);

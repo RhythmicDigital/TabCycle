@@ -187,8 +187,10 @@ function scheduleTabs(alarm) {
                 }
                 if (
                     entry.enabled &&
-                    entry.days.includes(currentDay) &&
-                    entry.time === currentTime
+                    (entry.days.includes(currentDay) &&
+                    entry.time === currentTime) || 
+                    (entry.repeat && (!entry.days || entry.days.includes(currentDay)) &&
+                    (!entry.time || entry.time <= currentTime))
                 ) {
                     const [hour, minute] = entry.time.split(":").map(Number);
                     chrome.tabs.create({ url: entry.url, active: entry.focus || false}, (tab) => {
@@ -291,7 +293,6 @@ chrome.runtime.onStartup.addListener(setupAlarms);
 chrome.storage.onChanged.addListener(setupAlarms);
 
 chrome.alarms.onAlarm.addListener((alarm) => {
-    scheduleTabs(alarm)
     console.log(`[autoclose] Alarm triggered: ${alarm.name}`);
     const match = alarm.name.match(/^autoclose-(\d+)$/);
     if (match) {
@@ -321,9 +322,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             }
         });
     }
-});
 
-chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name.startsWith("tab-")) {
         scheduleTabs(alarm);
     }
@@ -340,7 +339,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     
                     if (
                         (!entry.days || entry.days.includes(currentDay)) &&
-                        (!entry.time || entry.time === currentTime)
+                        (!entry.time || entry.time <= currentTime)
                     ) {
                         chrome.tabs.create({ url: entry.url, active: entry.focus || false }, (tab) => {
                             if (entry.autoclose > 0) {
@@ -383,4 +382,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
     }
     sendResponse({ success: true });
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "refreshAlarms") {
+        console.log("Manual refreshAlarms requested.");
+        setupAlarms();
+        sendResponse({ success: true });
+    }
 });
