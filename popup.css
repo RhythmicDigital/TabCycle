@@ -15,10 +15,18 @@ body {
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: left;
+  gap: 10px;
   margin-bottom: 20px;
-  transition: margin-bottom 0.4s ease;
+}
+
+.left-side {
+  flex: 0 0 38%;   /* Left side takes up 60% */
+  min-width: 180px;
+}
+
+.right-side {
+  flex: 0 0 50%;   /* Right side takes up 38% (2% buffer for gap) */
+  min-width: 250px;
 }
   
 h1 {
@@ -305,7 +313,7 @@ tbody tr:hover {
 
 /* Playlist Section */
 #playlist-section {
-  margin-top: 1rem;
+  margin-top: 0.25rem;
   animation: fadeSlideUp 0.2s ease forwards;
   width: 100%;
   margin-left: 20px;
