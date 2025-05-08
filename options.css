@@ -1,9 +1,33 @@
 body {
-    font-family: sans-serif;
-    padding: 1em 2em;
-    max-width: 1000px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     margin: auto;
     background: #f9f9f9;
+    color: #333;
+
+}
+
+header {
+    background-color: #1a73e8;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+header p {
+    font-size: 1.2rem;
+}
+
+section {
+    padding: 2rem;
+    max-width: 1000px;
+    margin: auto;
 }
 
 h1 {
@@ -13,10 +37,16 @@ h1 {
     opacity: 1;
 }
 h2 {
-    font-size: 1.5em;
+    font-size: 2em;
     margin-bottom: 1em;
     text-align: center;
     opacity: 1;
+}
+
+span {
+    text-align: right; 
+    font-size: 1.2em; 
+    color: black;
 }
 .schedule-entry {
     background: #fff;

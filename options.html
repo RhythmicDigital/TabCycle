@@ -2,56 +2,68 @@
 <html>
 <head>
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="icons/settings-icon.png" type="image/png">
 <title>TabCycle Settings</title>
 <link rel="stylesheet" href="options.css" />
 </head>
 <body>
-<div id="toast" class="toast">Saved!</div>
-<h1>TabCycle Settings</h1>
-<div id="scheduled-tabs-container">
-    <h2>Scheduled Tab Configurations</h2>
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-        <button id="save-all">💾 Save</button>
-        <span style="font-size: 1em; color: black;">Changes are saved automatically.</span>
-    </div>
-    <table id="scheduled-tabs">
-        <thead>
-        <tr>
-            <th>Active</th>
-            <th>Name</th>
-            <th>URL</th>
-            <th>Time & Days</th>
-            <th>Auto-Close (seconds)</th>
-            <th>Cycle Interval (seconds)</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="schedule-body">
-        </tbody>
-    </table>
-</div>
-<button id="add-schedule">➕ Add New Tab</button>
-<hr>
-<div id="tab-intervals-container">
-    <h2>Tab Cycling Configurations</h2>
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-        <span style="text-align: right; font-size: 1em; color: black;">Empty cycle intervals will be set to the default cycle interval.</span>
-    </div>
-        <div class="table-scroll">
-            <table id="tab-intervals">
+    <div id="toast" class="toast">Saved!</div>
+    <div id="scheduled-tabs-container">
+        <header>
+                <h1>
+                    <img src="icons/header-icon.png" alt="TabCycle logo" style="height: 64px; vertical-align: middle; margin-right: 10px;">
+                    TabCycle Settings
+                </h1>  
+                <p>Here you can customize tab cycling and add scheduled tabs to open at specific times and days</p>
+            </header>
+            <section id="features">
+            <h2>Scheduled Tab Configurations</h2>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <button id="save-all">💾 Save</button>
+                <span style="font-size: 1em; color: black;">Changes are saved automatically.</span>
+            </div>
+            <table id="scheduled-tabs">
                 <thead>
-                    <tr>
-                    <th>Icon</th>
-                    <th>Title</th>
+                <tr>
+                    <th>Active</th>
+                    <th>Name</th>
                     <th>URL</th>
+                    <th>Time & Days</th>
+                    <th>Auto-Close (seconds)</th>
                     <th>Cycle Interval (seconds)</th>
-                    </tr>
+                    <th>Actions</th>
+                </tr>
                 </thead>
-                <tbody id="tab-intervals-body"></tbody>
+                <tbody id="schedule-body">
+                </tbody>
             </table>
-        </div>
+        <button id="add-schedule">➕ Add New Tab</button>
     </div>
+</section>
 
-<script src="options.js"></script>
-</body>
+        <hr>
+    <section>
+        <div id="tab-intervals-container">
+            <h2>Tab Cycling Configurations</h2>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <span>Empty cycle intervals will be set to the default cycle interval.</span>
+            </div>
+                <div class="table-scroll">
+                    <table id="tab-intervals">
+                        <thead>
+                            <tr>
+                            <th>Icon</th>
+                            <th>Title</th>
+                            <th>URL</th>
+                            <th>Cycle Interval (seconds)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tab-intervals-body"></tbody>
+                    </table>
+                </div>
+            </div>
+    </section>
+    <script src="options.js"></script>
+    </body>
 </html>
