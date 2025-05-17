@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let displayText = entry.autoclose <= 0
         ? `Auto-close off – will display until cycled.`
-        : `Display for <strong>${entry.autoclose} seconds</strong>.`;
+        : `Display for <strong>${entry.autoclose} second(s)</strong>.`;
 
       nextOpenText.innerHTML = `
       <ul style="margin: 0; padding-left: 1.2em;">
@@ -284,6 +284,18 @@ chrome.windows.getAll({ populate: true }, (windows) => {
         windowSelect.value = data.targetWindowId || "active";
     });
 });
+
+function saveSchedule(index, updatedEntry) {
+  chrome.storage.local.get("schedules", (res) => {
+    const schedules = res.schedules || [];
+    if (index >= 0 && index < schedules.length) {
+      schedules[index] = updatedEntry;
+      chrome.storage.local.set({ schedules }, () => {
+        chrome.runtime.sendMessage({ action: "refreshAlarms" });
+      });
+    }
+  });
+}
 
 windowSelect.addEventListener("change", () => {
   chrome.storage.local.set({ targetWindowId: windowSelect.value });
