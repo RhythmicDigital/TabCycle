@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.3.7] - 2025-05-16
+### Added
+- Added open button in options page to open scheduled tabs immediately.
+- Updated options page icon.
+
+### Fixed
+- Fixed defect where repeating scheduled tabs would open on every change to scheduled tabs. 
+- Scheduled tabs will now repeatedly open only if it has first opened at its initially scheduled time.
+- Truncated long URLs in tab cycle configuration table in options page and make them expandable.
+- Adjusted layout of scheduled tabs table in popup.
+- Improved "open next" info text for scheduled tabs in popup.
+
 ## [2.3.6] - 2025-05-08
 ### Added
 - Added CHANGELOG and README files.

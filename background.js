@@ -175,70 +175,31 @@ function scheduleTabs(alarm) {
     const index = parseInt(match[1]);
 
     chrome.storage.local.get("schedules", (res) => {
-        const entry = res.schedules?.[index];
-
-            if (entry) {
-                if (entry.autoclose > 0) {
-                    // Pause cycling
-                    if (isCycling) {
-                        stopCycling();
-                        cyclingPaused = true;
-                    }
-                }
-                if (
-                    entry.enabled &&
-                    (entry.days.includes(currentDay) &&
-                    entry.time === currentTime) || 
-                    (entry.repeat && (!entry.days || entry.days.includes(currentDay)) &&
-                    (!entry.time || entry.time <= currentTime))
-                ) {
-                    const [hour, minute] = entry.time.split(":").map(Number);
-                    chrome.tabs.create({ url: entry.url, active: entry.focus || false}, (tab) => {
-                        if (entry.autoclose > 0) {
-                            const alarmName = `autoclose-${tab.id}`;
-                            const alarmDate = new Date(now);
-                            alarmDate.setDate(now.getDate());
-                            alarmDate.setHours(hour, minute, entry.autoclose, 0);
-                            chrome.alarms.create(alarmName, {
-                                when: alarmDate.getTime()
-                            });
-                            if (entry.autodisable) {
-                                const disableAlarmName = `autodisable-${index}`;
-                                chrome.alarms.create(disableAlarmName, {
-                                    when: alarmDate.getTime()
-                                });
-                            }
-                        } else {
-                            if (entry.autoclose <= 0 && entry.cycleInterval && entry.cycleInterval > 0) {
-                                chrome.storage.local.get("tabIntervals", (res) => {
-                                    const updatedIntervals = res.tabIntervals || {};
-                                    updatedIntervals[tab.id] = entry.cycleInterval;
-                                    chrome.storage.local.set({ tabIntervals: updatedIntervals });
-                                    
-                                    if (isCycling) {
-                                        stopCycling();
-                                        startCycling();
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-        }});    
-    }
-        
-function setupAlarms() {
-    chrome.alarms.clearAll(() => {
-    chrome.storage.local.get("schedules", (res) => {
         const schedules = res.schedules || [];
+        const entry = res.schedules?.[index];
+        if (!entry) return;
+        // Set first-open flags
+        entry.hasOpenedOnce = true;
+        entry.lastOpenedTime = Date.now();
 
-        schedules.forEach((entry, index) => {
-            if (!entry.enabled || !entry.days?.length || !entry.time) return;
-
+        if (entry.autoclose > 0) {
+            // Pause cycling
+            if (isCycling) {
+                stopCycling();
+                cyclingPaused = true;
+            }
+        }
+        if (
+            entry.enabled &&
+            (entry.days.includes(currentDay) &&
+            entry.time === currentTime) || 
+            (entry.repeat && (!entry.days || entry.days.includes(currentDay)) &&
+            (!entry.time || entry.time <= currentTime))
+        ) {
+            const [hour, minute] = entry.time.split(":").map(Number);
+            
+            // Create the repeat alarm
             if (entry.repeat && entry.repeatEvery > 0) {
-                // If repeat is enabled for this tab
-
-                // Convert the repeat interval into minutes
                 let repeatInMinutes = 0;
                 switch (entry.repeatUnit) {
                     case "seconds":
@@ -255,14 +216,60 @@ function setupAlarms() {
                         break;
                 }
 
-                if (repeatInMinutes >= 1 / 60) { // Chrome minimum alarm period is 1 second (1/60 minutes)
+                if (repeatInMinutes >= 1 / 60) {
                     chrome.alarms.create(`repeat-tab-${index}`, {
                         periodInMinutes: repeatInMinutes,
-                        delayInMinutes: 0.01 // Start almost immediately
+                        delayInMinutes: repeatInMinutes
                     });
+                    console.log(`Created repeat-tab-${index} with ${repeatInMinutes}min interval`);
                 }
+            }
 
-            } else if (entry.days?.length && entry.time) {
+            chrome.storage.local.set({ schedules });
+            
+            chrome.tabs.create({ url: entry.url, active: entry.focus || false}, (tab) => {
+                if (entry.autoclose > 0) {
+                    const alarmName = `autoclose-${tab.id}`;
+                    const alarmDate = new Date(now);
+                    alarmDate.setDate(now.getDate());
+                    alarmDate.setHours(hour, minute, entry.autoclose, 0);
+                    chrome.alarms.create(alarmName, {
+                        when: alarmDate.getTime()
+                    });
+                    if (entry.autodisable) {
+                        const disableAlarmName = `autodisable-${index}`;
+                        chrome.alarms.create(disableAlarmName, {
+                            when: alarmDate.getTime()
+                        });
+                    }
+                } else {
+                    if (entry.autoclose <= 0 && entry.cycleInterval && entry.cycleInterval > 0) {
+                        chrome.storage.local.get("tabIntervals", (res) => {
+                            const updatedIntervals = res.tabIntervals || {};
+                            updatedIntervals[tab.id] = entry.cycleInterval;
+                            chrome.storage.local.set({ tabIntervals: updatedIntervals });
+                            
+                            if (isCycling) {
+                                stopCycling();
+                                startCycling();
+                            }
+                        });
+                    }
+                }
+            });
+                
+        }});    
+    }
+        
+function setupAlarms() {
+    chrome.alarms.clearAll(() => {
+    chrome.storage.local.get("schedules", (res) => {
+        const schedules = res.schedules || [];
+
+        schedules.forEach((entry, index) => {
+            if (!entry.enabled || !entry.days?.length || !entry.time) return;
+        
+            if (entry.days?.length && entry.time) {
                 // Normal daily/weekly scheduled tab
                 const now = new Date();
                 const [hour, minute] = entry.time.split(":").map(Number);
@@ -290,8 +297,7 @@ function setupAlarms() {
 
 chrome.runtime.onInstalled.addListener(setupAlarms);
 chrome.runtime.onStartup.addListener(setupAlarms);
-chrome.storage.onChanged.addListener(setupAlarms);
-
+    
 chrome.alarms.onAlarm.addListener((alarm) => {
     console.log(`[autoclose] Alarm triggered: ${alarm.name}`);
     const match = alarm.name.match(/^autoclose-(\d+)$/);
@@ -357,7 +363,21 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             });
         }
     }    
+    
+    
 });
+
+function getRepeatMs(value, unit) {
+    if (!value || value <= 0) return 0;
+
+    switch (unit) {
+        case "seconds": return value * 1000;
+        case "minutes": return value * 60 * 1000;
+        case "hours": return value * 60 * 60 * 1000;
+        case "days": return value * 24 * 60 * 60 * 1000;
+        default: return 0;
+    }
+}
 
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === "previewNow") {

@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "TabCycle",
-    "version": "2.3.6",
+    "version": "2.3.7",
     "description": "Cycles through open tabs at a set time interval, and schedules tabs to open at specific dates/times, with per-tab scheduling.",
     "permissions": ["storage", "alarms", "tabs"],
     "background": {

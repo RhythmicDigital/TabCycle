@@ -5,7 +5,7 @@ body {
     margin: auto;
     background: #f9f9f9;
     color: #333;
-
+    overflow-x: auto; /* Enables horizontal scrolling */
 }
 
 header {
@@ -240,6 +240,11 @@ input[type="url"], input[type="text"], input[type="time"], input[type="number"] 
     color: white;
     z-index: 2;
 }
+
+#tab-intervals-container {
+    table-layout: fixed;
+    width: 100%;
+  }
 
 @keyframes fadeSlideUp {
     0% {

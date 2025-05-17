@@ -121,8 +121,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const nextOpenCell = document.createElement("td");
       const nextOpenText = document.createElement("span");
       let openText = getNextOpenDate(entry) != "Not scheduled" ? `Open on ${getNextOpenDate(entry)}` : `${getNextOpenDate(entry)}`;
-      let displayText = entry.autoclose <= 0 ? `Auto-close off – will display until cycled` : `Display for <strong>${entry.autoclose} seconds</strong>`;
-      nextOpenText.innerHTML = `${openText}. ${displayText}.`;
+      let repeatText = "";
+
+      if (entry.repeat && entry.repeatEvery > 0) {
+        const pluralizeUnit = (count, unit) => count === 1 ? unit.slice(0, -1) : unit;
+        repeatText = `Will reopen every <strong>${entry.repeatEvery} ${pluralizeUnit(entry.repeatEvery, entry.repeatUnit)}</strong> after its initial launch.`;      
+      } else {
+        repeatText = ` Will open only once at scheduled time.`;
+      }
+
+      let displayText = entry.autoclose <= 0
+        ? `Auto-close off – will display until cycled.`
+        : `Display for <strong>${entry.autoclose} seconds</strong>.`;
+
+      nextOpenText.innerHTML = `
+      <ul style="margin: 0; padding-left: 1.2em;">
+        <li>${openText}</li>
+        <li>${displayText}</li>
+        <li>${repeatText}</li>
+      </ul>
+    `;
       nextOpenCell.appendChild(nextOpenText);
       row.appendChild(nextOpenCell);
 

@@ -43,7 +43,25 @@ function loadTabIntervals() {
 
                 // URL
                 const urlCell = document.createElement("td");
-                urlCell.textContent = tab.url || "";
+
+                const urlText = document.createElement("span");
+                urlText.textContent = tab.url || "";
+                urlText.title = tab.url || "";
+                urlText.style.display = "inline-block";
+                urlText.style.maxWidth = "250px";
+                urlText.style.overflow = "hidden";
+                urlText.style.textOverflow = "ellipsis";
+                urlText.style.whiteSpace = "nowrap";
+                urlText.style.cursor = "pointer";
+                urlCell.style.wordBreak = "break-all";
+                
+                urlText.addEventListener("click", () => {
+                  const isCollapsed = urlText.style.whiteSpace === "nowrap";
+                  urlText.style.whiteSpace = isCollapsed ? "normal" : "nowrap";
+                  urlText.style.maxWidth = isCollapsed ? "unset" : "250px";
+                });
+                
+                urlCell.appendChild(urlText);
                 row.appendChild(urlCell);
 
                 // Cycle Interval input
@@ -111,6 +129,9 @@ function createScheduleEntry(data = {
         repeatUnit: "minutes", 
         focus: false,
         cycleInterval: 0,
+        lastOpened: 0,
+        hasOpenedOnce: false
+
     }, index = null) {
     const row = document.createElement("tr");
         
@@ -301,7 +322,9 @@ function createScheduleEntry(data = {
             cycleInterval: parseInt(cycleIntervalInput.value) || 0,  // Include cycle interval here
             repeat: repeatInput.checked,
             repeatEvery: parseInt(repeatEveryInput.value) || 0,
-            repeatUnit: repeatUnitSelect.value || "minutes"
+            repeatUnit: repeatUnitSelect.value || "minutes",
+            lastOpened: data.lastOpened || 0,
+            hasOpenedOnce: data.hasOpenedOnce || false
         };
         
         debouncedSave(index, newData);
@@ -323,26 +346,58 @@ function createScheduleEntry(data = {
     });
     toggleEnabled.querySelector("input").addEventListener("change", updateSchedule);
 
-    // Action buttons (delete)
+    // Action buttons (open + delete)
     const actionCell = document.createElement("td");
+
+    // Open Button
+    const openBtn = document.createElement("button");
+    openBtn.textContent = "Open";
+    openBtn.title = "Open this tab now";
+    openBtn.style.marginBottom = "6px";
+
+    openBtn.addEventListener("click", () => {
+        chrome.storage.local.get("schedules", (res) => {
+            const schedules = res.schedules || [];
+            if (index !== null) {
+                const entry = schedules[index];
+                chrome.tabs.create({ url: entry.url, active: entry.focus || false });
+            }
+        });
+    });
+    
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "X Delete";
     deleteBtn.title = "Delete";
+    deleteBtn.style.backgroundColor = "#dc3545"; // Bootstrap-style red
+    deleteBtn.style.color = "white";
+    deleteBtn.style.border = "none";
+    deleteBtn.style.padding = "6px 12px";
+    deleteBtn.style.borderRadius = "4px";
+    deleteBtn.style.cursor = "pointer";
+
+    deleteBtn.onmouseover = () => {
+        deleteBtn.style.backgroundColor = "#c82333"; // darker red on hover
+    };
+
+    deleteBtn.onmouseout = () => {
+        deleteBtn.style.backgroundColor = "#dc3545";
+    };
 
     deleteBtn.onclick = () => {
         chrome.storage.local.get("schedules", (res) => {
-        const schedules = res.schedules || [];
-        if (index !== null) {
-            schedules.splice(index, 1);
+            const schedules = res.schedules || [];
+            if (index !== null) {
+                schedules.splice(index, 1);
 
-            chrome.storage.local.set({ 
-                schedules, 
-                scrollPosition: document.body.scrollTop
-            }, () => location.reload());
-        }
+                chrome.storage.local.set({ 
+                    schedules, 
+                    scrollPosition: document.body.scrollTop
+                }, () => location.reload());
+            }
         });
     };
 
+    actionCell.appendChild(openBtn);
     actionCell.appendChild(deleteBtn);
     row.appendChild(actionCell);
 

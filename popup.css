@@ -181,25 +181,23 @@ button:hover {
 }
 
 /* Scheduled Table */
-/* Make the table body scrollable */
-#popup-table-body {
-  display: block;
-  max-height: 200px;  /* or whatever height you prefer */
+.popup-table-wrapper {
   overflow-y: auto;
-  overflow-x: hidden;  /* Prevent horizontal scrolling */
+  max-height: 200px; /* or whatever limit you want */
   width: 100%;
 }
 
-#popup-table-body tr {
-  display: table;
+.popup-table {
   width: 100%;
-  table-layout: fixed;
+  border-collapse: collapse;
+  table-layout: auto; /* Allow natural column sizing */
 }
 
-table thead {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+.popup-table th,
+.popup-table td {
+  white-space: nowrap;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
 }
 
 /* For a clean look while scrolling */
