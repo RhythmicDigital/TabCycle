@@ -1,0 +1,10 @@
+{
+    "extName": {
+    "message": "TabCycle",
+    "description": "The name of the extension"
+    },
+    "extDescription": {
+    "message": "Cycle through tabs and schedule tab openings.",
+    "description": "Description of the extension"
+    }
+}
