@@ -7,55 +7,110 @@
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <h1>TabCycle <span id="version" style="font-size: 0.6em; opacity: 0.7;"></span></h1>
-    <div class="container">
-        <div class="left-side">
-            <label for="interval">Default cycle interval (seconds):</label>
-            <input id="interval" type="number" min="1" value="15">
-            <div class="button-group">
-                <button id="toggle-cycle">
-                    <span id="toggle-icon">▶️</span> <span id="toggle-text">Start</span>
-                </button>
+    <div id="view-container" class="view-container">
+        <div class="header-box">
+            <div class="header-content">
+                <div class="header-left">
+                    <button id="calendar-view-btn" class="header-icon" title="Calendar">📅</button>
+                </div>
+                <div class="header-title">
+                    <h1>TabCycle <span id="version" style="font-size: 0.6em; opacity: 0.7;"></span></h1>
+                </div>
+                <div class="header-buttons">
+                    <button id="home-button" title="Home">🏠</button>
+                    <button id="settings-button" title="Settings">⚙️</button>
+                    <button id="open-settings">⋮</button>
+                </div>
+                </div>
             </div>
-            <hr>
-            <label for="window-select">Cycle tabs in:</label>
-            <select id="window-select">
-                <option value="active">Active Window</option>
-                <!-- Dynamically add window IDs -->
-            </select>
-            <hr>
-        </div>
-        
-        <div class="right-side" id="playlist-section">
-            <!-- Tabs list will be inserted here -->
-        </div>
-    </div>
+            <div id="main-view" class="view active">
+                    <div class="left-side">
+                        <div class="tab-cycle-box">
+                            <div class="interval-row">
+                                <label for="interval">Default Cycle Interval:</label>
+                                <div class="interval-input-group">
+                                  <input id="interval" type="number" min="1" value="15">
+                                  <span class="interval-unit">seconds</span>
+                                </div>
+                              </div>
+                            <div class="button-group">
+                                <button id="toggle-cycle">
+                                    <span id="toggle-icon">▶️</span> <span id="toggle-text">Start</span>
+                                </button>
+                                <input type="range" id="interval-slider" min="1" max="120" value="15" step="1">
 
-    <h2 style="display: flex; justify-content: space-between; align-items: center; margin-top: 1em;">
-        Scheduled Tabs
-        <button class="popup-button small" id="preview">Open All</button>
-    </h2>
+                            </div>                            
+                            <hr>
+                            <div class="cycle-tabs-row">
+                                <label for="window-select">Cycle tabs in:</label>
+                                <select id="window-select">
+                                  <option value="active">Active Window</option>
+                                  <!-- Dynamically add window IDs -->
+                                </select>
+                              </div>
+                            <hr>
+                        </div>
+                    </div>
+            
+                <div id="playlist-wrapper" class="frosted-box">
+                    <div class="right-side" id="playlist-section">
+                        <button id="reset-tab-intervals" class="popup-button medium">Reset All to Default</button>
+
+                        <!-- Tabs list will be inserted here -->
+                    </div>
+                </div>
+        </div>
+
+        <!-- Calendar View (initially hidden) -->
+        <div id="calendar-view" class="popup-view hidden-section">
+            <button id="back-to-main">← Back</button>
+            <div id="scheduled-wrapper">
+                <h2 style="display: flex; justify-content: space-between; align-items: center; margin-top: .1em;">
+                    Scheduled Tabs
+                    <button class="popup-button small" id="preview">Open All</button>
+                </h2>
+                
+                <div class="popup-table-wrapper">
+                        <table class="popup-table" id="schedule-list">
+                            <thead>
+                                <tr>
+                                    <th>Active</th>
+                                    <th>Name</th>
+                                    <th>Date & Time to Open Next</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="popup-table-body"></tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
     
-    <div class="popup-table-wrapper">
-        <div id="schedule-list"></div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Active</th>
-                        <th>Name</th>
-                        <th>Date & Time to Open</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="popup-table-body"></tbody>
-            </table>
+        <div id="settings-view" class="view">
+            <button id="back-button">← Back</button>
+            <div class="settings-box">
+                <h2>Additional Settings</h2>
+                <div class="visibility-toggles">
+                </div>
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="dark-theme-toggle">
+                        <span class="slider"></span>
+                        Dark Theme
+                    </label>
+                </div>
+                <button id="help-button" class="popup-button">Help</button>
+            </div>
+        </div>
+
+        <button id="collapse-toggle" class="popup-button medium" style="margin-left: auto; display: flex; align-items: center;">
+            <span id="collapse-icon">▲</span>
+            <span id="collapse-text"> Collapse Details</span>
+        </button>
+
+        <div class="popup-buttons">
+            <button class="popup-button large" id="options">Configure Tabs</button>
+        </div>
     </div>
-
-
-    <div class="popup-buttons">
-        <button class="popup-button large" id="options">Configure Tabs</button>
-    </div>
-
     <script src="popup.js"></script>
 </body>
-</html>

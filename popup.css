@@ -1,10 +1,14 @@
 body {
-  width: 500px;
-  max-width: 100%;
-  padding: 10px;
+  width: auto;
+  min-width: 450px;
+  max-width: 750px;
+  padding: 0px;
   font-family: Arial, sans-serif;
+  
+  background: linear-gradient(135deg, #f0f0f0,#c4c9ff); /* Soft lavender to pale blue */
+  background-size: 800% 100%;  
+  animation: gradientShift 60s ease infinite;
 
-  background-color: #f9f9f9;
   text-align: left;
   box-sizing: border-box;
 
@@ -12,11 +16,260 @@ body {
   overflow-y: auto;
 }
 
+.settings-box {
+  background-color: #f9f9f9;
+  color: black;
+  padding: 10px 16px;
+  border-radius: 5px;
+  margin: 0 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .settings-box {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border-color: #555;
+}
+
+.interval-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.interval-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.interval-input-group input {
+  width: 60px;
+  text-align: right;
+}
+
+.interval-unit {
+  font-size: 1em;
+  color: #000000;
+}
+
+.cycle-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 1px; /* controls spacing between label and dropdown */
+  margin-bottom: 0.5rem;
+}
+
+#calendar-container {
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+}
+
+/* Make playlist horizontal */
+.playlist-horizontal {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 6px 0;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  max-width: 100%;
+}
+
+.playlist-horizontal::-webkit-scrollbar {
+  height: 6px;
+}
+.playlist-horizontal::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.playlist-item {
+  flex: 0 0 auto;
+  width: 220px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background: #fff;
+  padding: 8px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  transition: background-color 0.2s ease;
+  border: 1px solid #ddd;
+  max-width: 100%; 
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+#interval-slider {
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+#interval-display {
+  font-weight: bold;
+}
+
+.view-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden; /* Prevent offscreen views from affecting layout */
+}
+
+.view {
+  display: none;              /* Hide by default */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show only active view */
+.view.active {
+  transform: translateX(0%);
+  opacity: 1;
+  pointer-events: auto;
+  display: block;
+}
+
+/* Animate main view out */
+#main-view.slide-left {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Animate settings view in */
+#settings-view.active {
+  transform: translateX(0%);
+  opacity: 1;
+  pointer-events: auto;
+  display: block;
+}
+
+/* Main view default: visible */
+#main-view {
+  transform: translateX(0%);
+  z-index: 1;
+}
+
+/* Settings view default: offscreen right */
+#settings-view {
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.header-box {
+  background: linear-gradient(135deg, #004f9f, #7174f8);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: .5em;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  text-align: center; /* center text content */
+  position: relative;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1em;
+}
+
+.header-buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap; /* Allow wrapping */
+  max-width: 40%;   /* Prevent overflow on narrow screens */
+  justify-content: flex-end;
+}
+
+.header-box h1 {
+  color: white;
+  text-align: center;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.header-left {
+  flex: 0 0 auto;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+
+.header-icon {
+  font-size: 1.2em;
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#settings-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 4px;
+}
+
+#settings-button:hover {
+  color: #ffd700; /* optional hover color */
+}
+
+#home-button,
+#settings-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 4px;
+  min-width: 28px;
+  max-width: 100%;
+  flex: 1 1 auto;
+}
+
+#home-button:hover,
+#settings-button:hover {
+  color: #ffd700; /* gold hover effect */
+}
+
 .container {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 8x;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .left-side {
@@ -25,8 +278,9 @@ body {
 }
 
 .right-side {
-  flex: 0 0 50%;   /* Right side takes up 38% (2% buffer for gap) */
-  min-width: 250px;
+  flex: 1 1 auto;
+  min-width: 0; /* 👈 prevents overflow */
+  max-width: 100%;
 }
   
 h1 {
@@ -55,14 +309,14 @@ h3 {
 }
 
 label[for="interval"] {
-  display: inline-block;
-  margin-right: 4px;
+  display: flex;
+  margin-right: 1px;
   margin-bottom: 0.5rem;
   font-weight: bold;
 }
 
 label[for="window-select"] {
-  display: inline-block;
+  display: flex;
   margin-right: 4px;
   margin-bottom: 0.5rem;
   font-weight: bold;
@@ -71,7 +325,7 @@ label[for="window-select"] {
 #window-select {
   display: inline-block;
   vertical-align: middle;
-  width: 100%;
+  width: 75%;
   max-width: 95%;
   padding: 2px 6px;
   font-size: 13px;
@@ -102,7 +356,7 @@ input {
 }
 
 #interval {
-  width: 100%;
+  width: 50%;
   max-width: 100%;
   padding: 6px;
   font-size: 14px;
@@ -145,7 +399,7 @@ input {
 
 .button-group {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   margin-bottom: .5rem;
   transition: margin-bottom 0.4s ease;
 }
@@ -183,7 +437,9 @@ button:hover {
 /* Scheduled Table */
 .popup-table-wrapper {
   overflow-y: auto;
-  max-height: 200px; /* or whatever limit you want */
+  overflow-x: auto;
+  max-width: 100%;
+  max-height: 200px;
   width: 100%;
 }
 
@@ -198,6 +454,13 @@ button:hover {
   white-space: nowrap;
   padding: 8px 10px;
   border: 1px solid #ddd;
+  word-break: break-word;
+}
+
+.playlist-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: .5em; /* spacing between window groups */
 }
 
 /* For a clean look while scrolling */
@@ -223,13 +486,21 @@ table {
 th, td {
   padding: 8px 10px;
   text-align: left;
-  border: 1px solid #ddd;
+  border: 1px solid #ddd; /* ✅ Adds lines between columns and rows */
 }
 
 th {
-  background-color: #003366;
+  background-color: #4a90e2;
   color: white;
   font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+th:first-child {
+  border-top-left-radius: 6px;
+}
+th:last-child {
+  border-top-right-radius: 6px;
 }
 
 tbody tr:nth-child(even) {
@@ -251,6 +522,14 @@ tbody tr:hover {
   display: flex;
   justify-content: space-between;
   gap: 8px;
+}
+.no-schedule-cell {
+  text-align: center;
+  padding: 10px;
+}
+.schedule-details {
+  margin: 0;
+  padding-left: 1.2em;
 }
 
 /* Day Buttons */
@@ -282,9 +561,14 @@ tbody tr:hover {
   cursor: pointer;
 }
 .popup-button.small {
-  width: 16%;
+  width: 18%;
   font-size: 0.75em;
-  padding: 4px 8px;
+  padding: 3px 8px;
+}
+.popup-button.medium {
+  width: 18%;
+  font-size: 1em;
+  padding: 3px 8px;
 }
 .popup-button.large {
   width: 100%;
@@ -309,12 +593,25 @@ tbody tr:hover {
   fill: white;
 }
 
+.tab-cycle-box {
+  background-color: #f9f9f9;
+  color: black;
+  padding: 10px 16px;
+  border-radius: 5px;
+  margin-bottom: .5em;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  text-align: center; /* center text content */
+  position: relative;
+}
+
 /* Playlist Section */
 #playlist-section {
   margin-top: 0.25rem;
   animation: fadeSlideUp 0.2s ease forwards;
+  margin-left: 0;         
   width: 100%;
-  margin-left: 20px;
+  box-sizing: border-box;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -323,6 +620,17 @@ tbody tr:hover {
   max-height: 300px; /* Adjust as needed */
   overflow-y: auto;  /* Adds vertical scroll if needed */
   padding-right: 10px; /* To avoid scrollbar overlap */
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.playlist-header h3 {
+  margin: 0;
 }
 
 #playlist-section ul {
@@ -333,12 +641,16 @@ tbody tr:hover {
 
 .playlist-item {
   display: flex;
-  align-items: center;
+  width: 160px;
+  scroll-snap-align: start;
+  flex-direction: row;
+  align-items: flex-start;
   margin-bottom: 8px;
   background: #fff;
   padding: 6px 8px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #ddd;
   transition: background-color 0.2s ease;
 }
 
@@ -357,7 +669,7 @@ tbody tr:hover {
 .tab-favicon {
   width: 16px;
   height: 16px;
-  margin-right: 8px;
+  margin-bottom: 4px;
   flex-shrink: 0;
 }
 
@@ -397,17 +709,48 @@ tbody tr:hover {
 .playlist-text {
   display: flex;
   flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.window-group {
+  padding: 4px 0;
+  border-top: 1px solid #ccc;
+}
+
+.window-group h4 {
+  margin: 0 0 6px 0;
+  font-size: 1em;
+  color: #444;
 }
 
 .tab-title {
   font-weight: bold;
   font-size: 0.95em;
   color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+
 }
 
 .tab-interval {
-  font-size: 0.8em;
-  color: #666;
+  font-size: .95em;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tab-interval-input {
+  width: 50px;
+  font-size: 0.9em;
+  margin-left: 4px;
+  padding: 2px 6px;
 }
 
 @keyframes spin {
@@ -422,4 +765,294 @@ tbody tr:hover {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+#playlist-wrapper {
+  transition: height 0.2s ease, opacity 0.2s ease;
+  overflow-x: auto;
+}
+
+#scheduled-wrapper {
+  width: 100%;
+  margin-top: 1em;
+  background-color: #f9f9f9;
+  color: black;
+  padding: 1px 16px;
+  border-radius: 5px;
+  margin-bottom: 1em;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+  
+  overflow-y: auto;
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#scheduled-wrapper .popup-table-wrapper {
+  max-height: 180px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+#scheduled-wrapper,
+.popup-table-wrapper,
+.popup-table {
+  box-sizing: border-box;
+}
+
+.hidden-section {
+  display: none !important;
+}
+
+.visibility-toggles {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  justify-content: flex-end;
+}
+
+#details-sections {
+  transition: opacity 0.2s ease, max-height 0.2s ease;
+}
+
+.hidden-section {
+  display: none !important;
+}
+
+#collapse-toggle {
+  display: block;
+  width: 100%;
+  text-align: right;
+  box-sizing: border-box;
+  padding-right: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#collapse-icon {
+  font-size: 1em;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+/* Additional Settings View */
+body.dark {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+}
+body.dark .popup-button {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark .popup-button:hover {
+  background-color: #3a3a3a;
+  border-color: #777;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.switch input {
+  display: none;
+}
+
+.switch .slider {
+  width: 36px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 10px;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.switch .slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.switch input:checked + .slider {
+  background-color: #4caf50;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(16px);
+}
+
+body.dark {
+  background: #1f1f1f !important; /* override the gradient */
+  background-image: none !important;
+  color: #e0e0e0;
+}
+
+body.dark .tab-cycle-box,
+body.dark #playlist-section,
+body.dark #scheduled-wrapper,
+body.dark .popup-table,
+body.dark table {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border-color: #555;
+}
+
+body.dark th {
+  background-color: #444;
+  color: #fff;
+}
+
+body.dark td {
+  background-color: #333;
+}
+
+body.dark .playlist-item {
+  background: #2d2d2d;
+  border-color: #444;
+}
+
+body.dark .playlist-item:hover {
+  background-color: #3a3a3a;
+}
+
+body.dark .popup-button {
+  background-color: #444;
+  color: #fff;
+}
+
+body.dark button:hover {
+  background-color: #555;
+}
+
+body.dark .playlist-item,
+body.dark .playlist-item * {
+  color: #f0f0f0;
+}
+
+body.dark .tab-title,
+body.dark .tab-interval {
+  color: #f0f0f0;
+}
+
+body.dark .window-group h4 {
+  color: #f0f0f0;
+}
+
+body.dark h4 {
+  color: #f0f0f0;
+}
+
+body.dark .interval-unit {
+  font-size: 1em;
+  color: #f0f0f0;
+}
+
+body.dark input[type="number"] {
+  color: #000;
+}
+
+body.dark .header-box {
+  background: linear-gradient(135deg, #1a1f2b, #2e3c61); /* Replace with your preferred option */
+}
+
+body.dark #back-button,
+body.dark #open-settings,
+body.dark #back-to-main {
+  background-color: #2c2c2c;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+body.dark #back-button:hover,
+body.dark #open-settings:hover,
+body.dark #back-to-main:hover {
+  background-color: #3a3a3a;
+  border-color: #777;
+}
+
+/* Base style for Open buttons */
+.popup-table button {
+  background-color: #e0e0e0;
+  color: #000;
+  border: 1px solid #ccc;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Dark Mode - Blue/Purple Start/Stop Buttons */
+body.dark #toggle-cycle.stopped {
+  background-color: #444;
+  color: #fff;
+}
+body.dark #toggle-cycle.stopped:hover {
+  background-color: #555;
+}
+
+body.dark #toggle-cycle.started {
+  background-color: #222;
+  color: #fff;
+}
+body.dark #toggle-cycle.started:hover {
+  background-color: #333;
+}
+
+/* Dark mode slider styles */
+body.dark input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #444;
+  border-radius: 4px;
+  outline: none;
+  transition: background 0.2s;
+}
+
+/* Track styling */
+body.dark input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #555;
+  border-radius: 4px;
+}
+
+/* Thumb styling */
+body.dark input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ccc;
+  cursor: pointer;
+  border: 2px solid #888;
+  margin-top: -4px; /* Align thumb with track */
+}
+
+/* Firefox support */
+body.dark input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: #555;
+  border-radius: 4px;
+}
+body.dark input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ccc;
+  border: 2px solid #888;
+  cursor: pointer;
 }

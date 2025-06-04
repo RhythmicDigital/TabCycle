@@ -9,7 +9,7 @@ body {
 }
 
 header {
-    background-color: #1a73e8;
+    background: linear-gradient(135deg, #004f9f, #7174f8);
     color: white;
     padding: 2rem;
     text-align: center;
@@ -63,6 +63,44 @@ span {
 
 .schedule-entry input[type="url"] {
     width: 100%;
+}
+
+.url-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.url-input-container input[type="url"] {
+    flex-grow: 1;
+    padding: 6px 8px;
+    font-size: 0.95em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.url-input-container input[type="url"].invalid {
+    border-color: #e74c3c;
+    background-color: #fff5f5;
+}
+
+.url-input-container input[type="url"].valid {
+    border-color: #2ecc71;
+    background-color: #f0fff0;
+}
+
+.url-launch {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 4px;
+    color: #007acc;
+}
+.url-launch:hover {
+    color: #005fa3;
 }
 
 .schedule-entry input[type="time"],
@@ -142,7 +180,12 @@ button:hover {
     align-items: center;
     gap: 8px;
     font-size: 0.85em;
-  }
+}
+
+.repeat-container label {
+    font-size: 1.1em;
+    font-weight: 500;
+}
 
 table {
   width: 105%;
@@ -157,21 +200,27 @@ table {
 th, td {
     padding: 8px 10px;
     text-align: left;
-    border: 1px solid #ddd; /* ✅ Adds lines between columns and rows */
+    border: 1px solid #ddd; /* Adds lines between columns and rows */
   }
 
 th {
-  background-color: #003366; /* ✅ Dark blue */
-  color: white;
-  font-weight: 600;
+    background-color: #4a90e2;
+    color: white;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
-
+th:first-child {
+    border-top-left-radius: 6px;
+}
+th:last-child {
+    border-top-right-radius: 6px;
+}
 tbody tr:nth-child(even) {
-    background-color: #f2f2f2; /* ✅ Alternating row color */
+    background-color: #f2f2f2; /* Alternating row color */
 }
   
 tbody tr:hover {
-    background-color: #e0eaff; /* ✅ Hover highlight effect */
+    background-color: #e0eaff; /* Hover highlight effect */
 }
 
 input[type="url"], input[type="text"], input[type="time"], input[type="number"] {
@@ -187,10 +236,13 @@ input[type="url"], input[type="text"], input[type="time"], input[type="number"] 
 }
 
 .days label {
-  background: #eee;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.8em;
+    border: 1px solid #aaa;
+    background: #fff;
+    cursor: pointer;
+}
+.days input:checked + label {
+    background: #4a90e2;
+    color: white;
 }
 
 .toast {
@@ -236,7 +288,7 @@ input[type="url"], input[type="text"], input[type="time"], input[type="number"] 
 .table-scroll thead th {
     position: sticky;
     top: 0;
-    background-color: #003366;
+    background-color: #4a90e2;
     color: white;
     z-index: 2;
 }
@@ -244,7 +296,7 @@ input[type="url"], input[type="text"], input[type="time"], input[type="number"] 
 #tab-intervals-container {
     table-layout: fixed;
     width: 100%;
-  }
+}
 
 @keyframes fadeSlideUp {
     0% {
@@ -256,3 +308,10 @@ input[type="url"], input[type="text"], input[type="time"], input[type="number"] 
         transform: translateY(0);
     }
 }
+
+@media (prefers-color-scheme: dark) {
+    body {
+      background: #121212;
+      color: #f1f1f1;
+    }
+  }
