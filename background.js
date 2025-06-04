@@ -45,7 +45,7 @@ async function cycleTabs() {
     const activeTab = tabs.find(tab => tab.active);
 
     // Ensure that we're staying on the active tab for the full interval
-    const interval = tabIntervals[activeTab.id] || intervalSeconds;
+    const interval = tabIntervals[activeTab.id]?.value || intervalSeconds;
     const nextTabIndex = (activeTab.index + 1) % tabs.length;
     const nextTab = tabs[nextTabIndex];
 
@@ -246,8 +246,13 @@ function scheduleTabs(alarm) {
                     if (entry.autoclose <= 0 && entry.cycleInterval && entry.cycleInterval > 0) {
                         chrome.storage.local.get("tabIntervals", (res) => {
                             const updatedIntervals = res.tabIntervals || {};
-                            updatedIntervals[tab.id] = entry.cycleInterval;
-                            chrome.storage.local.set({ tabIntervals: updatedIntervals });
+                            if (entry.cycleInterval && entry.cycleInterval > 0) {
+                                tabIntervals[tab.id] = {
+                                  value: entry.cycleInterval,
+                                  manual: false
+                                };
+                                chrome.storage.local.set({ tabIntervals });
+                              }
                             
                             if (isCycling) {
                                 stopCycling();

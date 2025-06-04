@@ -80,7 +80,7 @@ function loadTabIntervals() {
                         if (isNaN(newInterval) || newInterval <= 0) {
                             delete updatedIntervals[tab.id];
                         } else {
-                            updatedIntervals[tab.id] = newInterval;
+                            updatedIntervals[tab.id] = { value: newInterval, manual: true };
                         }
                         chrome.storage.local.set({ tabIntervals: updatedIntervals }, () => {
                             showSavedMessage();
@@ -157,11 +157,41 @@ function createScheduleEntry(data = {
 
     // URL
     const urlCell = document.createElement("td");
+    const urlContainer = document.createElement("div");
+    urlContainer.className = "url-input-container";
+    
     const urlInput = document.createElement("input");
     urlInput.type = "url";
     urlInput.placeholder = "https://example.com";
-    urlInput.value = data.url;
-    urlCell.appendChild(urlInput);
+    urlInput.value = data.url || "";
+    
+    // URL validation
+    urlInput.addEventListener("input", () => {
+        try {
+            new URL(urlInput.value);
+            urlInput.classList.remove("invalid");
+            urlInput.classList.add("valid");
+        } catch {
+            urlInput.classList.add("invalid");
+            urlInput.classList.remove("valid");
+        }
+        updateSchedule();
+    });
+    
+    // Open-in-tab button
+    const openLinkBtn = document.createElement("button");
+    openLinkBtn.className = "url-launch";
+    openLinkBtn.textContent = "🔗";
+    openLinkBtn.title = "Open this URL";
+    openLinkBtn.onclick = () => {
+        if (urlInput.value) {
+            chrome.tabs.create({ url: urlInput.value });
+        }
+    };
+    
+    urlContainer.appendChild(urlInput);
+    urlContainer.appendChild(openLinkBtn);
+    urlCell.appendChild(urlContainer);
     row.appendChild(urlCell);
 
     // Time & Details
@@ -282,7 +312,7 @@ function createScheduleEntry(data = {
                 chrome.runtime.sendMessage({
                     action: "setTabInterval",
                     tabId: tab.id,
-                    interval: newInterval
+                    interval: { value: newInterval, manual: true }
                 });
             });
         });
@@ -384,15 +414,17 @@ function createScheduleEntry(data = {
     };
 
     deleteBtn.onclick = () => {
+        const row = deleteBtn.closest("tr");
+        if (row) row.remove();
+    
         chrome.storage.local.get("schedules", (res) => {
             const schedules = res.schedules || [];
-            if (index !== null) {
+            if (index !== null && index < schedules.length) {
                 schedules.splice(index, 1);
-
-                chrome.storage.local.set({ 
-                    schedules, 
-                    scrollPosition: document.body.scrollTop
-                }, () => location.reload());
+                chrome.storage.local.set({ schedules }, () => {
+                    showSavedMessage();
+                    chrome.runtime.sendMessage({ action: "refreshAlarms" });
+                });
             }
         });
     };
@@ -417,11 +449,12 @@ addButton.onclick = () => {
             autodisable: false,
             focus: false
         });
-        chrome.storage.local.set({ 
-            schedules, 
-            scrollPosition: document.body.scrollTop
-        }, () => {
-            location.reload(); // Ensures the new entry is indexed properly
+        chrome.storage.local.set({ schedules }, () => {
+            createScheduleEntry(schedules[schedules.length - 1], schedules.length - 1);
+            showSavedMessage();
+
+            const newRow = document.querySelector("#schedule-body tr:last-child");
+            if (newRow) newRow.scrollIntoView({ behavior: "smooth", block: "center" });
         });
     });
 };

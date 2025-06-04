@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.4.0] - 2025-06-03
+### Added
+- Added slider to update default cycle interval.
+- Added toggle to collapse/expand popup by showing/hiding open tabs list.
+- Moved scheduled tabs list to its own view in popup.
+- Added an Additional Settings view to popup.
+- Added a dark mode toggle in Additional Settings.
+- Added a Help button that links to the FAQ section on tabcycle.com.
+- Added header box with gradient in popup.
+- Added buttons in header including: scheduled tabs button, additional settings button, options button, and home button that directs to tabcycle.com.
+- Styled popup with contained boxes for better layout clarity.
+- Added animated gradient background for popup.
+- Updated color of header row colors.
+- Updated schedule table header in popup from "Date & Time to Open" to "Date & Time to Open Next".
+- Added URL validation to URL input for scheduled tab configs in options, with updated styling for URL input.
+
+### Fixed
+- Fixed adding/deleting scheduled tab configs affecting view in options, and now automatically adjusts scrolling of page when adding/deleting.
+- Fixed default interval not being applied to tabs without manual override.
+- Reset tab intervals button now correctly resets all tab intervals, even those manually set.
+- Collapse button no longer reappears incorrectly when switching between views.
+- Interval changes no longer affect manually configured tab intervals unless explicitly updated.
+
+## [2.3.8] - 2025-05-25
+### Added
+- Added locale messages for Edge
+
 ## [2.3.7] - 2025-05-16
 ### Added
 - Added open button in options page to open scheduled tabs immediately.

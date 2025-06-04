@@ -8,6 +8,7 @@ const text = document.getElementById("toggle-text");
 const playlistSection = document.getElementById("playlist-section");
 const defaultCycleInterval = 15;
 const windowSelect = document.getElementById("window-select");
+const slider = document.getElementById("interval-slider");
 
 let isCycling = false;
 
@@ -24,6 +25,41 @@ function updateToggleButton() {
     text.textContent = "Start";
   }
 }
+
+chrome.storage.local.get("intervalSeconds", (data) => {
+  const saved = data.intervalSeconds || defaultCycleInterval;
+  slider.value = saved;
+  intervalInput.value = saved;
+});
+
+// Update display and store new value when user changes it
+slider.addEventListener("input", () => {
+  const val = parseInt(slider.value, 10);
+  intervalInput.value = val;
+
+  chrome.storage.local.set({ intervalSeconds: val });
+  chrome.runtime.sendMessage({ action: "setInterval", value: val });
+
+  chrome.windows.getAll({ populate: true }, (windows) => {
+    chrome.storage.local.get("tabIntervals", (res) => {
+      const updated = {};
+      const existing = res.tabIntervals || {};
+  
+      windows.flatMap(win => win.tabs).forEach(tab => {
+        const current = existing[tab.id];
+        if (!current || !current.manual) {
+          updated[tab.id] = { value: val, manual: false };
+        } else {
+          updated[tab.id] = current; // Preserve manually set values
+        }
+      });
+  
+      chrome.storage.local.set({ tabIntervals: updated }, () => {
+        updatePlaylist(updated);
+      });
+    });
+  });
+});
 
 document.getElementById("toggle-cycle").addEventListener("click", () => {
   if (!isCycling) {
@@ -44,6 +80,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const manifest = chrome.runtime.getManifest();
   versionSpan.textContent = `v${manifest.version}`;
   
+  chrome.storage.local.get("isCollapsed", (data) => {
+    const isCollapsed = data.isCollapsed;
+
+    // Default to collapsed if undefined
+    if (typeof isCollapsed === "undefined") {
+      isCollapsed = true;
+      chrome.storage.local.set({ isCollapsed: true });
+    }
+    
+    const playlist = document.getElementById("playlist-wrapper");
+    const toggleButton = document.getElementById("collapse-toggle");
+    
+    playlist.classList.toggle("hidden-section", isCollapsed);
+    toggleButton.classList.toggle("collapsed", isCollapsed);
+  
+    toggleButton.innerHTML = `
+    <span id="collapse-icon">${isCollapsed ? "▼" : "▲"}</span>
+    <span id="collapse-text">${isCollapsed ? " Expand Details" : " Collapse Details"}</span>
+  `;
+
+    resizePopupToFitContent();
+  });
+  
   // Get the stored interval value
   chrome.storage.local.get("intervalSeconds", (data) => {
     intervalInput.value = data.intervalSeconds || defaultCycleInterval;
@@ -53,7 +112,29 @@ document.addEventListener("DOMContentLoaded", () => {
   intervalInput.addEventListener("input", () => {
     let newInterval = parseInt(intervalInput.value, 10);
     if (!isNaN(newInterval) && newInterval > 0) {
+      slider.value = newInterval;
+      chrome.storage.local.set({ intervalSeconds: newInterval });
       chrome.runtime.sendMessage({ action: "setInterval", value: newInterval });
+  
+      chrome.windows.getAll({ populate: true }, (windows) => {
+        chrome.storage.local.get("tabIntervals", (res) => {
+          const existing = res.tabIntervals || {};
+          const updated = {};
+  
+          windows.flatMap(win => win.tabs).forEach(tab => {
+            const current = existing[tab.id];
+            if (!current || !current.manual) {
+              updated[tab.id] = { value: newInterval, manual: false };
+            } else {
+              updated[tab.id] = current; // Preserve manually set ones
+            }
+          });
+  
+          chrome.storage.local.set({ tabIntervals: updated }, () => {
+            updatePlaylist(updated);
+          });
+        });
+      });
     }
   });
 
@@ -67,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     isCycling = data.isCycling || false;
     updateToggleButton();
   });
-  
+
   const tableBody = document.createElement("table");
   tableBody.className = "popup-table";
 
@@ -81,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const noTabsRow = document.createElement("tr");
         const noTabsCell = document.createElement("td");
         noTabsCell.colSpan = 4; // Span across all table columns
+        noTabsCell.className = "no-schedule-cell";
         noTabsCell.textContent = "No tabs scheduled.";
         noTabsCell.style.textAlign = "center";
         noTabsCell.style.padding = "10px";
@@ -134,13 +216,13 @@ document.addEventListener("DOMContentLoaded", () => {
         ? `Auto-close off – will display until cycled.`
         : `Display for <strong>${entry.autoclose} second(s)</strong>.`;
 
-      nextOpenText.innerHTML = `
-      <ul style="margin: 0; padding-left: 1.2em;">
-        <li>${openText}</li>
-        <li>${displayText}</li>
-        <li>${repeatText}</li>
-      </ul>
-    `;
+        nextOpenText.innerHTML = `
+        <ul class="schedule-details">
+          <li>${openText}</li>
+          <li>${displayText}</li>
+          <li>${repeatText}</li>
+        </ul>
+      `;
       nextOpenCell.appendChild(nextOpenText);
       row.appendChild(nextOpenCell);
 
@@ -157,78 +239,341 @@ document.addEventListener("DOMContentLoaded", () => {
 
       tbody.appendChild(row);
     });
+
+    document.getElementById("calendar-view-btn").addEventListener("click", () => {
+      const mainView = document.getElementById("main-view");
+      const calendarView = document.getElementById("calendar-view");
+      const settingsView = document.getElementById("settings-view");
+
+      const isCalendarVisible = calendarView.classList.contains("active");
+      const isSettingsVisible = settingsView.classList.contains("active");
+
+        // If settings view is open, close it
+      if (isSettingsVisible) {
+        settingsView.classList.remove("active");
+        mainView.classList.remove("slide-left");
+      }
+      
+      if (isCalendarVisible) {
+        // Go back to main view
+        calendarView.classList.remove("active");
+        calendarView.classList.add("hidden-section");
+    
+        mainView.classList.remove("hidden-section");
+        mainView.classList.add("active");
+      } else {
+        // Show calendar view
+        mainView.classList.remove("active");
+        mainView.classList.add("hidden-section");
+    
+        calendarView.classList.remove("hidden-section");
+        calendarView.classList.add("active");
+    
+        renderCalendar();
+      }
+      updateCollapseToggleVisibility();
+    });
+    
+    document.getElementById("back-to-main").addEventListener("click", () => {
+      document.getElementById("calendar-view").classList.remove("active");
+      document.getElementById("calendar-view").classList.add("hidden-section");
+    
+      document.getElementById("main-view").classList.remove("hidden-section");
+      document.getElementById("main-view").classList.add("active");
+
+      updateCollapseToggleVisibility();
+    });
   });
 
   chrome.storage.local.get("tabIntervals", (res) => {
     const tabIntervals = res.tabIntervals || {};
     updatePlaylist(tabIntervals);
   });
+
+  document.getElementById("open-settings").addEventListener("click", () => {
+    const mainView = document.getElementById("main-view");
+    const calendarView = document.getElementById("calendar-view");
+    const settingsView = document.getElementById("settings-view");
+  
+    const isCalendarVisible = calendarView.classList.contains("active");
+    const isSettingsVisible = settingsView.classList.contains("active");
+  
+    // CASE 1: Already in settings view — go back to main
+    if (isSettingsVisible && !isCalendarVisible) {
+      settingsView.classList.remove("active");
+      settingsView.classList.add("hidden-section");
+  
+      mainView.classList.remove("hidden-section");
+      mainView.classList.add("active");
+  
+      updateCollapseToggleVisibility();
+      return; // ✅ Important to prevent further logic from running
+    }
+  
+    // CASE 2: Calendar view is visible — close it and go to settings
+    if (isCalendarVisible) {
+      calendarView.classList.remove("active");
+      calendarView.classList.add("hidden-section");
+  
+      settingsView.classList.remove("hidden-section");
+      settingsView.classList.add("active");
+  
+      mainView.classList.add("hidden-section");
+      mainView.classList.remove("active");
+    } else {
+      // CASE 3: Going to settings view from main
+      mainView.classList.remove("active");
+      mainView.classList.add("hidden-section");
+  
+      settingsView.classList.remove("hidden-section");
+      settingsView.classList.add("active");
+    }
+  
+    updateCollapseToggleVisibility();
+  });
+  
+  document.getElementById("back-button").addEventListener("click", () => {
+    const mainView = document.getElementById("main-view");
+    const settingsView = document.getElementById("settings-view");
+  
+    // Hide settings
+    settingsView.classList.remove("active");
+    settingsView.classList.add("hidden-section");
+  
+    // Show main
+    mainView.classList.remove("hidden-section");
+    mainView.classList.remove("slide-left"); // If using slide effect
+    mainView.classList.add("active");
+  
+    resizePopupToFitContent();
+    updateCollapseToggleVisibility();
+  });
+  
+  document.getElementById("collapse-toggle").addEventListener("click", () => {
+    const mainView = document.getElementById("main-view");
+  
+    // Only allow collapsing if we're in the main view
+    if (mainView.classList.contains("active") && !mainView.classList.contains("hidden-section")) {
+      const playlist = document.getElementById("playlist-wrapper");
+      const toggleButton = document.getElementById("collapse-toggle");
+  
+      const isCollapsed = toggleButton.classList.toggle("collapsed");
+  
+      playlist.classList.toggle("hidden-section", isCollapsed);
+  
+      toggleButton.innerHTML = `
+        <span id="collapse-icon">${isCollapsed ? "▼" : "▲"}</span>
+        <span id="collapse-text">${isCollapsed ? " Expand Details" : " Collapse Details"}</span>
+      `;
+  
+      chrome.storage.local.set({ isCollapsed });
+      resizePopupToFitContent();
+    }
+  });
 });
+
+function renderCalendar() {
+  const container = document.getElementById("calendar-container");
+  container.innerHTML = "";
+
+  chrome.storage.local.get("schedules", (res) => {
+    const schedules = res.schedules || [];
+    const dateMap = {};
+
+    schedules.forEach(entry => {
+      const nextDateText = getNextOpenDate(entry);
+      const tmpDiv = document.createElement("div");
+      tmpDiv.innerHTML = nextDateText;
+      const plainText = tmpDiv.textContent || tmpDiv.innerText;
+
+      if (!plainText.includes("Not scheduled")) {
+        if (!dateMap[plainText]) dateMap[plainText] = [];
+        dateMap[plainText].push(entry.name || entry.url);
+      }
+    });
+
+    for (const date in dateMap) {
+      const block = document.createElement("div");
+      block.className = "calendar-block";
+
+      const dateHeading = document.createElement("h4");
+      dateHeading.textContent = date;
+      block.appendChild(dateHeading);
+
+      const ul = document.createElement("ul");
+      dateMap[date].forEach(name => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        ul.appendChild(li);
+      });
+
+      block.appendChild(ul);
+      container.appendChild(block);
+    }
+  });
+}
+
+// Additional Settings Page
+document.getElementById("dark-theme-toggle").addEventListener("change", (e) => {
+  if (e.target.checked) {
+    document.body.classList.add("dark");
+    chrome.storage.local.set({ theme: "dark" });
+  } else {
+    document.body.classList.remove("dark");
+    chrome.storage.local.set({ theme: "light" });
+  }
+});
+
+// Load theme on popup open
+chrome.storage.local.get("theme", (res) => {
+  if (res.theme === "dark") {
+    document.body.classList.add("dark");
+    document.getElementById("dark-theme-toggle").checked = true;
+  }
+});
+
+document.getElementById("help-button").addEventListener("click", () => {
+  chrome.tabs.create({ url: "https://tabcycle.com/#faq" });
+});
+
+document.getElementById("home-button").addEventListener("click", () => {
+  chrome.tabs.create({ url: "https://tabcycle.com" });
+});
+
+document.getElementById("settings-button").addEventListener("click", () => {
+  chrome.runtime.openOptionsPage();
+});
+
+function resizePopupToFitContent() {
+  requestAnimationFrame(() => {
+    document.body.style.height = "auto";
+    document.documentElement.style.height = "auto";
+  });
+}
+
+function updateCollapseToggleVisibility() {
+  const mainView = document.getElementById("main-view");
+  const calendarView = document.getElementById("calendar-view");
+  const settingsView = document.getElementById("settings-view");
+  const collapseToggle = document.getElementById("collapse-toggle");
+
+  const isMainView = mainView.classList.contains("active");
+  const isScheduledView = calendarView.classList.contains("active");
+  const isSettingsView = settingsView.classList.contains("active");
+
+  // Only show the collapse button in the main view
+  if (isMainView && !isScheduledView && !isSettingsView) {
+    collapseToggle.style.display = "inline-flex";
+  } else {
+    collapseToggle.style.display = "none";
+  }
+}
 
 // Update the playlist section
 function updatePlaylist(tabIntervals) {
-  playlistSection.innerHTML = "<div id='playlist-loading'></div>"; // Show loading spinner
+  playlistSection.innerHTML = "<div id='playlist-loading'></div>";
 
-  chrome.tabs.query({}, (tabs) => {
-    chrome.storage.local.get("tabIntervals", (res) => {
-      playlistSection.innerHTML = "<h3>Tabs Currently Open</h3>"; // Remove spinner, reset section
+  chrome.windows.getAll({ populate: true }, (windows) => {
+    chrome.storage.local.get("intervalSeconds", (res) => {
+      const defaultInterval = res.intervalSeconds || 15;
+      playlistSection.innerHTML = `
+      <div class="playlist-header">
+        <h3>Tabs Currently Open</h3>
+        <button id="reset-tab-intervals" class="popup-button medium">Reset All</button>
+      </div>
+    `;
 
-      const playlistUl = document.createElement("ul");
-      const maxTabsToShow = 3;
-      let isExpanded = false;
+      const container = document.createElement("div");
+      container.className = "playlist-vertical";
+      
+      windows.forEach((win, winIndex) => {
+        const windowGroup = document.createElement("div");
+        windowGroup.className = "window-group";
 
-      tabs.forEach((tab, index) => {
-        const playlistItem = document.createElement("li");
-        playlistItem.classList.add("playlist-item");
+        const windowTitle = document.createElement("h4");
+        windowTitle.textContent = `Window ${winIndex + 1}`;
+        windowGroup.appendChild(windowTitle);
 
-        const favicon = document.createElement("img");
-        favicon.src = tab.favIconUrl || "default-favicon.png";
-        favicon.className = "tab-favicon";
+        const tabList = document.createElement("div");
+        tabList.className = "playlist-horizontal";
 
-        const textContainer = document.createElement("div");
-        textContainer.className = "playlist-text";
+        win.tabs.forEach(tab => {
+          const item = document.createElement("div");
+          item.className = "playlist-item";
 
-        const titleSpan = document.createElement("span");
-        titleSpan.className = "tab-title";
-        titleSpan.textContent = tab.title;
+          const favicon = document.createElement("img");
+          favicon.src = tab.favIconUrl || "default-favicon.png";
+          favicon.className = "tab-favicon";
 
-        const intervalSpan = document.createElement("span");
-        intervalSpan.className = "tab-interval";
-        chrome.storage.local.get("intervalSeconds", (data) => {
-          intervalSpan.textContent = `Cycle interval: ${tabIntervals[tab.id] || data.intervalSeconds} sec`;
+          const textContainer = document.createElement("div");
+          textContainer.className = "playlist-text";
+
+          const titleSpan = document.createElement("span");
+          titleSpan.className = "tab-title";
+          titleSpan.textContent = tab.title;
+
+          textContainer.appendChild(titleSpan);
+
+          // Create editable input for cycle interval
+          const intervalWrapper = document.createElement("div");
+          intervalWrapper.className = "tab-interval";
+          
+          const intervalLabel = document.createElement("label");
+          intervalLabel.textContent = "Interval (sec): ";
+          
+          const intervalInput = document.createElement("input");
+          intervalInput.type = "number";
+          intervalInput.min = 1;
+          intervalInput.max = 999;
+          const intervalData = tabIntervals[tab.id];
+          intervalInput.value = intervalData?.value || defaultInterval;          intervalInput.dataset.tabId = tab.id;
+          intervalInput.className = "tab-interval-input";
+
+          intervalInput.addEventListener("change", () => {
+            const newVal = parseInt(intervalInput.value, 10);
+            if (!isNaN(newVal)) {
+              chrome.storage.local.get("tabIntervals", (res) => {
+                const updated = res.tabIntervals || {};
+                updated[tab.id] = { value: newVal, manual: true };
+                chrome.storage.local.set({ tabIntervals: updated });
+              });
+            }
+          });
+          
+          intervalLabel.appendChild(intervalInput);
+          intervalWrapper.appendChild(intervalLabel);
+          textContainer.appendChild(intervalWrapper);
+
+          item.appendChild(favicon);
+          item.appendChild(textContainer);
+          tabList.appendChild(item);
         });
 
-        textContainer.appendChild(titleSpan);
-        textContainer.appendChild(intervalSpan);
-
-        playlistItem.appendChild(favicon);
-        playlistItem.appendChild(textContainer);
-
-
-        if (index >= maxTabsToShow) {
-          playlistItem.style.display = "none";
-          playlistItem.classList.add("hidden-tab");
-        }
-
-        playlistUl.appendChild(playlistItem);
+        windowGroup.appendChild(tabList);
+        container.appendChild(windowGroup);
       });
 
-      playlistSection.appendChild(playlistUl);
+      playlistSection.appendChild(container);
 
-      if (tabs.length > maxTabsToShow) {
-        const moreDiv = document.createElement("div");
-        moreDiv.textContent = `+${tabs.length - maxTabsToShow} more`;
-        moreDiv.className = "more-tabs";
-        playlistSection.appendChild(moreDiv);
-
-        moreDiv.addEventListener("click", () => {
-          isExpanded = !isExpanded;
-          document.querySelectorAll(".hidden-tab").forEach(item => {
-            item.style.display = isExpanded ? "flex" : "none";
+      document.getElementById("reset-tab-intervals").addEventListener("click", () => {
+        chrome.windows.getAll({ populate: true }, (windows) => {
+          const allTabs = windows.flatMap(win => win.tabs);
+      
+          chrome.storage.local.get(["intervalSeconds", "tabIntervals"], (res) => {
+            const defaultInterval = res.intervalSeconds || 15;
+            const existingIntervals = res.tabIntervals || {};
+            const updatedIntervals = { ...existingIntervals };
+      
+            allTabs.forEach(tab => {
+              updatedIntervals[tab.id] = { value: defaultInterval, manual: false };
+            });
+      
+            chrome.storage.local.set({ tabIntervals: updatedIntervals }, () => {
+              updatePlaylist(updatedIntervals); // Refresh visual
+            });
           });
-          moreDiv.textContent = isExpanded ? "Show Less" : `+${tabs.length - maxTabsToShow} more`;
         });
-      }
+      });
     });
   });
 }
