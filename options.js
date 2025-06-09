@@ -19,7 +19,7 @@ window.addEventListener('load', function() {
             const noTabsCell = document.createElement("td");
             noTabsCell.colSpan = 7;
             noTabsCell.className = "no-schedule-cell";
-            noTabsCell.textContent = "No tabs scheduled.";
+            noTabsCell.textContent = "No tabs scheduled. Click 'Add New Tab' to schedule a tab to open.";
             noTabsRow.appendChild(noTabsCell);
             scheduleBody.appendChild(noTabsRow);
         } else {
@@ -28,6 +28,31 @@ window.addEventListener('load', function() {
         loadTabIntervals();
     });  
 });
+
+function updateNoTabsMessage() {
+    const scheduleBody = document.querySelector("#schedule-body");
+    const existingMsg = scheduleBody.querySelector(".no-schedule-row");
+
+    const rows = scheduleBody.querySelectorAll("tr:not(.no-schedule-row)");
+    const hasTabs = rows.length > 0;
+
+    if (!hasTabs && !existingMsg) {
+        const noTabsRow = document.createElement("tr");
+        noTabsRow.className = "no-schedule-row";
+
+        const noTabsCell = document.createElement("td");
+        noTabsCell.colSpan = 7;
+        noTabsCell.textContent = "No tabs scheduled. Click 'Add New Tab' to schedule a tab to open.";
+        noTabsCell.style.textAlign = "center";
+        noTabsCell.style.padding = "12px";
+        noTabsCell.style.color = "#000";
+
+        noTabsRow.appendChild(noTabsCell);
+        scheduleBody.appendChild(noTabsRow);
+    } else if (hasTabs && existingMsg) {
+        existingMsg.remove();
+    }
+}
 
 function loadTabIntervals() {
     chrome.tabs.query({}, (tabs) => {
@@ -438,6 +463,7 @@ function createScheduleEntry(data = {
                 });
             }
         });
+        updateNoTabsMessage();
     };
 
     actionCell.appendChild(openBtn);
@@ -466,6 +492,7 @@ addButton.onclick = () => {
 
             const newRow = document.querySelector("#schedule-body tr:last-child");
             if (newRow) newRow.scrollIntoView({ behavior: "smooth", block: "center" });
+            updateNoTabsMessage();
         });
     });
 };
