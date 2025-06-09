@@ -14,8 +14,14 @@ chrome.storage.local.get(["selectedWindowId"], (res) => {
     targetWindowId = res.selectedWindowId || "active";
 });
 
-chrome.storage.local.set({ intervalSeconds });
-
+chrome.storage.local.get("intervalSeconds", (res) => {
+    if (typeof res.intervalSeconds === "undefined") {
+      chrome.storage.local.set({ intervalSeconds });
+    } else {
+      intervalSeconds = res.intervalSeconds;
+    }
+  });
+  
 chrome.runtime.onInstalled.addListener(({reason}) => {
     if (reason === 'install') {
         chrome.tabs.create({
@@ -45,7 +51,7 @@ async function cycleTabs() {
     const activeTab = tabs.find(tab => tab.active);
 
     // Ensure that we're staying on the active tab for the full interval
-    const interval = tabIntervals[activeTab.id]?.value || intervalSeconds;
+    const interval = tabIntervals[activeTab.id]?.value ?? intervalSeconds;
     const nextTabIndex = (activeTab.index + 1) % tabs.length;
     const nextTab = tabs[nextTabIndex];
 
@@ -140,7 +146,7 @@ function updateBadge() {
 // Listens for messages from popup or other parts of the extension
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.command === "start") {
-        intervalSeconds = message.interval || 5;
+        intervalSeconds = message.interval ?? intervalSeconds;
         startCycling();
     } else if (message.command === "stop") {
         stopCycling();
@@ -358,9 +364,27 @@ chrome.alarms.onAlarm.addListener((alarm) => {
                                     when: Date.now() + (entry.autoclose * 1000)
                                 });
                             }
-                            if (isCycling) {
-                                stopCycling();
-                                startCycling();
+                        
+                            // Inject cycleInterval into tabIntervals
+                            if (entry.cycleInterval && entry.cycleInterval > 0) {
+                                chrome.storage.local.get("tabIntervals", (res) => {
+                                    const updatedIntervals = res.tabIntervals || {};
+                                    updatedIntervals[tab.id] = {
+                                        value: entry.cycleInterval,
+                                        manual: false
+                                    };
+                                    chrome.storage.local.set({ tabIntervals: updatedIntervals }, () => {
+                                        if (isCycling) {
+                                            stopCycling();
+                                            startCycling();
+                                        }
+                                    });
+                                });
+                            } else {
+                                if (isCycling) {
+                                    stopCycling();
+                                    startCycling();
+                                }
                             }
                         });
                     }

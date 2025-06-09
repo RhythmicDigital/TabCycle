@@ -26,12 +26,6 @@ function updateToggleButton() {
   }
 }
 
-chrome.storage.local.get("intervalSeconds", (data) => {
-  const saved = data.intervalSeconds || defaultCycleInterval;
-  slider.value = saved;
-  intervalInput.value = saved;
-});
-
 // Update display and store new value when user changes it
 slider.addEventListener("input", () => {
   const val = parseInt(slider.value, 10);
@@ -105,7 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Get the stored interval value
   chrome.storage.local.get("intervalSeconds", (data) => {
-    intervalInput.value = data.intervalSeconds || defaultCycleInterval;
+    console.log("Loaded intervalSeconds:", data.intervalSeconds);
+    const saved = data.intervalSeconds ?? defaultCycleInterval;
+    slider.value = saved;
+    intervalInput.value = saved;
   });
 
   // Listen for changes and send to background
@@ -163,82 +160,82 @@ document.addEventListener("DOMContentLoaded", () => {
         const noTabsCell = document.createElement("td");
         noTabsCell.colSpan = 4; // Span across all table columns
         noTabsCell.className = "no-schedule-cell";
-        noTabsCell.textContent = "No tabs scheduled.";
+        noTabsCell.textContent = "No tabs scheduled. Click 'Configure Tabs' to add scheduled tabs.";
         noTabsCell.style.textAlign = "center";
         noTabsCell.style.padding = "10px";
         noTabsRow.appendChild(noTabsCell);
         tbody.appendChild(noTabsRow);
-        return;  // Exit early
-    }
-
-    // Otherwise, render the table rows as normal
-    schedules.forEach((entry, index) => {
-      const row = document.createElement("tr");
-
-      // Active toggle
-      const activeCell = document.createElement("td");
-      const toggle = document.createElement("input");
-      toggle.type = "checkbox";
-      toggle.checked = entry.enabled;
-      toggle.addEventListener("change", () => {
-        entry.enabled = toggle.checked;
-        saveSchedule(index, entry);
-      });
-      activeCell.appendChild(toggle);
-      row.appendChild(activeCell);
-
-      // Name input
-      const nameCell = document.createElement("td");
-      const nameInput = document.createElement("input");
-      nameInput.type = "text";
-      nameInput.value = entry.name || "";
-      nameInput.addEventListener("change", () => {
-        entry.name = nameInput.value;
-        saveSchedule(index, entry);
-      });
-      nameCell.appendChild(nameInput);
-      row.appendChild(nameCell);
-
-      // Next Open Time
-      const nextOpenCell = document.createElement("td");
-      const nextOpenText = document.createElement("span");
-      let openText = getNextOpenDate(entry) != "Not scheduled" ? `Open on ${getNextOpenDate(entry)}` : `${getNextOpenDate(entry)}`;
-      let repeatText = "";
-
-      if (entry.repeat && entry.repeatEvery > 0) {
-        const pluralizeUnit = (count, unit) => count === 1 ? unit.slice(0, -1) : unit;
-        repeatText = `Will reopen every <strong>${entry.repeatEvery} ${pluralizeUnit(entry.repeatEvery, entry.repeatUnit)}</strong> after its initial launch.`;      
       } else {
-        repeatText = ` Will open only once at scheduled time.`;
-      }
 
-      let displayText = entry.autoclose <= 0
-        ? `Auto-close off – will display until cycled.`
-        : `Display for <strong>${entry.autoclose} second(s)</strong>.`;
+      // Otherwise, render the table rows as normal
+      schedules.forEach((entry, index) => {
+        const row = document.createElement("tr");
 
-        nextOpenText.innerHTML = `
-        <ul class="schedule-details">
-          <li>${openText}</li>
-          <li>${displayText}</li>
-          <li>${repeatText}</li>
-        </ul>
-      `;
-      nextOpenCell.appendChild(nextOpenText);
-      row.appendChild(nextOpenCell);
+        // Active toggle
+        const activeCell = document.createElement("td");
+        const toggle = document.createElement("input");
+        toggle.type = "checkbox";
+        toggle.checked = entry.enabled;
+        toggle.addEventListener("change", () => {
+          entry.enabled = toggle.checked;
+          saveSchedule(index, entry);
+        });
+        activeCell.appendChild(toggle);
+        row.appendChild(activeCell);
 
-      // Open Now
-      const openCell = document.createElement("td");
-      const openBtn = document.createElement("button");
-      openBtn.textContent = "Open";
-      openBtn.title = "Open Tab Now";
-      openBtn.addEventListener("click", () => {
-        chrome.tabs.create({ url: entry.url, active: entry.focus || false });
+        // Name input
+        const nameCell = document.createElement("td");
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.value = entry.name || "";
+        nameInput.addEventListener("change", () => {
+          entry.name = nameInput.value;
+          saveSchedule(index, entry);
+        });
+        nameCell.appendChild(nameInput);
+        row.appendChild(nameCell);
+
+        // Next Open Time
+        const nextOpenCell = document.createElement("td");
+        const nextOpenText = document.createElement("span");
+        let openText = getNextOpenDate(entry) != "Not scheduled" ? `Open on ${getNextOpenDate(entry)}` : `${getNextOpenDate(entry)}`;
+        let repeatText = "";
+
+        if (entry.repeat && entry.repeatEvery > 0) {
+          const pluralizeUnit = (count, unit) => count === 1 ? unit.slice(0, -1) : unit;
+          repeatText = `Will reopen every <strong>${entry.repeatEvery} ${pluralizeUnit(entry.repeatEvery, entry.repeatUnit)}</strong> after its initial launch.`;      
+        } else {
+          repeatText = ` Will open only once at scheduled time.`;
+        }
+
+        let displayText = entry.autoclose <= 0
+          ? `Auto-close off – will display until cycled.`
+          : `Display for <strong>${entry.autoclose} second(s)</strong>.`;
+
+          nextOpenText.innerHTML = `
+          <ul class="schedule-details">
+            <li>${openText}</li>
+            <li>${displayText}</li>
+            <li>${repeatText}</li>
+          </ul>
+        `;
+        nextOpenCell.appendChild(nextOpenText);
+        row.appendChild(nextOpenCell);
+
+        // Open Now
+        const openCell = document.createElement("td");
+        const openBtn = document.createElement("button");
+        openBtn.textContent = "Open";
+        openBtn.title = "Open Tab Now";
+        openBtn.addEventListener("click", () => {
+          chrome.tabs.create({ url: entry.url, active: entry.focus || false });
+        });
+        openCell.appendChild(openBtn);
+        row.appendChild(openCell);
+
+        tbody.appendChild(row);
       });
-      openCell.appendChild(openBtn);
-      row.appendChild(openCell);
-
-      tbody.appendChild(row);
-    });
+    }
 
     document.getElementById("calendar-view-btn").addEventListener("click", () => {
       const mainView = document.getElementById("main-view");
@@ -307,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
       mainView.classList.add("active");
   
       updateCollapseToggleVisibility();
-      return; // ✅ Important to prevent further logic from running
+      return; // Important to prevent further logic from running
     }
   
     // CASE 2: Calendar view is visible — close it and go to settings
@@ -475,7 +472,7 @@ function updatePlaylist(tabIntervals) {
 
   chrome.windows.getAll({ populate: true }, (windows) => {
     chrome.storage.local.get("intervalSeconds", (res) => {
-      const defaultInterval = res.intervalSeconds || 15;
+      const defaultInterval = res.intervalSeconds ?? defaultCycleInterval;
       playlistSection.innerHTML = `
       <div class="playlist-header">
         <h3>Tabs Currently Open</h3>
@@ -560,7 +557,7 @@ function updatePlaylist(tabIntervals) {
           const allTabs = windows.flatMap(win => win.tabs);
       
           chrome.storage.local.get(["intervalSeconds", "tabIntervals"], (res) => {
-            const defaultInterval = res.intervalSeconds || 15;
+            const defaultInterval = res.intervalSeconds ?? defaultCycleInterval;
             const existingIntervals = res.tabIntervals || {};
             const updatedIntervals = { ...existingIntervals };
       

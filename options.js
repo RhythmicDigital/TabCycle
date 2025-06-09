@@ -13,7 +13,18 @@ window.addEventListener('load', function() {
         window.scrollTo(0, savedScrollPosition);
 
         const schedules = res.schedules || [];
-        schedules.forEach((sched, i) => createScheduleEntry(sched, i)); // Create schedule entries
+        if (schedules.length === 0) {
+            const scheduleBody = document.querySelector("#schedule-body");
+            const noTabsRow = document.createElement("tr");
+            const noTabsCell = document.createElement("td");
+            noTabsCell.colSpan = 7;
+            noTabsCell.className = "no-schedule-cell";
+            noTabsCell.textContent = "No tabs scheduled.";
+            noTabsRow.appendChild(noTabsCell);
+            scheduleBody.appendChild(noTabsRow);
+        } else {
+            schedules.forEach((sched, i) => createScheduleEntry(sched, i)); // Create schedule entries
+        }
         loadTabIntervals();
     });  
 });
