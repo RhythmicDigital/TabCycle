@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.4.2] - 2025-06-08
+### Fixed
+- Fixed default cycle interval reverting to initial default interval of 15.
+
+## [2.4.1] - 2025-06-08
+### Fixed
+- Fixed scheduled tabs view in popup not showing when there are no scheduled tabs.
+- Scheduled tabs table now displays "No tabs displayed" in options page when there are no scheduled tabs.
+- Scheduled tabs table in popup now displays "No tabs scheduled. Click 'Configure Tabs' to add scheduled tabs".
+
 ## [2.4.0] - 2025-06-03
 ### Added
 - Added slider to update default cycle interval.

@@ -108,6 +108,14 @@ span {
     width: 100%;
 }
 
+.no-schedule-cell {
+    font-size: 1.05em;
+    text-align: center;
+    padding: 12px;
+    color: #000;
+    background-color: #fefefe;
+}
+
 .schedule-actions {
     display: flex;
     flex-direction: column;
