@@ -5,11 +5,11 @@ let intervalSeconds = 15; // Default value
 let isCycling = false;
 let cyclingPaused = false;
 let badgeIntervalId = null;
-let badgeCountdownInterval = null;
+let badgeCountdown = 0;
 let cycleStartTime = null;
 let tabIntervals = {}; // To store the interval for each tab
 let targetWindowId = "active"; // default
-
+ 
 chrome.storage.local.get(["selectedWindowId"], (res) => {
     targetWindowId = res.selectedWindowId || "active";
 });
