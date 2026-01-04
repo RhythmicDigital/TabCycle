@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's New | TabCycle</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #004f9f, #7174f8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .update-section {
+            margin: 20px 0;
+        }
+        .update-section h3 {
+            color: #007bff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .update-section ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .update-section li {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .close-button {
+            background: #6c757d;
+        }
+        .close-button:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            What's New in TabCycle
+            <span class="version-badge" id="version-badge">v2.4.5</span>
+        </h1>
+        <section id="update-section">
+            <div class="update-section">
+                <h3>New Features</h3>
+                <ul id="added-list">
+                    <!-- Will be populated by update.js -->
+                </ul>
+            </div>
+            <div class="update-section">
+                <h3>Bug Fixes</h3>
+                <ul id="fixed-list">
+                    <!-- Will be populated by update.js -->
+                </ul>
+            </div>
+            <div class="update-section">
+                <h3>🔧 Improvements</h3>
+                <ul id="changed-list">
+                    <!-- Will be populated by update.js -->
+                </ul>
+            </div>
+        </section>
+        <div class="button-container">
+            <button id="options-button">Open Settings</button>
+            <button class="close-button" id="close-button">Close</button>
+        </div>
+    </div>
+    <script src="update.js"></script>
+</body>
+</html>
+
+

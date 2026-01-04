@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "TabCycle - Auto-Rotate Tabs for Dashboards and Wallboard Displays",
-    "version": "2.4.4",
+    "version": "2.5.0",
     "default_locale": "en",
     "description": "Automatically switches browser tabs at a time of your choice, and schedules URLs to open at specific dates/times.",
     "permissions": ["storage", "alarms", "tabs"],

@@ -22,10 +22,14 @@ chrome.storage.local.get("intervalSeconds", (res) => {
     }
   });
   
-chrome.runtime.onInstalled.addListener(({reason}) => {
-    if (reason === 'install') {
+chrome.runtime.onInstalled.addListener((details) => {
+    if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.tabs.create({
             url: 'onboarding.html'
+        });
+    } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
+        chrome.tabs.create({
+            url: 'update.html'
         });
     }
 });

@@ -76,12 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   chrome.storage.local.get("isCollapsed", (data) => {
     const isCollapsed = data.isCollapsed;
-
-    // Default to collapsed if undefined
-    if (typeof isCollapsed === "undefined") {
-      isCollapsed = true;
-      chrome.storage.local.set({ isCollapsed: true });
-    }
     
     const playlist = document.getElementById("playlist-wrapper");
     const toggleButton = document.getElementById("collapse-toggle");
@@ -160,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const noTabsCell = document.createElement("td");
         noTabsCell.colSpan = 4; // Span across all table columns
         noTabsCell.className = "no-schedule-cell";
-        noTabsCell.textContent = "No tabs scheduled. Click 'Configure Tabs' to add scheduled tabs.";
+        noTabsCell.textContent = "No tabs scheduled. Click 'TabCycle Settings' to add scheduled tabs.";
         noTabsCell.style.textAlign = "center";
         noTabsCell.style.padding = "10px";
         noTabsRow.appendChild(noTabsCell);
