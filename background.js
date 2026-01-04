@@ -65,8 +65,14 @@ async function cycleTabs() {
     updateBadge();
 
     // Wait for the cycle interval to expire before switching to the next tab
-    timeoutId = setTimeout(() => {
+    timeoutId = setTimeout(async () => {
         chrome.tabs.update(nextTab.id, { active: true });
+
+        chrome.storage.local.get("reloadTabOnCycle", (res) => {
+            if (res.reloadTabOnCycle) {
+                chrome.tabs.reload(nextTab.id);
+            }
+        });
         cycleTabs(); // Recursively call cycleTabs to continue cycling
     }, interval * 1000);
 }
@@ -267,10 +273,10 @@ function scheduleTabs(alarm) {
                         });
                     }
                 }
-            });
-                
-        }});    
-    }
+            });  
+        }
+    });    
+}
         
 function setupAlarms() {
     chrome.alarms.clearAll(() => {
@@ -307,7 +313,13 @@ function setupAlarms() {
 }
 
 chrome.runtime.onInstalled.addListener(setupAlarms);
-chrome.runtime.onStartup.addListener(setupAlarms);
+chrome.runtime.onStartup.addListener(() => {
+    setupAlarms();
+
+    chrome.storage.local.get("autoStartOnStartup", (res) => {
+        if (res.autoStartOnStartup) { startCycling();}
+    })
+});
     
 chrome.alarms.onAlarm.addListener((alarm) => {
     console.log(`[autoclose] Alarm triggered: ${alarm.name}`);

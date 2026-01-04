@@ -6,12 +6,33 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const tabIntervalsBody = document.getElementById("tab-intervals-body");
 
 window.addEventListener('load', function() {
-    chrome.storage.local.get(["schedules", "scrollPosition"], (res) => {
+    chrome.storage.local.get(["schedules", "scrollPosition", "reloadTabOnCycle", "autoStartOnStartup"], (res) => {
         const savedScrollPosition = res.scrollPosition;
 
+        // Load general settings
+        const reloadTabToggle = document.getElementById("reload-tab-toggle");
+        const autoStartToggle = document.getElementById("auto-start-toggle");
+
+        if (reloadTabToggle) {
+            reloadTabToggle.checked = res.reloadTabOnCycle || false;
+            reloadTabToggle.addEventListener("change", () => {
+                chrome.storage.local.set({ reloadTabOnCycle: reloadTabToggle.checked }, () => {
+                    showSavedMessage();
+                })
+            });
+        }
+        if (autoStartToggle) {
+            autoStartToggle.checked = res.autoStartOnStartup || false;
+            autoStartToggle.addEventListener("change", () => {
+                chrome.storage.local.set({ autoStartOnStartup: autoStartToggle.checked }, () => {
+                    showSavedMessage();
+                })
+            });
+        }
         // Restore the page scroll position
         window.scrollTo(0, savedScrollPosition);
 
+        // Schedules
         const schedules = res.schedules || [];
         if (schedules.length === 0) {
             const scheduleBody = document.querySelector("#schedule-body");
