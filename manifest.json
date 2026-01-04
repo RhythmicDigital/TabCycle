@@ -6,15 +6,15 @@
     "description": "Automatically switches browser tabs at a time of your choice, and schedules URLs to open at specific dates/times.",
     "permissions": ["storage", "alarms", "tabs"],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "assets/js/background.js"
     },
     "action": {
         "default_popup": "popup.html",
         "default_title": "TabCycle",
         "default_icon": {
-            "16": "icons/play16.png",
-            "48": "icons/play48.png",
-            "128": "icons/play128.png"
+            "16": "assets/icons/play16.png",
+            "48": "assets/icons/play48.png",
+            "128": "assets/icons/play128.png"
         }
     },
     "options_ui": {
@@ -23,9 +23,9 @@
     },
     "options_page": "options.html",
     "icons": {
-        "16": "icons/play16.png",
-        "48": "icons/play48.png",
-        "128": "icons/play128.png"
+        "16": "assets/icons/play16.png",
+        "48": "assets/icons/play48.png",
+        "128": "assets/icons/play128.png"
     },
     "web_accessible_resources": [{
         "resources": ["dist/*"],

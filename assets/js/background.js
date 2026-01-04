@@ -25,11 +25,11 @@ chrome.storage.local.get("intervalSeconds", (res) => {
 chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.tabs.create({
-            url: 'onboarding.html'
+            url: chrome.runtime.getURL('onboarding.html')
         });
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         chrome.tabs.create({
-            url: 'update.html'
+            url: chrome.runtime.getURL('update.html')
         });
     }
 });
@@ -103,9 +103,9 @@ function startCycling() {
             isCycling = true;
             cycleTabs();
             chrome.action.setIcon({   path: {
-                16: "icons/pause16.png",
-                48: "icons/pause48.png",
-                128: "icons/pause128.png"
+                16: "assets/icons/pause16.png",
+                48: "assets/icons/pause48.png",
+                128: "assets/icons/pause128.png"
             } });
 
             startBadgeTimer();
@@ -126,9 +126,9 @@ function stopCycling() {
     isCycling = false;
 
     chrome.action.setIcon({   path: {
-        16: "icons/play16.png",
-        48: "icons/play48.png",
-        128: "icons/play128.png"
+        16: "assets/icons/play16.png",
+        48: "assets/icons/play48.png",
+        128: "assets/icons/play128.png"
     } }); 
     chrome.action.setBadgeText({ text: '' });
 }
