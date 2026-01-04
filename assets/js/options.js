@@ -77,8 +77,9 @@ function updateNoTabsMessage() {
 
 function loadTabIntervals() {
     chrome.tabs.query({}, (tabs) => {
-        chrome.storage.local.get("tabIntervals", (res) => {
+        chrome.storage.local.get(["tabIntervals", "intervalSeconds"], (res) => {
             const tabIntervals = res.tabIntervals || {};
+            const defaultInterval = res.intervalSeconds || 15; // Default to 15 if not set
 
             tabs.forEach(tab => {
                 const row = document.createElement("tr");
@@ -127,7 +128,9 @@ function loadTabIntervals() {
                 intervalInput.type = "number";
                 intervalInput.min = "1";
                 intervalInput.placeholder = "Seconds";
-                intervalInput.value = tabIntervals[tab.id] || "";
+                // Use custom interval if exists, otherwise use default interval
+                const customInterval = tabIntervals[tab.id]?.value;
+                intervalInput.value = customInterval !== undefined ? customInterval : defaultInterval;
                 intervalInput.style.width = "80px";
 
                 intervalInput.addEventListener("input", debounce(() => {
@@ -257,7 +260,6 @@ function createScheduleEntry(data = {
     const timeInput = document.createElement("input");
     timeInput.type = "time";
     timeInput.value = data.time;
-    timeInput.style.display = "block";
 
     const daysDiv = document.createElement("div");
     daysDiv.className = "days";
@@ -307,8 +309,6 @@ function createScheduleEntry(data = {
     repeatEveryInput.min = "1";
     repeatEveryInput.placeholder = "Interval";
     repeatEveryInput.value = data.repeatEvery || "";
-    repeatEveryInput.style.width = "60px";
-    repeatEveryInput.style.marginLeft = "10px";
     
     const repeatUnitSelect = document.createElement("select");
     ["seconds", "minutes", "hours", "days"].forEach(unit => {
@@ -318,7 +318,6 @@ function createScheduleEntry(data = {
         if (data.repeatUnit === unit) option.selected = true;
         repeatUnitSelect.appendChild(option);
     });
-    repeatUnitSelect.style.marginLeft = "5px";
     
     // ➔ Group repeatLabel, repeatEveryInput, repeatUnitSelect nicely together
     repeatContainer.appendChild(repeatLabel);
@@ -336,9 +335,11 @@ function createScheduleEntry(data = {
     autocloseInput.type = "number";
     autocloseInput.placeholder = "Seconds";
     autocloseInput.value = data.autoclose || 0;
-    autocloseInput.style.width = "50%";
+    autocloseInput.style.width = "100%";
+    autocloseInput.style.minWidth = "100px";
     autocloseCell.appendChild(autocloseInput);
-    autocloseCell.style.width = "90px";
+    autocloseCell.style.width = "140px";
+    autocloseCell.style.minWidth = "140px";
 
     row.appendChild(autocloseCell);
 
@@ -348,9 +349,11 @@ function createScheduleEntry(data = {
     cycleIntervalInput.type = "number";
     cycleIntervalInput.placeholder = "Cycle Interval (s)";
     cycleIntervalInput.value = data.cycleInterval || 0;  // Default to 0 if no interval is provided
-    cycleIntervalInput.style.width = "50%";
+    cycleIntervalInput.style.width = "100%";
+    cycleIntervalInput.style.minWidth = "100px";
     cycleIntervalCell.appendChild(cycleIntervalInput);
-    cycleIntervalCell.style.width = "90px";
+    cycleIntervalCell.style.width = "160px";
+    cycleIntervalCell.style.minWidth = "160px";
 
     row.appendChild(cycleIntervalCell);
 

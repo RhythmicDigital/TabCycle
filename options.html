@@ -21,7 +21,7 @@
             <h2>General Settings</h2>
             <div style="background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); margin-bottom: 2rem;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-                    <label for="reload-tab-toggle" style="font-size: 1.1em; font-weight: 500; cursor: pointer;">
+                    <label for="reload-tab-toggle" style="font-size: 1rem; font-weight: 500; line-height: 1.5; cursor: pointer;">
                         Reload tab on cycle
                     </label>
                     <label class="switch">
@@ -30,7 +30,7 @@
                     </label>
                 </div>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <label for="auto-start-toggle" style="font-size: 1.1em; font-weight: 500; cursor: pointer;">
+                    <label for="auto-start-toggle" style="font-size: 1rem; font-weight: 500; line-height: 1.5; cursor: pointer;">
                         Start cycling automatically on browser startup
                     </label>
                     <label class="switch">
@@ -43,23 +43,25 @@
             <h2>Scheduled Tab Configurations</h2>
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                 <button id="save-all">💾 Save</button>
-                <span style="font-size: 1em; color: black;">Changes are saved automatically.</span>
+                <span style="font-size: 1rem; line-height: 1.5; color: black;">Changes are saved automatically.</span>
             </div>
-            <table id="scheduled-tabs">
-                <thead>
-                <tr>
-                    <th>Active</th>
-                    <th>Name</th>
-                    <th>URL</th>
-                    <th>Time & Days</th>
-                    <th>Auto-Close (seconds)</th>
-                    <th>Cycle Interval (seconds)</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody id="schedule-body">
-                </tbody>
-            </table>
+            <div class="table-scroll" style="max-height: none; overflow-x: auto; overflow-y: visible;">
+                <table id="scheduled-tabs">
+                    <thead>
+                    <tr>
+                        <th>Active</th>
+                        <th>Name</th>
+                        <th>URL</th>
+                        <th>Time & Days</th>
+                        <th>Auto-Close (seconds)</th>
+                        <th>Cycle Interval (seconds)</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="schedule-body">
+                    </tbody>
+                </table>
+            </div>
         <button id="add-schedule">➕ Add New Tab</button>
     </div>
     </section>
