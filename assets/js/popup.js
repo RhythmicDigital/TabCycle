@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     toggleButton.innerHTML = `
     <span id="collapse-icon">${isCollapsed ? "▼" : "▲"}</span>
-    <span id="collapse-text">${isCollapsed ? " Expand Details" : " Collapse Details"}</span>
+    <span id="collapse-text">${isCollapsed ? " Show Custom Cycle Intervals" : " Hide Custom Cycle Intervals"}</span>
   `;
 
     resizePopupToFitContent();
@@ -103,7 +103,14 @@ document.addEventListener("DOMContentLoaded", () => {
   intervalInput.addEventListener("input", () => {
     let newInterval = parseInt(intervalInput.value, 10);
     if (!isNaN(newInterval) && newInterval > 0) {
-      slider.value = newInterval;
+      // Update slider if within its range, otherwise just update the input
+      const min = parseInt(slider.min, 10);
+      const max = parseInt(slider.max, 10);
+      
+      slider.value = Math.max(min, Math.min(max, newInterval));
+      // Always update the input value (no clamping)
+      intervalInput.value = newInterval;
+      
       chrome.storage.local.set({ intervalSeconds: newInterval });
       chrome.runtime.sendMessage({ action: "setInterval", value: newInterval });
   
@@ -354,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
       toggleButton.innerHTML = `
         <span id="collapse-icon">${isCollapsed ? "▼" : "▲"}</span>
-        <span id="collapse-text">${isCollapsed ? " Expand Details" : " Collapse Details"}</span>
+        <span id="collapse-text">${isCollapsed ? " Show Custom Cycle Intervals" : " Hide Custom Cycle Intervals"}</span>
       `;
   
       chrome.storage.local.set({ isCollapsed });

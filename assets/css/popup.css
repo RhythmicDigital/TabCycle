@@ -36,29 +36,72 @@ body.dark .settings-box {
   border-color: #555;
 }
 
-.interval-row {
+/* Cycle Controls Container */
+.cycle-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Interval Control Group */
+.interval-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.interval-label-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.interval-input-group {
+.interval-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #1f2937;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.interval-input-wrapper {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  justify-content: flex-start;
 }
 
-.interval-input-group input {
-  width: 60px;
-  text-align: right;
+.interval-input-wrapper .interval-input {
+  width: 80px;
+  text-align: center;
+  padding: 8px 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin: 0;
+}
+
+.interval-input-wrapper .interval-input:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+}
+
+.interval-input-wrapper .interval-input:hover:not(:disabled) {
+  border-color: #9ca3af;
 }
 
 .interval-unit {
   font-size: 0.9375rem;
   line-height: 1.5;
-  color: #000000;
+  color: #6b7280;
+  font-weight: 500;
 }
 
 .cycle-tabs-row {
@@ -115,11 +158,75 @@ body.dark .settings-box {
   100% { background-position: 0% 50%; }
 }
 
-#interval-slider {
+/* Interval Slider Styling */
+.interval-slider {
   width: 100%;
-  margin-top: 6px;
-  margin-bottom: 10px;
+  height: 8px;
+  border-radius: 4px;
+  background: #e5e7eb;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  transition: background 0.2s ease;
 }
+
+.interval-slider:hover {
+  background: #d1d5db;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.interval-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #007acc;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease, transform 0.1s ease;
+  margin-top: -6px; /* Center the thumb vertically on the 8px track */
+}
+
+.interval-slider::-webkit-slider-thumb:hover {
+  background: #005fa3;
+  transform: scale(1.1);
+}
+
+.interval-slider::-webkit-slider-thumb:active {
+  transform: scale(0.95);
+}
+
+.interval-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 4px;
+  background: #e5e7eb;
+}
+
+/* Firefox */
+.interval-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #007acc;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease;
+}
+
+.interval-slider::-moz-range-thumb:hover {
+  background: #005fa3;
+}
+
+.interval-slider::-moz-range-track {
+  height: 8px;
+  border-radius: 4px;
+  background: #e5e7eb;
+}
+
 #interval-display {
   font-weight: bold;
 }
@@ -330,15 +437,6 @@ h4 {
   margin-bottom: 0.5rem;
 }
 
-label[for="interval"] {
-  display: flex;
-  margin-right: 1px;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-}
-
 label[for="window-select"] {
   display: flex;
   margin-right: 4px;
@@ -426,68 +524,59 @@ input::placeholder {
   opacity: 1;
 }
 
-#interval {
-  width: 50%;
-  max-width: 100%;
-  padding: 8px 12px;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  background-color: #fff;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  font-family: inherit;
-}
+/* Interval input styling moved to .interval-input-wrapper .interval-input */
 
-#interval:focus {
-  outline: none;
-  border-color: #007acc;
-  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
-}
-
-#interval:hover:not(:disabled) {
-  border-color: #9ca3af;
-}
-
-#toggle-cycle {
+/* Cycle Toggle Button */
+.cycle-toggle-btn {
   width: 100%;
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.5;
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 10px 16px;
+  border-radius: 8px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: background-color 0.3s ease;
-  margin-bottom: 1em;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0;
 }
 
-#toggle-cycle.started {
+.cycle-toggle-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cycle-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cycle-toggle-btn.started {
   background-color: #dc3545; /* Red */
 }
 
-#toggle-cycle.started:hover {
+.cycle-toggle-btn.started:hover {
   background-color: #c82333;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
 }
 
-#toggle-cycle.stopped {
+.cycle-toggle-btn.stopped {
   background-color: #28a745; /* Green */
 }
 
-#toggle-cycle.stopped:hover {
+.cycle-toggle-btn.stopped:hover {
   background-color: #218838;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
-.button-group {
-  display: flex;
-  gap: 5px;
-  margin-bottom: .5rem;
-  transition: margin-bottom 0.4s ease;
+.cycle-toggle-btn #toggle-icon {
+  font-size: 1.1em;
+  line-height: 1;
 }
 
 button {
@@ -851,7 +940,7 @@ tbody tr {
 
 .playlist-item {
   display: flex;
-  width: 160px;
+  width: 180px;
   scroll-snap-align: start;
   flex-direction: row;
   align-items: flex-start;
@@ -962,17 +1051,19 @@ tbody tr {
 }
 
 .tab-interval-input {
-  width: 50px;
+  width: 65px;
+  min-width: 65px;
   font-size: 0.875rem;
   line-height: 1.5;
   margin-left: 4px;
-  padding: 6px 8px;
+  padding: 6px 6px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   background-color: #fff;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: inherit;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .tab-interval-input:focus {
@@ -1208,10 +1299,63 @@ body.dark h4 {
   color: #f0f0f0;
 }
 
+body.dark .interval-label {
+  color: #f0f0f0;
+}
+
 body.dark .interval-unit {
   font-size: 0.9375rem;
   line-height: 1.5;
+  color: #d1d5db;
+}
+
+body.dark .interval-input-wrapper .interval-input {
+  background-color: #2a2a2a;
   color: #f0f0f0;
+  border-color: #555;
+}
+
+body.dark .interval-input-wrapper .interval-input:focus {
+  border-color: #007acc;
+  box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.2);
+}
+
+body.dark .interval-input-wrapper .interval-input:hover:not(:disabled) {
+  border-color: #666;
+}
+
+body.dark .interval-slider {
+  background: #444;
+}
+
+body.dark .interval-slider:hover {
+  background: #555;
+}
+
+body.dark .interval-slider::-webkit-slider-runnable-track {
+  background: #444;
+}
+
+body.dark .interval-slider::-webkit-slider-thumb {
+  background: #007acc;
+  border-color: #2a2a2a;
+}
+
+body.dark .interval-slider::-webkit-slider-thumb:hover {
+  background: #005fa3;
+}
+
+body.dark .interval-slider::-moz-range-track {
+  background: #444;
+}
+
+body.dark .interval-slider::-moz-range-thumb {
+  background: #007acc;
+  border-color: #2a2a2a;
+}
+
+body.dark .interval-slider::-moz-range-thumb:hover {
+  background: #005fa3;
 }
 
 body.dark input[type="number"],
@@ -1313,66 +1457,27 @@ body.dark #back-to-main:hover {
   box-shadow: none;
 }
 
-/* Dark Mode - Blue/Purple Start/Stop Buttons */
+/* Dark Mode - Start/Stop Buttons */
+body.dark .cycle-toggle-btn.stopped,
 body.dark #toggle-cycle.stopped {
-  background-color: #444;
+  background-color: #28a745;
   color: #fff;
 }
+body.dark .cycle-toggle-btn.stopped:hover,
 body.dark #toggle-cycle.stopped:hover {
-  background-color: #555;
+  background-color: #218838;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
+body.dark .cycle-toggle-btn.started,
 body.dark #toggle-cycle.started {
-  background-color: #222;
+  background-color: #dc3545;
   color: #fff;
 }
+body.dark .cycle-toggle-btn.started:hover,
 body.dark #toggle-cycle.started:hover {
-  background-color: #333;
+  background-color: #c82333;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
 }
 
-/* Dark mode slider styles */
-body.dark input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 6px;
-  background: #444;
-  border-radius: 4px;
-  outline: none;
-  transition: background 0.2s;
-}
-
-/* Track styling */
-body.dark input[type="range"]::-webkit-slider-runnable-track {
-  height: 6px;
-  background: #555;
-  border-radius: 4px;
-}
-
-/* Thumb styling */
-body.dark input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #ccc;
-  cursor: pointer;
-  border: 2px solid #888;
-  margin-top: -4px; /* Align thumb with track */
-}
-
-/* Firefox support */
-body.dark input[type="range"]::-moz-range-track {
-  height: 6px;
-  background: #555;
-  border-radius: 4px;
-}
-body.dark input[type="range"]::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #ccc;
-  border: 2px solid #888;
-  cursor: pointer;
-}
+/* Dark mode slider styles are now handled in the .interval-slider section above */

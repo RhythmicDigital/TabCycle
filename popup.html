@@ -26,20 +26,22 @@
             <div id="main-view" class="view active">
                     <div class="left-side">
                         <div class="tab-cycle-box">
-                            <div class="interval-row">
-                                <label for="interval">Default Cycle Interval:</label>
-                                <div class="interval-input-group">
-                                  <input id="interval" type="number" min="1" value="15">
-                                  <span class="interval-unit">seconds</span>
+                            <div class="cycle-controls">
+                                <div class="interval-control-group">
+                                    <div class="interval-label-row">
+                                        <label for="interval" class="interval-label">Default Cycle Interval:</label>
+                                        <div class="interval-input-wrapper">
+                                            <input id="interval" type="number" min="1" value="15" class="interval-input" step="1">
+                                            <span class="interval-unit">seconds</span>
+                                        </div>
+                                    </div>
+                                    <input type="range" id="interval-slider" min="1" max="300" value="15" step="1" class="interval-slider">
                                 </div>
-                              </div>
-                            <div class="button-group">
-                                <button id="toggle-cycle">
-                                    <span id="toggle-icon">▶️</span> <span id="toggle-text">Start</span>
+                                <button id="toggle-cycle" class="cycle-toggle-btn">
+                                    <span id="toggle-icon">▶️</span>
+                                    <span id="toggle-text">Start</span>
                                 </button>
-                                <input type="range" id="interval-slider" min="1" max="120" value="15" step="1">
-
-                            </div>                            
+                            </div>
                             <hr>
                             <div class="cycle-tabs-row">
                                 <label for="window-select">Cycle tabs in:</label>
@@ -76,7 +78,7 @@
                                 <tr>
                                     <th>Active</th>
                                     <th>Name</th>
-                                    <th>Date & Time to Open Next</th>
+                                    <th>When to Open Next</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
