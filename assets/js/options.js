@@ -5,13 +5,40 @@ const saveAllButton = document.getElementById("save-all");
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const tabIntervalsBody = document.getElementById("tab-intervals-body");
 
+// Page Navigation
+function initPageNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.settings-page');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const targetPage = this.getAttribute('data-page');
+
+            // Update active nav item
+            navItems.forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+
+            // Show target page, hide others
+            pages.forEach(page => {
+                page.classList.remove('active');
+                if (page.id === `page-${targetPage}`) {
+                    page.classList.add('active');
+                }
+            });
+        });
+    });
+}
+
 window.addEventListener('load', function() {
-    chrome.storage.local.get(["schedules", "scrollPosition", "reloadTabOnCycle", "autoStartOnStartup"], (res) => {
+    // Initialize page navigation
+    initPageNavigation();
+    chrome.storage.local.get(["schedules", "scrollPosition", "reloadTabOnCycle", "autoStartOnStartup", "skipPinnedTabs"], (res) => {
         const savedScrollPosition = res.scrollPosition;
 
         // Load general settings
         const reloadTabToggle = document.getElementById("reload-tab-toggle");
         const autoStartToggle = document.getElementById("auto-start-toggle");
+        const skipPinnedToggle = document.getElementById("skip-pinned-toggle");
 
         if (reloadTabToggle) {
             reloadTabToggle.checked = res.reloadTabOnCycle || false;
@@ -26,6 +53,16 @@ window.addEventListener('load', function() {
             autoStartToggle.addEventListener("change", () => {
                 chrome.storage.local.set({ autoStartOnStartup: autoStartToggle.checked }, () => {
                     showSavedMessage();
+                })
+            });
+        }
+        if (skipPinnedToggle) {
+            skipPinnedToggle.checked = res.skipPinnedTabs || false;
+            skipPinnedToggle.addEventListener("change", () => {
+                chrome.storage.local.set({ skipPinnedTabs: skipPinnedToggle.checked }, () => {
+                    showSavedMessage();
+                    // If cycling is active, restart it to apply the new setting
+                    chrome.runtime.sendMessage({ action: "restartCycling" });
                 })
             });
         }
@@ -279,14 +316,14 @@ function createScheduleEntry(data = {
     autofocusInput.type = "checkbox";
     autofocusInput.checked = data.focus;
     autofocusLabel.appendChild(autofocusInput);
-    autofocusLabel.append(" Autofocus tab after opening");
+    autofocusLabel.append(" Autofocus");
 
     const autodisableLabel = document.createElement("label");
     const autodisableInput = document.createElement("input");
     autodisableInput.type = "checkbox";
     autodisableInput.checked = data.autodisable;
     autodisableLabel.appendChild(autodisableInput);
-    autodisableLabel.append(" Autodisable after opening");
+    autodisableLabel.append(" Autodisable");
 
     timeCell.appendChild(timeInput);
     timeCell.appendChild(daysDiv);
@@ -501,7 +538,6 @@ addButton.onclick = () => {
     chrome.storage.local.get("schedules", (res) => {
         const schedules = res.schedules || [];
         schedules.push({
-            id: crypto.randomUUID(), // Assign unique ID
             enabled: true,
             name: "",
             url: "",
@@ -514,7 +550,6 @@ addButton.onclick = () => {
         chrome.storage.local.set({ schedules }, () => {
             createScheduleEntry(schedules[schedules.length - 1], schedules.length - 1);
             showSavedMessage();
-            chrome.runtime.sendMessage({ action: "refreshAlarms" });
 
             const newRow = document.querySelector("#schedule-body tr:last-child");
             if (newRow) newRow.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -524,51 +559,38 @@ addButton.onclick = () => {
 };
 
 saveAllButton.onclick = () => {
-    chrome.storage.local.get("schedules", (res) => {
-        const existingSchedules = res.schedules || [];
-        const rows = document.querySelectorAll("#schedule-body tr");
-        const updatedSchedules = [];
+    const rows = document.querySelectorAll("#schedule-body tr");
+    const updatedSchedules = [];
 
-        rows.forEach((row, rowIndex) => {
-            const enabled = row.querySelector("td:nth-child(1) input").checked;
-            const name = row.querySelector("td:nth-child(2) input").value;
-            const url = row.querySelector("td:nth-child(3) input").value;
-            const time = row.querySelector("td:nth-child(4) input[type='time']").value;
-            const fourthTd = row.querySelector("td:nth-child(4)");
-            const checkboxes = fourthTd.querySelectorAll("input[type='checkbox']");
-            const focus = checkboxes[checkboxes.length - 2].checked;
-            const autodisable = checkboxes[checkboxes.length - 1].checked;
-            const dayCheckboxes = row.querySelectorAll("td:nth-child(4) .days input[type='checkbox']");
-            const days = [...dayCheckboxes].filter(cb => cb.checked).map(cb => parseInt(cb.dataset.index));
-            const repeat = checkboxes[checkboxes.length - 3].checked; // repeat checkbox is before focus/autodisable
-            const repeatEveryInput = fourthTd.querySelector("input[type='number']");
-            const repeatEvery = parseInt(repeatEveryInput?.value) || 0;
-            const repeatUnitSelect = fourthTd.querySelector("select");
-            const repeatUnit = repeatUnitSelect?.value || "minutes";
-            const autoclose = parseInt(row.querySelector("td:nth-child(5) input").value) || 0;
-            const cycleInterval = parseInt(row.querySelector("td:nth-child(6) input").value) || 0;  // Get cycle interval value
-            
-            // Ensure each schedule has an ID
-            const scheduleData = {
-                enabled, name, url, time, days,
-                autoclose, focus, autodisable, cycleInterval,
-                repeat, repeatEvery, repeatUnit
-            };
-            // Preserve existing ID or generate new one
-            const existingSchedule = existingSchedules[rowIndex];
-            if (existingSchedule && existingSchedule.id) {
-                scheduleData.id = existingSchedule.id;
-            } else if (!scheduleData.id) {
-                scheduleData.id = crypto.randomUUID();
-            }
-            updatedSchedules.push(scheduleData);
+    rows.forEach(row => {
+        const enabled = row.querySelector("td:nth-child(1) input").checked;
+        const name = row.querySelector("td:nth-child(2) input").value;
+        const url = row.querySelector("td:nth-child(3) input").value;
+        const time = row.querySelector("td:nth-child(4) input[type='time']").value;
+        const fourthTd = row.querySelector("td:nth-child(4)");
+        const checkboxes = fourthTd.querySelectorAll("input[type='checkbox']");
+        const focus = checkboxes[checkboxes.length - 2].checked;
+        const autodisable = checkboxes[checkboxes.length - 1].checked;
+        const dayCheckboxes = row.querySelectorAll("td:nth-child(4) .days input[type='checkbox']");
+        const days = [...dayCheckboxes].filter(cb => cb.checked).map(cb => parseInt(cb.dataset.index));
+        const repeat = checkboxes[checkboxes.length - 3].checked; // repeat checkbox is before focus/autodisable
+        const repeatEveryInput = fourthTd.querySelector("input[type='number']");
+        const repeatEvery = parseInt(repeatEveryInput?.value) || 0;
+        const repeatUnitSelect = fourthTd.querySelector("select");
+        const repeatUnit = repeatUnitSelect?.value || "minutes";
+        const autoclose = parseInt(row.querySelector("td:nth-child(5) input").value) || 0;
+        const cycleInterval = parseInt(row.querySelector("td:nth-child(6) input").value) || 0;  // Get cycle interval value
+        updatedSchedules.push({
+            enabled, name, url, time, days,
+            autoclose, focus, autodisable, cycleInterval,
+            repeat, repeatEvery, repeatUnit
         });
+    });
+    
+    chrome.storage.local.set({ 
+        schedules: updatedSchedules,
         
-        chrome.storage.local.set({ 
-            schedules: updatedSchedules,
-        }, () => {
-            showSavedMessage();
-            chrome.runtime.sendMessage({ action: "refreshAlarms" });
-        });
+    }, () => {
+        showSavedMessage();
     });
 };

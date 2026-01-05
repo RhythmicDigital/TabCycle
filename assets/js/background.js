@@ -41,7 +41,7 @@ function updateInterval(newInterval) {
 
 // Function to cycle through tabs
 async function cycleTabs() {
-    const result = await chrome.storage.local.get("targetWindowId");
+    const result = await chrome.storage.local.get(["targetWindowId", "skipPinnedTabs"]);
     let query = {};
 
     // Use specific window if chosen
@@ -51,12 +51,28 @@ async function cycleTabs() {
         query.currentWindow = true;
     }
 
-    const tabs = await chrome.tabs.query(query);
+    let tabs = await chrome.tabs.query(query);
+    
+    // Filter out pinned tabs if the setting is enabled
+    if (result.skipPinnedTabs) {
+        tabs = tabs.filter(tab => !tab.pinned);
+    }
+    
+    // If no tabs remain after filtering, stop cycling
+    if (tabs.length === 0) {
+        stopCycling();
+        return;
+    }
+    
     const activeTab = tabs.find(tab => tab.active);
+    
+    // If active tab was filtered out, use the first tab
+    const currentTab = activeTab || tabs[0];
 
     // Ensure that we're staying on the active tab for the full interval
-    const interval = tabIntervals[activeTab.id]?.value ?? intervalSeconds;
-    const nextTabIndex = (activeTab.index + 1) % tabs.length;
+    const interval = tabIntervals[currentTab.id]?.value ?? intervalSeconds;
+    const currentTabIndex = tabs.findIndex(tab => tab.id === currentTab.id);
+    const nextTabIndex = (currentTabIndex + 1) % tabs.length;
     const nextTab = tabs[nextTabIndex];
 
     // Clear any previous timeout
@@ -523,5 +539,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         console.log("Manual refreshAlarms requested.");
         setupAlarms();
         sendResponse({ success: true });
+    } else if (message.action === "restartCycling") {
+        if (isCycling) {
+            stopCycling();
+            startCycling();
+        }
+        sendResponse({ success: true });
     }
+    return true;
 });
