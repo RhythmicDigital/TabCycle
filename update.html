@@ -75,34 +75,55 @@
 <body>
     <div class="container">
         <h1>
-            What's New in TabCycle
+            <span data-i18n="whatsNew">What's New in TabCycle</span>
             <span class="version-badge" id="version-badge">v2.4.5</span>
         </h1>
         <section id="update-section">
             <div class="update-section">
-                <h3>New Features</h3>
+                <h3 data-i18n="newFeatures">New Features</h3>
                 <ul id="added-list">
                     <!-- Will be populated by update.js -->
                 </ul>
             </div>
             <div class="update-section">
-                <h3>Bug Fixes</h3>
+                <h3 data-i18n="bugFixes">Bug Fixes</h3>
                 <ul id="fixed-list">
                     <!-- Will be populated by update.js -->
                 </ul>
             </div>
             <div class="update-section">
-                <h3>🔧 Improvements</h3>
+                <h3 data-i18n="improvements">🔧 Improvements</h3>
                 <ul id="changed-list">
                     <!-- Will be populated by update.js -->
                 </ul>
             </div>
         </section>
         <div class="button-container">
-            <button id="options-button">Open Settings</button>
-            <button class="close-button" id="close-button">Close</button>
+            <button id="options-button" data-i18n="openSettings">Open Settings</button>
+            <button class="close-button" id="close-button" data-i18n="close">Close</button>
         </div>
     </div>
+    <script>
+        // Localize all elements with data-i18n attributes
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (el.tagName === 'INPUT' && el.type === 'button') {
+                    el.value = chrome.i18n.getMessage(key);
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = chrome.i18n.getMessage(key);
+                } else {
+                    el.textContent = chrome.i18n.getMessage(key);
+                }
+            });
+            
+            const titleTag = document.querySelector('title[data-i18n]');
+            if (titleTag) {
+                document.title = chrome.i18n.getMessage(titleTag.getAttribute('data-i18n'));
+            }
+        });
+    </script>
     <script src="assets/js/update.js"></script>
 </body>
 </html>

@@ -1,11 +1,418 @@
 {
     "extName": {
-    "message": "TabCycle",
-    "description": "The name of the extension"
+        "message": "TabCycle",
+        "description": "The name of the extension"
     },
     "extDescription": {
-    "message": "탭 간 전환 및 탭 열기 일정 관리.",
-    "description": "Description of the extension"
+        "message": "탭 간 전환 및 탭 열기 일정 관리.",
+        "description": "Description of the extension"
+    },
+    "popupTitle": {
+        "message": "TabCycle",
+        "description": "Popup title"
+    },
+    "calendarTitle": {
+        "message": "캘린더",
+        "description": "Calendar button title"
+    },
+    "homeTitle": {
+        "message": "TabCycle.com 웹사이트",
+        "description": "Home button title"
+    },
+    "settingsTitle": {
+        "message": "설정",
+        "description": "Settings button title"
+    },
+    "defaultCycleInterval": {
+        "message": "기본 주기 간격:",
+        "description": "Label for default cycle interval"
+    },
+    "seconds": {
+        "message": "초",
+        "description": "Seconds unit"
+    },
+    "start": {
+        "message": "시작",
+        "description": "Start button text"
+    },
+    "stop": {
+        "message": "중지",
+        "description": "Stop button text"
+    },
+    "cycleTabsIn": {
+        "message": "탭 순환 위치:",
+        "description": "Label for window selection"
+    },
+    "activeWindow": {
+        "message": "활성 창",
+        "description": "Active window option"
+    },
+    "resetAllToDefault": {
+        "message": "모두 기본값으로 재설정",
+        "description": "Reset all intervals button"
+    },
+    "resetAll": {
+        "message": "모두 재설정",
+        "description": "Reset all button"
+    },
+    "back": {
+        "message": "← 뒤로",
+        "description": "Back button text"
+    },
+    "scheduledTabs": {
+        "message": "예약된 탭",
+        "description": "Scheduled tabs heading"
+    },
+    "openAll": {
+        "message": "모두 열기",
+        "description": "Open all scheduled tabs button"
+    },
+    "active": {
+        "message": "활성",
+        "description": "Active table header"
+    },
+    "name": {
+        "message": "이름",
+        "description": "Name table header"
+    },
+    "whenToOpenNext": {
+        "message": "다음 열기 시간",
+        "description": "When to open next table header"
+    },
+    "action": {
+        "message": "작업",
+        "description": "Action table header"
+    },
+    "noTabsScheduledPopup": {
+        "message": "예약된 탭이 없습니다. 'TabCycle 설정'을 클릭하여 예약된 탭을 추가하세요.",
+        "description": "Message when no tabs are scheduled in popup"
+    },
+    "additionalSettings": {
+        "message": "추가 설정",
+        "description": "Additional settings heading"
+    },
+    "darkTheme": {
+        "message": "다크 테마",
+        "description": "Dark theme toggle label"
+    },
+    "help": {
+        "message": "도움말",
+        "description": "Help button text"
+    },
+    "showCustomCycleIntervals": {
+        "message": " 사용자 지정 주기 간격 표시",
+        "description": "Show custom cycle intervals button text"
+    },
+    "hideCustomCycleIntervals": {
+        "message": " 사용자 지정 주기 간격 숨기기",
+        "description": "Hide custom cycle intervals button text"
+    },
+    "collapseDetails": {
+        "message": " 세부 정보 접기",
+        "description": "Collapse details button text"
+    },
+    "tabCycleSettings": {
+        "message": "TabCycle 설정",
+        "description": "TabCycle settings button"
+    },
+    "optionsTitle": {
+        "message": "TabCycle 설정",
+        "description": "Options page title"
+    },
+    "generalSettings": {
+        "message": "일반 설정",
+        "description": "General settings nav item and heading"
+    },
+    "scheduledTabsNav": {
+        "message": "예약된 탭",
+        "description": "Scheduled tabs nav item"
+    },
+    "tabCycling": {
+        "message": "탭 순환",
+        "description": "Tab cycling nav item"
+    },
+    "reloadTabOnCycle": {
+        "message": "주기마다 탭 새로고침",
+        "description": "Reload tab on cycle setting label"
+    },
+    "autoStartOnStartup": {
+        "message": "브라우저 시작 시 자동으로 순환 시작",
+        "description": "Auto start on startup setting label"
+    },
+    "skipPinnedTabs": {
+        "message": "순환 시 고정된 탭 건너뛰기",
+        "description": "Skip pinned tabs setting label"
+    },
+    "scheduledTabConfigurations": {
+        "message": "예약된 탭 구성",
+        "description": "Scheduled tab configurations heading"
+    },
+    "save": {
+        "message": "💾 저장",
+        "description": "Save button"
+    },
+    "changesSavedAutomatically": {
+        "message": "변경 사항이 자동으로 저장됩니다.",
+        "description": "Auto-save hint"
+    },
+    "url": {
+        "message": "URL",
+        "description": "URL table header"
+    },
+    "timeAndDays": {
+        "message": "시간 및 요일",
+        "description": "Time and days table header"
+    },
+    "autoCloseSeconds": {
+        "message": "자동 닫기(초)",
+        "description": "Auto-close table header"
+    },
+    "cycleIntervalSeconds": {
+        "message": "주기 간격(초)",
+        "description": "Cycle interval table header"
+    },
+    "actions": {
+        "message": "작업",
+        "description": "Actions table header"
+    },
+    "noTabsScheduledOptions": {
+        "message": "예약된 탭이 없습니다. '새 탭 추가'를 클릭하여 탭 열기를 예약하세요.",
+        "description": "Message when no tabs are scheduled in options"
+    },
+    "addNewTab": {
+        "message": "➕ 새 탭 추가",
+        "description": "Add new tab button"
+    },
+    "tabCyclingConfigurations": {
+        "message": "탭 순환 구성",
+        "description": "Tab cycling configurations heading"
+    },
+    "emptyCycleIntervalsHint": {
+        "message": "빈 주기 간격은 기본 주기 간격으로 설정됩니다.",
+        "description": "Hint about empty cycle intervals"
+    },
+    "icon": {
+        "message": "아이콘",
+        "description": "Icon table header"
+    },
+    "title": {
+        "message": "제목",
+        "description": "Title table header"
+    },
+    "tabName": {
+        "message": "탭 이름",
+        "description": "Tab name placeholder"
+    },
+    "urlPlaceholder": {
+        "message": "https://예시.com",
+        "description": "URL input placeholder"
+    },
+    "autofocusTabAfterOpening": {
+        "message": "열기 후 탭 자동 포커스",
+        "description": "Autofocus checkbox label"
+    },
+    "autoStartCyclingAfterOpening": {
+        "message": "열기 후 자동으로 순환 시작",
+        "description": "Auto-start cycling checkbox label"
+    },
+    "disableScheduleAfterOpening": {
+        "message": "열기 후 일정 비활성화 ",
+        "description": "Disable schedule checkbox label"
+    },
+    "repeat": {
+        "message": "반복",
+        "description": "Repeat checkbox label"
+    },
+    "interval": {
+        "message": "간격",
+        "description": "Interval input placeholder"
+    },
+    "secondsUnit": {
+        "message": "초",
+        "description": "Seconds unit capitalized"
+    },
+    "minutes": {
+        "message": "분",
+        "description": "Minutes unit capitalized"
+    },
+    "hours": {
+        "message": "시간",
+        "description": "Hours unit capitalized"
+    },
+    "days": {
+        "message": "일",
+        "description": "Days unit capitalized"
+    },
+    "autoCloseLabel": {
+        "message": "자동 닫기(초)",
+        "description": "Auto-close label"
+    },
+    "cycleIntervalLabel": {
+        "message": "주기 간격(초)",
+        "description": "Cycle interval label"
+    },
+    "open": {
+        "message": "열기",
+        "description": "Open button"
+    },
+    "openTabNow": {
+        "message": "지금 탭 열기",
+        "description": "Open tab now button title"
+    },
+    "openThisTabNow": {
+        "message": "지금 이 탭 열기",
+        "description": "Open this tab now button title"
+    },
+    "delete": {
+        "message": "X 삭제",
+        "description": "Delete button"
+    },
+    "deleteTitle": {
+        "message": "삭제",
+        "description": "Delete button title"
+    },
+    "openThisUrl": {
+        "message": "이 URL 열기",
+        "description": "Open URL button title"
+    },
+    "tabsCurrentlyOpen": {
+        "message": "현재 열려 있는 탭",
+        "description": "Tabs currently open heading"
+    },
+    "intervalSec": {
+        "message": "간격(초): ",
+        "description": "Interval label in playlist"
+    },
+    "window": {
+        "message": "창",
+        "description": "Window label"
+    },
+    "currentTab": {
+        "message": "현재 탭:",
+        "description": "Current tab label"
+    },
+    "noActiveTab": {
+        "message": "활성 탭 없음",
+        "description": "No active tab message"
+    },
+    "notScheduled": {
+        "message": "예약되지 않음",
+        "description": "Not scheduled message"
+    },
+    "openOn": {
+        "message": "열기",
+        "description": "Open on prefix"
+    },
+    "at": {
+        "message": "에",
+        "description": "At time separator"
+    },
+    "willReopenEvery": {
+        "message": "다음 간격마다 다시 열림:",
+        "description": "Will reopen every prefix"
+    },
+    "afterInitialLaunch": {
+        "message": "초기 실행 후.",
+        "description": "After initial launch suffix"
+    },
+    "willOpenOnlyOnce": {
+        "message": "예약된 시간에 한 번만 열립니다.",
+        "description": "Will open only once message"
+    },
+    "autoCloseOff": {
+        "message": "자동 닫기 끄기 – 순환될 때까지 표시됩니다.",
+        "description": "Auto-close off message"
+    },
+    "displayFor": {
+        "message": "표시 시간:",
+        "description": "Display for prefix"
+    },
+    "second": {
+        "message": "초",
+        "description": "Second singular"
+    },
+    "secondsPlural": {
+        "message": "초",
+        "description": "Seconds plural"
+    },
+    "noValidDate": {
+        "message": "유효한 날짜 없음",
+        "description": "No valid date message"
+    },
+    "welcomeToTabCycle": {
+        "message": "TabCycle에 오신 것을 환영합니다!",
+        "description": "Welcome heading"
+    },
+    "onboardingDescription": {
+        "message": "TabCycle은 열려 있는 탭 간을 자동으로 전환하는 데 도움이 되며, 대시보드, 뉴스 피드 또는 외부 디스플레이의 실시간 업데이트를 모니터링하는 데 완벽합니다.",
+        "description": "Onboarding description"
+    },
+    "gettingStarted": {
+        "message": "시작하기:",
+        "description": "Getting started heading"
+    },
+    "onboardingStep1": {
+        "message": "순환하려는 탭을 엽니다.",
+        "description": "Onboarding step 1"
+    },
+    "onboardingStep2": {
+        "message": "도구 모음 아이콘을 클릭하고 시작을 선택합니다.",
+        "description": "Onboarding step 2"
+    },
+    "onboardingStep3": {
+        "message": "중지하려면 아이콘을 다시 클릭하고 중지를 선택합니다.",
+        "description": "Onboarding step 3"
+    },
+    "onboardingDefaultInterval": {
+        "message": "기본적으로 탭은 15초마다 전환됩니다(설정 가능). TV와 같은 외부 디스플레이에서 사용하기에 적합합니다.",
+        "description": "Onboarding default interval info"
+    },
+    "onboardingFullscreen": {
+        "message": "최상의 경험을 위해 Chrome을 전체 화면 모드로 설정하세요:",
+        "description": "Onboarding fullscreen tip"
+    },
+    "onboardingWindowsLinux": {
+        "message": "Windows/Linux: F11 키를 누르세요",
+        "description": "Onboarding Windows/Linux fullscreen"
+    },
+    "onboardingMac": {
+        "message": "Mac: Fn + F 키를 누르세요",
+        "description": "Onboarding Mac fullscreen"
+    },
+    "whatsNew": {
+        "message": "TabCycle의 새로운 기능",
+        "description": "What's new heading"
+    },
+    "newFeatures": {
+        "message": "새로운 기능",
+        "description": "New features heading"
+    },
+    "bugFixes": {
+        "message": "버그 수정",
+        "description": "Bug fixes heading"
+    },
+    "improvements": {
+        "message": "🔧 개선 사항",
+        "description": "Improvements heading"
+    },
+    "openSettings": {
+        "message": "설정 열기",
+        "description": "Open settings button"
+    },
+    "close": {
+        "message": "닫기",
+        "description": "Close button"
+    },
+    "tabCycleUpdated": {
+        "message": "TabCycle이 업데이트되었습니다! TabCycle을 사용해 주셔서 감사합니다.",
+        "description": "Generic update message"
+    },
+    "saved": {
+        "message": "저장됨!",
+        "description": "Saved toast message"
+    },
+    "untitled": {
+        "message": "제목 없음",
+        "description": "Untitled tab title"
     }
 }
-

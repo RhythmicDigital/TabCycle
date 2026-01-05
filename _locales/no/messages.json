@@ -1,11 +1,418 @@
 {
     "extName": {
-    "message": "TabCycle",
-    "description": "The name of the extension"
+        "message": "TabCycle",
+        "description": "The name of the extension"
     },
     "extDescription": {
-    "message": "Sykler gjennom faner og planlegger faneåpninger.",
-    "description": "Description of the extension"
+        "message": "Sykler gjennom faner og planlegger faneåpninger.",
+        "description": "Description of the extension"
+    },
+    "popupTitle": {
+        "message": "TabCycle",
+        "description": "Popup title"
+    },
+    "calendarTitle": {
+        "message": "Kalender",
+        "description": "Calendar button title"
+    },
+    "homeTitle": {
+        "message": "TabCycle.com nettsted",
+        "description": "Home button title"
+    },
+    "settingsTitle": {
+        "message": "Innstillinger",
+        "description": "Settings button title"
+    },
+    "defaultCycleInterval": {
+        "message": "Standard syklusintervall:",
+        "description": "Label for default cycle interval"
+    },
+    "seconds": {
+        "message": "sekunder",
+        "description": "Seconds unit"
+    },
+    "start": {
+        "message": "Start",
+        "description": "Start button text"
+    },
+    "stop": {
+        "message": "Stopp",
+        "description": "Stop button text"
+    },
+    "cycleTabsIn": {
+        "message": "Sykler faner i:",
+        "description": "Label for window selection"
+    },
+    "activeWindow": {
+        "message": "Aktivt vindu",
+        "description": "Active window option"
+    },
+    "resetAllToDefault": {
+        "message": "Tilbakestill alt til standard",
+        "description": "Reset all intervals button"
+    },
+    "resetAll": {
+        "message": "Tilbakestill alt",
+        "description": "Reset all button"
+    },
+    "back": {
+        "message": "← Tilbake",
+        "description": "Back button text"
+    },
+    "scheduledTabs": {
+        "message": "Planlagte faner",
+        "description": "Scheduled tabs heading"
+    },
+    "openAll": {
+        "message": "Åpne alle",
+        "description": "Open all scheduled tabs button"
+    },
+    "active": {
+        "message": "Aktiv",
+        "description": "Active table header"
+    },
+    "name": {
+        "message": "Navn",
+        "description": "Name table header"
+    },
+    "whenToOpenNext": {
+        "message": "Når å åpne neste",
+        "description": "When to open next table header"
+    },
+    "action": {
+        "message": "Handling",
+        "description": "Action table header"
+    },
+    "noTabsScheduledPopup": {
+        "message": "Ingen faner planlagt. Klikk på 'TabCycle-innstillinger' for å legge til planlagte faner.",
+        "description": "Message when no tabs are scheduled in popup"
+    },
+    "additionalSettings": {
+        "message": "Tilleggsinnstillinger",
+        "description": "Additional settings heading"
+    },
+    "darkTheme": {
+        "message": "Mørkt tema",
+        "description": "Dark theme toggle label"
+    },
+    "help": {
+        "message": "Hjelp",
+        "description": "Help button text"
+    },
+    "showCustomCycleIntervals": {
+        "message": " Vis egendefinerte syklusintervaller",
+        "description": "Show custom cycle intervals button text"
+    },
+    "hideCustomCycleIntervals": {
+        "message": " Skjul egendefinerte syklusintervaller",
+        "description": "Hide custom cycle intervals button text"
+    },
+    "collapseDetails": {
+        "message": " Skjul detaljer",
+        "description": "Collapse details button text"
+    },
+    "tabCycleSettings": {
+        "message": "TabCycle-innstillinger",
+        "description": "TabCycle settings button"
+    },
+    "optionsTitle": {
+        "message": "TabCycle-innstillinger",
+        "description": "Options page title"
+    },
+    "generalSettings": {
+        "message": "Generelle innstillinger",
+        "description": "General settings nav item and heading"
+    },
+    "scheduledTabsNav": {
+        "message": "Planlagte faner",
+        "description": "Scheduled tabs nav item"
+    },
+    "tabCycling": {
+        "message": "Fanesyklus",
+        "description": "Tab cycling nav item"
+    },
+    "reloadTabOnCycle": {
+        "message": "Last fane på nytt ved syklus",
+        "description": "Reload tab on cycle setting label"
+    },
+    "autoStartOnStartup": {
+        "message": "Start syklus automatisk ved nettleserstart",
+        "description": "Auto start on startup setting label"
+    },
+    "skipPinnedTabs": {
+        "message": "Hopp over festede faner ved syklus",
+        "description": "Skip pinned tabs setting label"
+    },
+    "scheduledTabConfigurations": {
+        "message": "Konfigurasjoner for planlagte faner",
+        "description": "Scheduled tab configurations heading"
+    },
+    "save": {
+        "message": "💾 Lagre",
+        "description": "Save button"
+    },
+    "changesSavedAutomatically": {
+        "message": "Endringer lagres automatisk.",
+        "description": "Auto-save hint"
+    },
+    "url": {
+        "message": "URL",
+        "description": "URL table header"
+    },
+    "timeAndDays": {
+        "message": "Tid og dager",
+        "description": "Time and days table header"
+    },
+    "autoCloseSeconds": {
+        "message": "Automatisk lukking (sekunder)",
+        "description": "Auto-close table header"
+    },
+    "cycleIntervalSeconds": {
+        "message": "Syklusintervall (sekunder)",
+        "description": "Cycle interval table header"
+    },
+    "actions": {
+        "message": "Handlinger",
+        "description": "Actions table header"
+    },
+    "noTabsScheduledOptions": {
+        "message": "Ingen faner planlagt. Klikk på 'Legg til ny fane' for å planlegge åpning av en fane.",
+        "description": "Message when no tabs are scheduled in options"
+    },
+    "addNewTab": {
+        "message": "➕ Legg til ny fane",
+        "description": "Add new tab button"
+    },
+    "tabCyclingConfigurations": {
+        "message": "Fanesykluskonfigurasjoner",
+        "description": "Tab cycling configurations heading"
+    },
+    "emptyCycleIntervalsHint": {
+        "message": "Tomme syklusintervaller vil bli satt til standard syklusintervall.",
+        "description": "Hint about empty cycle intervals"
+    },
+    "icon": {
+        "message": "Ikon",
+        "description": "Icon table header"
+    },
+    "title": {
+        "message": "Tittel",
+        "description": "Title table header"
+    },
+    "tabName": {
+        "message": "Fanenavn",
+        "description": "Tab name placeholder"
+    },
+    "urlPlaceholder": {
+        "message": "https://eksempel.com",
+        "description": "URL input placeholder"
+    },
+    "autofocusTabAfterOpening": {
+        "message": "Autofokuser fane etter åpning",
+        "description": "Autofocus checkbox label"
+    },
+    "autoStartCyclingAfterOpening": {
+        "message": "Start syklus automatisk etter åpning",
+        "description": "Auto-start cycling checkbox label"
+    },
+    "disableScheduleAfterOpening": {
+        "message": "Deaktiver timeplan etter åpning ",
+        "description": "Disable schedule checkbox label"
+    },
+    "repeat": {
+        "message": "Gjenta",
+        "description": "Repeat checkbox label"
+    },
+    "interval": {
+        "message": "Intervall",
+        "description": "Interval input placeholder"
+    },
+    "secondsUnit": {
+        "message": "Sekunder",
+        "description": "Seconds unit capitalized"
+    },
+    "minutes": {
+        "message": "Minutter",
+        "description": "Minutes unit capitalized"
+    },
+    "hours": {
+        "message": "Timer",
+        "description": "Hours unit capitalized"
+    },
+    "days": {
+        "message": "Dager",
+        "description": "Days unit capitalized"
+    },
+    "autoCloseLabel": {
+        "message": "Automatisk lukking (s)",
+        "description": "Auto-close label"
+    },
+    "cycleIntervalLabel": {
+        "message": "Syklusintervall (s)",
+        "description": "Cycle interval label"
+    },
+    "open": {
+        "message": "Åpne",
+        "description": "Open button"
+    },
+    "openTabNow": {
+        "message": "Åpne fane nå",
+        "description": "Open tab now button title"
+    },
+    "openThisTabNow": {
+        "message": "Åpne denne fanen nå",
+        "description": "Open this tab now button title"
+    },
+    "delete": {
+        "message": "X Slett",
+        "description": "Delete button"
+    },
+    "deleteTitle": {
+        "message": "Slett",
+        "description": "Delete button title"
+    },
+    "openThisUrl": {
+        "message": "Åpne denne URL-en",
+        "description": "Open URL button title"
+    },
+    "tabsCurrentlyOpen": {
+        "message": "For øyeblikket åpne faner",
+        "description": "Tabs currently open heading"
+    },
+    "intervalSec": {
+        "message": "Intervall (sek): ",
+        "description": "Interval label in playlist"
+    },
+    "window": {
+        "message": "Vindu",
+        "description": "Window label"
+    },
+    "currentTab": {
+        "message": "Gjeldende fane:",
+        "description": "Current tab label"
+    },
+    "noActiveTab": {
+        "message": "Ingen aktiv fane",
+        "description": "No active tab message"
+    },
+    "notScheduled": {
+        "message": "Ikke planlagt",
+        "description": "Not scheduled message"
+    },
+    "openOn": {
+        "message": "Åpne den",
+        "description": "Open on prefix"
+    },
+    "at": {
+        "message": "klokken",
+        "description": "At time separator"
+    },
+    "willReopenEvery": {
+        "message": "Vil åpne på nytt hver",
+        "description": "Will reopen every prefix"
+    },
+    "afterInitialLaunch": {
+        "message": "etter første oppstart.",
+        "description": "After initial launch suffix"
+    },
+    "willOpenOnlyOnce": {
+        "message": "Vil åpne bare én gang på planlagt tid.",
+        "description": "Will open only once message"
+    },
+    "autoCloseOff": {
+        "message": "Automatisk lukking av – vil vises til den sykles.",
+        "description": "Auto-close off message"
+    },
+    "displayFor": {
+        "message": "Vis i",
+        "description": "Display for prefix"
+    },
+    "second": {
+        "message": "sekund",
+        "description": "Second singular"
+    },
+    "secondsPlural": {
+        "message": "sekunder",
+        "description": "Seconds plural"
+    },
+    "noValidDate": {
+        "message": "Ingen gyldig dato",
+        "description": "No valid date message"
+    },
+    "welcomeToTabCycle": {
+        "message": "Velkommen til TabCycle!",
+        "description": "Welcome heading"
+    },
+    "onboardingDescription": {
+        "message": "TabCycle hjelper deg med å automatisk bytte mellom åpne faner, perfekt for overvåking av dashbord, nyhetsfeeder eller live-oppdateringer på en ekstern skjerm.",
+        "description": "Onboarding description"
+    },
+    "gettingStarted": {
+        "message": "Komme i gang:",
+        "description": "Getting started heading"
+    },
+    "onboardingStep1": {
+        "message": "Åpne fanene du vil sykle gjennom.",
+        "description": "Onboarding step 1"
+    },
+    "onboardingStep2": {
+        "message": "Klikk på verktøylinjeikonet og velg Start.",
+        "description": "Onboarding step 2"
+    },
+    "onboardingStep3": {
+        "message": "For å stoppe, klikk på ikonet igjen og velg Stopp.",
+        "description": "Onboarding step 3"
+    },
+    "onboardingDefaultInterval": {
+        "message": "Som standard bytter faner hvert 15. sekund (konfigurerbart), noe som gjør det flott for bruk på en ekstern skjerm, som en TV.",
+        "description": "Onboarding default interval info"
+    },
+    "onboardingFullscreen": {
+        "message": "For best opplevelse, sett Chrome i fullskjermmodus:",
+        "description": "Onboarding fullscreen tip"
+    },
+    "onboardingWindowsLinux": {
+        "message": "Windows/Linux: Trykk F11",
+        "description": "Onboarding Windows/Linux fullscreen"
+    },
+    "onboardingMac": {
+        "message": "Mac: Trykk Fn + F",
+        "description": "Onboarding Mac fullscreen"
+    },
+    "whatsNew": {
+        "message": "Hva er nytt i TabCycle",
+        "description": "What's new heading"
+    },
+    "newFeatures": {
+        "message": "Nye funksjoner",
+        "description": "New features heading"
+    },
+    "bugFixes": {
+        "message": "Feilrettinger",
+        "description": "Bug fixes heading"
+    },
+    "improvements": {
+        "message": "🔧 Forbedringer",
+        "description": "Improvements heading"
+    },
+    "openSettings": {
+        "message": "Åpne innstillinger",
+        "description": "Open settings button"
+    },
+    "close": {
+        "message": "Lukk",
+        "description": "Close button"
+    },
+    "tabCycleUpdated": {
+        "message": "TabCycle har blitt oppdatert! Takk for at du bruker TabCycle.",
+        "description": "Generic update message"
+    },
+    "saved": {
+        "message": "Lagret!",
+        "description": "Saved toast message"
+    },
+    "untitled": {
+        "message": "Uten tittel",
+        "description": "Untitled tab title"
     }
 }
-

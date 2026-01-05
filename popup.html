@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TabCycle</title>
+    <title data-i18n="popupTitle">TabCycle</title>
     <link rel="stylesheet" href="assets/css/popup.css">
 </head>
 <body>
@@ -11,14 +11,14 @@
         <div class="header-box">
             <div class="header-content">
                 <div class="header-left">
-                    <button id="calendar-view-btn" class="header-icon" title="Calendar">📅</button>
+                    <button id="calendar-view-btn" class="header-icon" data-i18n-title="calendarTitle" title="Calendar">📅</button>
                 </div>
                 <div class="header-title">
                     <h1>TabCycle <span id="version" style="font-size: 0.75rem; opacity: 0.7; line-height: 1.3;"></span></h1>
                 </div>
                 <div class="header-buttons">
-                    <button id="home-button" title="TabCycle.com website">🏠</button>
-                    <button id="settings-button" title="Settings">⚙️</button>
+                    <button id="home-button" data-i18n-title="homeTitle" title="TabCycle.com website">🏠</button>
+                    <button id="settings-button" data-i18n-title="settingsTitle" title="Settings">⚙️</button>
                     <button id="open-settings">⋮</button>
                 </div>
                 </div>
@@ -29,10 +29,10 @@
                             <div class="cycle-controls">
                                 <div class="interval-control-group">
                                     <div class="interval-label-row">
-                                        <label for="interval" class="interval-label">Default Cycle Interval:</label>
+                                        <label for="interval" class="interval-label" data-i18n="defaultCycleInterval">Default Cycle Interval:</label>
                                         <div class="interval-input-wrapper">
                                             <input id="interval" type="number" min="1" value="15" class="interval-input" step="1">
-                                            <span class="interval-unit">seconds</span>
+                                            <span class="interval-unit" data-i18n="seconds">seconds</span>
                                         </div>
                                     </div>
                                     <input type="range" id="interval-slider" min="1" max="300" value="15" step="1" class="interval-slider">
@@ -44,9 +44,9 @@
                             </div>
                             <hr>
                             <div class="cycle-tabs-row">
-                                <label for="window-select">Cycle tabs in:</label>
+                                <label for="window-select" data-i18n="cycleTabsIn">Cycle tabs in:</label>
                                 <select id="window-select">
-                                  <option value="active">Active Window</option>
+                                  <option value="active" data-i18n="activeWindow">Active Window</option>
                                   <!-- Dynamically add window IDs -->
                                 </select>
                               </div>
@@ -56,7 +56,7 @@
             
                 <div id="playlist-wrapper" class="frosted-box">
                     <div class="right-side" id="playlist-section">
-                        <button id="reset-tab-intervals" class="popup-button medium">Reset All to Default</button>
+                        <button id="reset-tab-intervals" class="popup-button medium" data-i18n="resetAllToDefault">Reset All to Default</button>
 
                         <!-- Tabs list will be inserted here -->
                     </div>
@@ -65,21 +65,21 @@
 
         <!-- Calendar View (initially hidden) -->
         <div id="calendar-view" class="popup-view hidden-section">
-            <button id="back-to-main">← Back</button>
+            <button id="back-to-main" data-i18n="back">← Back</button>
             <div id="scheduled-wrapper">
                 <h2 style="display: flex; justify-content: space-between; align-items: center; margin-top: .1em;">
-                    Scheduled Tabs
-                    <button class="popup-button small" id="preview">Open All</button>
+                    <span data-i18n="scheduledTabs">Scheduled Tabs</span>
+                    <button class="popup-button small" id="preview" data-i18n="openAll">Open All</button>
                 </h2>
                 
                 <div class="popup-table-wrapper">
                         <table class="popup-table" id="schedule-list">
                             <thead>
                                 <tr>
-                                    <th>Active</th>
-                                    <th>Name</th>
-                                    <th>When to Open Next</th>
-                                    <th>Action</th>
+                                    <th data-i18n="active">Active</th>
+                                    <th data-i18n="name">Name</th>
+                                    <th data-i18n="whenToOpenNext">When to Open Next</th>
+                                    <th data-i18n="action">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="popup-table-body"></tbody>
@@ -89,30 +89,57 @@
         </div>
     
         <div id="settings-view" class="view">
-            <button id="back-button">← Back</button>
+            <button id="back-button" data-i18n="back">← Back</button>
             <div class="settings-box">
-                <h2>Additional Settings</h2>
+                <h2 data-i18n="additionalSettings">Additional Settings</h2>
                 <div class="visibility-toggles">
                 </div>
                 <div class="setting-item">
                     <label class="switch">
                         <input type="checkbox" id="dark-theme-toggle">
                         <span class="slider"></span>
-                        Dark Theme
+                        <span data-i18n="darkTheme">Dark Theme</span>
                     </label>
                 </div>
-                <button id="help-button" class="popup-button">Help</button>
+                <button id="help-button" class="popup-button" data-i18n="help">Help</button>
             </div>
         </div>
 
         <button id="collapse-toggle" class="popup-button medium" style="margin-left: auto; display: flex; align-items: center;">
             <span id="collapse-icon">▲</span>
-            <span id="collapse-text"> Collapse Details</span>
+            <span id="collapse-text" data-i18n="collapseDetails"> Collapse Details</span>
         </button>
 
         <div class="popup-buttons">
-            <button class="popup-button large" id="options">TabCycle Settings</button>
+            <button class="popup-button large" id="options" data-i18n="tabCycleSettings">TabCycle Settings</button>
         </div>
     </div>
+    <script>
+        // Localize all elements with data-i18n attributes
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (el.tagName === 'INPUT' && el.type === 'button') {
+                    el.value = chrome.i18n.getMessage(key);
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = chrome.i18n.getMessage(key);
+                } else {
+                    el.textContent = chrome.i18n.getMessage(key);
+                }
+            });
+            
+            const titleElements = document.querySelectorAll('[data-i18n-title]');
+            titleElements.forEach(el => {
+                const key = el.getAttribute('data-i18n-title');
+                el.title = chrome.i18n.getMessage(key);
+            });
+            
+            const titleTag = document.querySelector('title[data-i18n]');
+            if (titleTag) {
+                document.title = chrome.i18n.getMessage(titleTag.getAttribute('data-i18n'));
+            }
+        });
+    </script>
     <script src="assets/js/popup.js"></script>
 </body>

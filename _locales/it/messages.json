@@ -1,11 +1,418 @@
 {
     "extName": {
-    "message": "TabCycle",
-    "description": "The name of the extension"
+        "message": "TabCycle",
+        "description": "The name of the extension"
     },
     "extDescription": {
-    "message": "Passa tra le schede e programma l'apertura delle schede.",
-    "description": "Description of the extension"
+        "message": "Passa tra le schede e programma l'apertura delle schede.",
+        "description": "Description of the extension"
+    },
+    "popupTitle": {
+        "message": "TabCycle",
+        "description": "Popup title"
+    },
+    "calendarTitle": {
+        "message": "Calendario",
+        "description": "Calendar button title"
+    },
+    "homeTitle": {
+        "message": "Sito web TabCycle.com",
+        "description": "Home button title"
+    },
+    "settingsTitle": {
+        "message": "Impostazioni",
+        "description": "Settings button title"
+    },
+    "defaultCycleInterval": {
+        "message": "Intervallo di ciclo predefinito:",
+        "description": "Label for default cycle interval"
+    },
+    "seconds": {
+        "message": "secondi",
+        "description": "Seconds unit"
+    },
+    "start": {
+        "message": "Avvia",
+        "description": "Start button text"
+    },
+    "stop": {
+        "message": "Ferma",
+        "description": "Stop button text"
+    },
+    "cycleTabsIn": {
+        "message": "Cicla le schede in:",
+        "description": "Label for window selection"
+    },
+    "activeWindow": {
+        "message": "Finestra attiva",
+        "description": "Active window option"
+    },
+    "resetAllToDefault": {
+        "message": "Reimposta tutto al predefinito",
+        "description": "Reset all intervals button"
+    },
+    "resetAll": {
+        "message": "Reimposta tutto",
+        "description": "Reset all button"
+    },
+    "back": {
+        "message": "← Indietro",
+        "description": "Back button text"
+    },
+    "scheduledTabs": {
+        "message": "Schede programmate",
+        "description": "Scheduled tabs heading"
+    },
+    "openAll": {
+        "message": "Apri tutto",
+        "description": "Open all scheduled tabs button"
+    },
+    "active": {
+        "message": "Attivo",
+        "description": "Active table header"
+    },
+    "name": {
+        "message": "Nome",
+        "description": "Name table header"
+    },
+    "whenToOpenNext": {
+        "message": "Quando aprire successivamente",
+        "description": "When to open next table header"
+    },
+    "action": {
+        "message": "Azione",
+        "description": "Action table header"
+    },
+    "noTabsScheduledPopup": {
+        "message": "Nessuna scheda programmata. Fai clic su 'Impostazioni TabCycle' per aggiungere schede programmate.",
+        "description": "Message when no tabs are scheduled in popup"
+    },
+    "additionalSettings": {
+        "message": "Impostazioni aggiuntive",
+        "description": "Additional settings heading"
+    },
+    "darkTheme": {
+        "message": "Tema scuro",
+        "description": "Dark theme toggle label"
+    },
+    "help": {
+        "message": "Aiuto",
+        "description": "Help button text"
+    },
+    "showCustomCycleIntervals": {
+        "message": " Mostra intervalli di ciclo personalizzati",
+        "description": "Show custom cycle intervals button text"
+    },
+    "hideCustomCycleIntervals": {
+        "message": " Nascondi intervalli di ciclo personalizzati",
+        "description": "Hide custom cycle intervals button text"
+    },
+    "collapseDetails": {
+        "message": " Comprimi dettagli",
+        "description": "Collapse details button text"
+    },
+    "tabCycleSettings": {
+        "message": "Impostazioni TabCycle",
+        "description": "TabCycle settings button"
+    },
+    "optionsTitle": {
+        "message": "Impostazioni TabCycle",
+        "description": "Options page title"
+    },
+    "generalSettings": {
+        "message": "Impostazioni generali",
+        "description": "General settings nav item and heading"
+    },
+    "scheduledTabsNav": {
+        "message": "Schede programmate",
+        "description": "Scheduled tabs nav item"
+    },
+    "tabCycling": {
+        "message": "Ciclo delle schede",
+        "description": "Tab cycling nav item"
+    },
+    "reloadTabOnCycle": {
+        "message": "Ricarica scheda ad ogni ciclo",
+        "description": "Reload tab on cycle setting label"
+    },
+    "autoStartOnStartup": {
+        "message": "Avvia il ciclo automaticamente all'avvio del browser",
+        "description": "Auto start on startup setting label"
+    },
+    "skipPinnedTabs": {
+        "message": "Salta le schede bloccate durante il ciclo",
+        "description": "Skip pinned tabs setting label"
+    },
+    "scheduledTabConfigurations": {
+        "message": "Configurazioni delle schede programmate",
+        "description": "Scheduled tab configurations heading"
+    },
+    "save": {
+        "message": "💾 Salva",
+        "description": "Save button"
+    },
+    "changesSavedAutomatically": {
+        "message": "Le modifiche vengono salvate automaticamente.",
+        "description": "Auto-save hint"
+    },
+    "url": {
+        "message": "URL",
+        "description": "URL table header"
+    },
+    "timeAndDays": {
+        "message": "Ora e giorni",
+        "description": "Time and days table header"
+    },
+    "autoCloseSeconds": {
+        "message": "Chiusura automatica (secondi)",
+        "description": "Auto-close table header"
+    },
+    "cycleIntervalSeconds": {
+        "message": "Intervallo di ciclo (secondi)",
+        "description": "Cycle interval table header"
+    },
+    "actions": {
+        "message": "Azioni",
+        "description": "Actions table header"
+    },
+    "noTabsScheduledOptions": {
+        "message": "Nessuna scheda programmata. Fai clic su 'Aggiungi nuova scheda' per programmare l'apertura di una scheda.",
+        "description": "Message when no tabs are scheduled in options"
+    },
+    "addNewTab": {
+        "message": "➕ Aggiungi nuova scheda",
+        "description": "Add new tab button"
+    },
+    "tabCyclingConfigurations": {
+        "message": "Configurazioni del ciclo delle schede",
+        "description": "Tab cycling configurations heading"
+    },
+    "emptyCycleIntervalsHint": {
+        "message": "Gli intervalli di ciclo vuoti verranno impostati sull'intervallo di ciclo predefinito.",
+        "description": "Hint about empty cycle intervals"
+    },
+    "icon": {
+        "message": "Icona",
+        "description": "Icon table header"
+    },
+    "title": {
+        "message": "Titolo",
+        "description": "Title table header"
+    },
+    "tabName": {
+        "message": "Nome scheda",
+        "description": "Tab name placeholder"
+    },
+    "urlPlaceholder": {
+        "message": "https://esempio.com",
+        "description": "URL input placeholder"
+    },
+    "autofocusTabAfterOpening": {
+        "message": "Metti a fuoco la scheda automaticamente dopo l'apertura",
+        "description": "Autofocus checkbox label"
+    },
+    "autoStartCyclingAfterOpening": {
+        "message": "Avvia il ciclo automaticamente dopo l'apertura",
+        "description": "Auto-start cycling checkbox label"
+    },
+    "disableScheduleAfterOpening": {
+        "message": "Disabilita la programmazione dopo l'apertura ",
+        "description": "Disable schedule checkbox label"
+    },
+    "repeat": {
+        "message": "Ripeti",
+        "description": "Repeat checkbox label"
+    },
+    "interval": {
+        "message": "Intervallo",
+        "description": "Interval input placeholder"
+    },
+    "secondsUnit": {
+        "message": "Secondi",
+        "description": "Seconds unit capitalized"
+    },
+    "minutes": {
+        "message": "Minuti",
+        "description": "Minutes unit capitalized"
+    },
+    "hours": {
+        "message": "Ore",
+        "description": "Hours unit capitalized"
+    },
+    "days": {
+        "message": "Giorni",
+        "description": "Days unit capitalized"
+    },
+    "autoCloseLabel": {
+        "message": "Chiusura automatica (s)",
+        "description": "Auto-close label"
+    },
+    "cycleIntervalLabel": {
+        "message": "Intervallo di ciclo (s)",
+        "description": "Cycle interval label"
+    },
+    "open": {
+        "message": "Apri",
+        "description": "Open button"
+    },
+    "openTabNow": {
+        "message": "Apri scheda ora",
+        "description": "Open tab now button title"
+    },
+    "openThisTabNow": {
+        "message": "Apri questa scheda ora",
+        "description": "Open this tab now button title"
+    },
+    "delete": {
+        "message": "X Elimina",
+        "description": "Delete button"
+    },
+    "deleteTitle": {
+        "message": "Elimina",
+        "description": "Delete button title"
+    },
+    "openThisUrl": {
+        "message": "Apri questo URL",
+        "description": "Open URL button title"
+    },
+    "tabsCurrentlyOpen": {
+        "message": "Schede attualmente aperte",
+        "description": "Tabs currently open heading"
+    },
+    "intervalSec": {
+        "message": "Intervallo (sec): ",
+        "description": "Interval label in playlist"
+    },
+    "window": {
+        "message": "Finestra",
+        "description": "Window label"
+    },
+    "currentTab": {
+        "message": "Scheda corrente:",
+        "description": "Current tab label"
+    },
+    "noActiveTab": {
+        "message": "Nessuna scheda attiva",
+        "description": "No active tab message"
+    },
+    "notScheduled": {
+        "message": "Non programmato",
+        "description": "Not scheduled message"
+    },
+    "openOn": {
+        "message": "Apri il",
+        "description": "Open on prefix"
+    },
+    "at": {
+        "message": "alle",
+        "description": "At time separator"
+    },
+    "willReopenEvery": {
+        "message": "Si riaprirà ogni",
+        "description": "Will reopen every prefix"
+    },
+    "afterInitialLaunch": {
+        "message": "dopo il lancio iniziale.",
+        "description": "After initial launch suffix"
+    },
+    "willOpenOnlyOnce": {
+        "message": "Si aprirà solo una volta all'ora programmata.",
+        "description": "Will open only once message"
+    },
+    "autoCloseOff": {
+        "message": "Chiusura automatica disattivata – verrà visualizzata fino al ciclo.",
+        "description": "Auto-close off message"
+    },
+    "displayFor": {
+        "message": "Visualizza per",
+        "description": "Display for prefix"
+    },
+    "second": {
+        "message": "secondo",
+        "description": "Second singular"
+    },
+    "secondsPlural": {
+        "message": "secondi",
+        "description": "Seconds plural"
+    },
+    "noValidDate": {
+        "message": "Nessuna data valida",
+        "description": "No valid date message"
+    },
+    "welcomeToTabCycle": {
+        "message": "Benvenuto in TabCycle!",
+        "description": "Welcome heading"
+    },
+    "onboardingDescription": {
+        "message": "TabCycle ti aiuta a passare automaticamente tra le schede aperte, perfetto per monitorare dashboard, feed di notizie o aggiornamenti in tempo reale su un display esterno.",
+        "description": "Onboarding description"
+    },
+    "gettingStarted": {
+        "message": "Per iniziare:",
+        "description": "Getting started heading"
+    },
+    "onboardingStep1": {
+        "message": "Apri le schede che vuoi ciclare.",
+        "description": "Onboarding step 1"
+    },
+    "onboardingStep2": {
+        "message": "Fai clic sull'icona della barra degli strumenti e seleziona Avvia.",
+        "description": "Onboarding step 2"
+    },
+    "onboardingStep3": {
+        "message": "Per fermare, fai clic di nuovo sull'icona e seleziona Ferma.",
+        "description": "Onboarding step 3"
+    },
+    "onboardingDefaultInterval": {
+        "message": "Per impostazione predefinita, le schede cambiano ogni 15 secondi (configurabile), ideale per l'uso su un display esterno, come una TV.",
+        "description": "Onboarding default interval info"
+    },
+    "onboardingFullscreen": {
+        "message": "Per la migliore esperienza, metti Chrome in modalità schermo intero:",
+        "description": "Onboarding fullscreen tip"
+    },
+    "onboardingWindowsLinux": {
+        "message": "Windows/Linux: Premi F11",
+        "description": "Onboarding Windows/Linux fullscreen"
+    },
+    "onboardingMac": {
+        "message": "Mac: Premi Fn + F",
+        "description": "Onboarding Mac fullscreen"
+    },
+    "whatsNew": {
+        "message": "Novità di TabCycle",
+        "description": "What's new heading"
+    },
+    "newFeatures": {
+        "message": "Nuove funzionalità",
+        "description": "New features heading"
+    },
+    "bugFixes": {
+        "message": "Correzioni di bug",
+        "description": "Bug fixes heading"
+    },
+    "improvements": {
+        "message": "🔧 Miglioramenti",
+        "description": "Improvements heading"
+    },
+    "openSettings": {
+        "message": "Apri impostazioni",
+        "description": "Open settings button"
+    },
+    "close": {
+        "message": "Chiudi",
+        "description": "Close button"
+    },
+    "tabCycleUpdated": {
+        "message": "TabCycle è stato aggiornato! Grazie per aver usato TabCycle.",
+        "description": "Generic update message"
+    },
+    "saved": {
+        "message": "Salvato!",
+        "description": "Saved toast message"
+    },
+    "untitled": {
+        "message": "Senza titolo",
+        "description": "Untitled tab title"
     }
 }
-

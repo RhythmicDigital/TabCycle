@@ -17,12 +17,12 @@ function updateToggleButton() {
     startStopbutton.classList.remove("stopped");
     startStopbutton.classList.add("started");
     icon.textContent = "⏸️"; // Pause icon
-    text.textContent = "Stop";
+    text.textContent = chrome.i18n.getMessage("stop");
   } else {
     startStopbutton.classList.remove("started");
     startStopbutton.classList.add("stopped");
     icon.textContent = "▶️"; // Play icon
-    text.textContent = "Start";
+    text.textContent = chrome.i18n.getMessage("start");
   }
 }
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     toggleButton.innerHTML = `
     <span id="collapse-icon">${isCollapsed ? "▼" : "▲"}</span>
-    <span id="collapse-text">${isCollapsed ? " Show Custom Cycle Intervals" : " Hide Custom Cycle Intervals"}</span>
+    <span id="collapse-text">${isCollapsed ? " " + chrome.i18n.getMessage("showCustomCycleIntervals") : " " + chrome.i18n.getMessage("hideCustomCycleIntervals")}</span>
   `;
 
     resizePopupToFitContent();
@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const noTabsCell = document.createElement("td");
         noTabsCell.colSpan = 4; // Span across all table columns
         noTabsCell.className = "no-schedule-cell";
-        noTabsCell.textContent = "No tabs scheduled. Click 'TabCycle Settings' to add scheduled tabs.";
+        noTabsCell.textContent = chrome.i18n.getMessage("noTabsScheduledPopup");
         noTabsCell.style.textAlign = "center";
         noTabsCell.style.padding = "10px";
         noTabsRow.appendChild(noTabsCell);
@@ -199,19 +199,28 @@ document.addEventListener("DOMContentLoaded", () => {
         // Next Open Time
         const nextOpenCell = document.createElement("td");
         const nextOpenText = document.createElement("span");
-        let openText = getNextOpenDate(entry) != "Not scheduled" ? `Open on ${getNextOpenDate(entry)}` : `${getNextOpenDate(entry)}`;
+        const notScheduledText = chrome.i18n.getMessage("notScheduled");
+        const openOnText = chrome.i18n.getMessage("openOn");
+        let openText = getNextOpenDate(entry) != notScheduledText ? `${openOnText} ${getNextOpenDate(entry)}` : `${getNextOpenDate(entry)}`;
         let repeatText = "";
 
         if (entry.repeat && entry.repeatEvery > 0) {
-          const pluralizeUnit = (count, unit) => count === 1 ? unit.slice(0, -1) : unit;
-          repeatText = `Will reopen every <strong>${entry.repeatEvery} ${pluralizeUnit(entry.repeatEvery, entry.repeatUnit)}</strong> after its initial launch.`;      
+          const pluralizeUnit = (count, unit) => {
+            const unitKey = unit === "seconds" ? "secondsUnit" : unit === "minutes" ? "minutes" : unit === "hours" ? "hours" : "days";
+            const singularKey = unit === "seconds" ? "second" : unit === "minutes" ? "minutes" : unit === "hours" ? "hours" : "days";
+            return count === 1 ? chrome.i18n.getMessage(singularKey) : chrome.i18n.getMessage(unitKey);
+          };
+          const willReopenEvery = chrome.i18n.getMessage("willReopenEvery");
+          const afterInitialLaunch = chrome.i18n.getMessage("afterInitialLaunch");
+          const unitText = pluralizeUnit(entry.repeatEvery, entry.repeatUnit);
+          repeatText = `${willReopenEvery} <strong>${entry.repeatEvery} ${unitText}</strong> ${afterInitialLaunch}`;      
         } else {
-          repeatText = ` Will open only once at scheduled time.`;
+          repeatText = " " + chrome.i18n.getMessage("willOpenOnlyOnce");
         }
 
         let displayText = entry.autoclose <= 0
-          ? `Auto-close off – will display until cycled.`
-          : `Display for <strong>${entry.autoclose} second(s)</strong>.`;
+          ? chrome.i18n.getMessage("autoCloseOff")
+          : `${chrome.i18n.getMessage("displayFor")} <strong>${entry.autoclose} ${entry.autoclose === 1 ? chrome.i18n.getMessage("second") : chrome.i18n.getMessage("secondsPlural")}</strong>.`;
 
           nextOpenText.innerHTML = `
           <ul class="schedule-details">
@@ -226,8 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Open Now
         const openCell = document.createElement("td");
         const openBtn = document.createElement("button");
-        openBtn.textContent = "Open";
-        openBtn.title = "Open Tab Now";
+        openBtn.textContent = chrome.i18n.getMessage("open");
+        openBtn.title = chrome.i18n.getMessage("openTabNow");
         openBtn.addEventListener("click", () => {
           chrome.tabs.create({ url: entry.url, active: entry.focus || false });
         });
@@ -361,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
       toggleButton.innerHTML = `
         <span id="collapse-icon">${isCollapsed ? "▼" : "▲"}</span>
-        <span id="collapse-text">${isCollapsed ? " Show Custom Cycle Intervals" : " Hide Custom Cycle Intervals"}</span>
+        <span id="collapse-text">${isCollapsed ? " " + chrome.i18n.getMessage("showCustomCycleIntervals") : " " + chrome.i18n.getMessage("hideCustomCycleIntervals")}</span>
       `;
   
       chrome.storage.local.set({ isCollapsed });
@@ -476,8 +485,8 @@ function updatePlaylist(tabIntervals) {
       const defaultInterval = res.intervalSeconds ?? defaultCycleInterval;
       playlistSection.innerHTML = `
       <div class="playlist-header">
-        <h3>Tabs Currently Open</h3>
-        <button id="reset-tab-intervals" class="popup-button medium">Reset All</button>
+        <h3>${chrome.i18n.getMessage("tabsCurrentlyOpen")}</h3>
+        <button id="reset-tab-intervals" class="popup-button medium">${chrome.i18n.getMessage("resetAll")}</button>
       </div>
     `;
 
@@ -489,7 +498,7 @@ function updatePlaylist(tabIntervals) {
         windowGroup.className = "window-group";
 
         const windowTitle = document.createElement("h4");
-        windowTitle.textContent = `Window ${winIndex + 1}`;
+        windowTitle.textContent = `${chrome.i18n.getMessage("window")} ${winIndex + 1}`;
         windowGroup.appendChild(windowTitle);
 
         const tabList = document.createElement("div");
@@ -517,7 +526,7 @@ function updatePlaylist(tabIntervals) {
           intervalWrapper.className = "tab-interval";
           
           const intervalLabel = document.createElement("label");
-          intervalLabel.textContent = "Interval (sec): ";
+          intervalLabel.textContent = chrome.i18n.getMessage("intervalSec");
           
           const intervalInput = document.createElement("input");
           intervalInput.type = "number";
@@ -577,7 +586,7 @@ function updatePlaylist(tabIntervals) {
 }
 
 function getNextOpenDate(entry) {
-  if (!entry.days || entry.days.length === 0) return "Not scheduled";
+  if (!entry.days || entry.days.length === 0) return chrome.i18n.getMessage("notScheduled");
 
   const now = new Date();
   const currentDay = now.getDay();
@@ -593,12 +602,13 @@ function getNextOpenDate(entry) {
       const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
       const dateStr = `<strong>${nextDate.toLocaleDateString(undefined, options)}</strong>`;
       const timeStr = `<strong>${nextDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>`;
+      const atText = chrome.i18n.getMessage("at");
 
-      return `${dateStr} at ${timeStr}`;
+      return `${dateStr} ${atText} ${timeStr}`;
     }
   }
 
-  return "No valid date";
+  return chrome.i18n.getMessage("noValidDate");
 }
 
 previewButton.onclick = () => {
@@ -616,8 +626,10 @@ chrome.windows.getAll({ populate: true }, (windows) => {
         const activeTab = win.tabs.find(tab => tab.active);
         const option = document.createElement("option");
         option.value = win.id;
-        const windowTitle = activeTab ? activeTab.title : "No active tab";
-        option.textContent = `[Window ${i}] Current tab: "${windowTitle}"`;
+        const windowTitle = activeTab ? activeTab.title : chrome.i18n.getMessage("noActiveTab");
+        const currentTabText = chrome.i18n.getMessage("currentTab");
+        const windowText = chrome.i18n.getMessage("window");
+        option.textContent = `[${windowText} ${i}] ${currentTabText} "${windowTitle}"`;
         windowSelect.appendChild(option);
         i++;
     });

@@ -3,31 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>First-Use Tutorial | TabCycle</title>
+    <title data-i18n="welcomeToTabCycle">First-Use Tutorial | TabCycle</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1 id="welcome-text">Welcome to TabCycle!</h1>
+        <h1 id="welcome-text" data-i18n="welcomeToTabCycle">Welcome to TabCycle!</h1>
         <section id="info-section">
-            <p>
+            <p data-i18n="onboardingDescription">
                 TabCycle helps you <strong>automatically switch between open tabs</strong>, perfect for monitoring dashboards, news feeds, or live updates on an external display.
             </p>
             <p>
-                <strong>Getting Started:</strong><br>
-                1. Open the tabs you want to cycle through.<br>
-                2. Click the toolbar icon and select <strong>Start</strong>.<br>
-                3. To stop, click the icon again and select <strong>Stop</strong>.
+                <strong data-i18n="gettingStarted">Getting Started:</strong><br>
+                1. <span data-i18n="onboardingStep1">Open the tabs you want to cycle through.</span><br>
+                2. <span data-i18n="onboardingStep2">Click the toolbar icon and select <strong>Start</strong>.</span><br>
+                3. <span data-i18n="onboardingStep3">To stop, click the icon again and select <strong>Stop</strong>.</span>
             </p>
-            <p>
+            <p data-i18n="onboardingDefaultInterval">
                 By default, tabs switch every <strong>15 seconds</strong> (configurable), making it great for use on an external display, like a TV.<br>
             </p>
             <p>
-                For the best experience, put Chrome in full-screen mode: <br>
-                - <strong>Windows/Linux:</strong> Press <kbd>F11</kbd><br>
-                - <strong>Mac:</strong> Press <kbd>Fn</kbd> + <kbd>F</kbd>
+                <span data-i18n="onboardingFullscreen">For the best experience, put Chrome in full-screen mode:</span> <br>
+                - <strong data-i18n="onboardingWindowsLinux">Windows/Linux: Press F11</strong><br>
+                - <strong data-i18n="onboardingMac">Mac: Press Fn + F</strong>
             </p>
         </section>
     </div>
+    <script>
+        // Localize all elements with data-i18n attributes
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (el.tagName === 'INPUT' && el.type === 'button') {
+                    el.value = chrome.i18n.getMessage(key);
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = chrome.i18n.getMessage(key);
+                } else {
+                    el.textContent = chrome.i18n.getMessage(key);
+                }
+            });
+            
+            const titleTag = document.querySelector('title[data-i18n]');
+            if (titleTag) {
+                document.title = chrome.i18n.getMessage(titleTag.getAttribute('data-i18n'));
+            }
+        });
+    </script>
 </body>
 </html>

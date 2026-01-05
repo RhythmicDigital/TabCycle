@@ -1,11 +1,418 @@
 {
     "extName": {
-    "message": "TabCycle",
-    "description": "The name of the extension"
+        "message": "TabCycle",
+        "description": "The name of the extension"
     },
     "extDescription": {
-    "message": "在分頁之間循環並安排分頁開啟。",
-    "description": "Description of the extension"
+        "message": "在分頁之間循環並安排分頁開啟。",
+        "description": "Description of the extension"
+    },
+    "popupTitle": {
+        "message": "TabCycle",
+        "description": "Popup title"
+    },
+    "calendarTitle": {
+        "message": "日曆",
+        "description": "Calendar button title"
+    },
+    "homeTitle": {
+        "message": "TabCycle.com 網站",
+        "description": "Home button title"
+    },
+    "settingsTitle": {
+        "message": "設定",
+        "description": "Settings button title"
+    },
+    "defaultCycleInterval": {
+        "message": "預設循環間隔：",
+        "description": "Label for default cycle interval"
+    },
+    "seconds": {
+        "message": "秒",
+        "description": "Seconds unit"
+    },
+    "start": {
+        "message": "開始",
+        "description": "Start button text"
+    },
+    "stop": {
+        "message": "停止",
+        "description": "Stop button text"
+    },
+    "cycleTabsIn": {
+        "message": "在以下位置循環分頁：",
+        "description": "Label for window selection"
+    },
+    "activeWindow": {
+        "message": "使用中視窗",
+        "description": "Active window option"
+    },
+    "resetAllToDefault": {
+        "message": "全部重設為預設值",
+        "description": "Reset all intervals button"
+    },
+    "resetAll": {
+        "message": "全部重設",
+        "description": "Reset all button"
+    },
+    "back": {
+        "message": "← 返回",
+        "description": "Back button text"
+    },
+    "scheduledTabs": {
+        "message": "已排程的分頁",
+        "description": "Scheduled tabs heading"
+    },
+    "openAll": {
+        "message": "全部開啟",
+        "description": "Open all scheduled tabs button"
+    },
+    "active": {
+        "message": "使用中",
+        "description": "Active table header"
+    },
+    "name": {
+        "message": "名稱",
+        "description": "Name table header"
+    },
+    "whenToOpenNext": {
+        "message": "下次開啟時間",
+        "description": "When to open next table header"
+    },
+    "action": {
+        "message": "動作",
+        "description": "Action table header"
+    },
+    "noTabsScheduledPopup": {
+        "message": "沒有排程的分頁。點擊「TabCycle 設定」以新增排程的分頁。",
+        "description": "Message when no tabs are scheduled in popup"
+    },
+    "additionalSettings": {
+        "message": "其他設定",
+        "description": "Additional settings heading"
+    },
+    "darkTheme": {
+        "message": "深色主題",
+        "description": "Dark theme toggle label"
+    },
+    "help": {
+        "message": "說明",
+        "description": "Help button text"
+    },
+    "showCustomCycleIntervals": {
+        "message": " 顯示自訂循環間隔",
+        "description": "Show custom cycle intervals button text"
+    },
+    "hideCustomCycleIntervals": {
+        "message": " 隱藏自訂循環間隔",
+        "description": "Hide custom cycle intervals button text"
+    },
+    "collapseDetails": {
+        "message": " 摺疊詳細資訊",
+        "description": "Collapse details button text"
+    },
+    "tabCycleSettings": {
+        "message": "TabCycle 設定",
+        "description": "TabCycle settings button"
+    },
+    "optionsTitle": {
+        "message": "TabCycle 設定",
+        "description": "Options page title"
+    },
+    "generalSettings": {
+        "message": "一般設定",
+        "description": "General settings nav item and heading"
+    },
+    "scheduledTabsNav": {
+        "message": "已排程的分頁",
+        "description": "Scheduled tabs nav item"
+    },
+    "tabCycling": {
+        "message": "分頁循環",
+        "description": "Tab cycling nav item"
+    },
+    "reloadTabOnCycle": {
+        "message": "每次循環時重新載入分頁",
+        "description": "Reload tab on cycle setting label"
+    },
+    "autoStartOnStartup": {
+        "message": "瀏覽器啟動時自動開始循環",
+        "description": "Auto start on startup setting label"
+    },
+    "skipPinnedTabs": {
+        "message": "循環時略過釘選的分頁",
+        "description": "Skip pinned tabs setting label"
+    },
+    "scheduledTabConfigurations": {
+        "message": "已排程分頁設定",
+        "description": "Scheduled tab configurations heading"
+    },
+    "save": {
+        "message": "💾 儲存",
+        "description": "Save button"
+    },
+    "changesSavedAutomatically": {
+        "message": "變更會自動儲存。",
+        "description": "Auto-save hint"
+    },
+    "url": {
+        "message": "URL",
+        "description": "URL table header"
+    },
+    "timeAndDays": {
+        "message": "時間與日期",
+        "description": "Time and days table header"
+    },
+    "autoCloseSeconds": {
+        "message": "自動關閉（秒）",
+        "description": "Auto-close table header"
+    },
+    "cycleIntervalSeconds": {
+        "message": "循環間隔（秒）",
+        "description": "Cycle interval table header"
+    },
+    "actions": {
+        "message": "動作",
+        "description": "Actions table header"
+    },
+    "noTabsScheduledOptions": {
+        "message": "沒有排程的分頁。點擊「新增分頁」以排程開啟分頁。",
+        "description": "Message when no tabs are scheduled in options"
+    },
+    "addNewTab": {
+        "message": "➕ 新增分頁",
+        "description": "Add new tab button"
+    },
+    "tabCyclingConfigurations": {
+        "message": "分頁循環設定",
+        "description": "Tab cycling configurations heading"
+    },
+    "emptyCycleIntervalsHint": {
+        "message": "空的循環間隔將設為預設循環間隔。",
+        "description": "Hint about empty cycle intervals"
+    },
+    "icon": {
+        "message": "圖示",
+        "description": "Icon table header"
+    },
+    "title": {
+        "message": "標題",
+        "description": "Title table header"
+    },
+    "tabName": {
+        "message": "分頁名稱",
+        "description": "Tab name placeholder"
+    },
+    "urlPlaceholder": {
+        "message": "https://example.com",
+        "description": "URL input placeholder"
+    },
+    "autofocusTabAfterOpening": {
+        "message": "開啟後自動聚焦分頁",
+        "description": "Autofocus checkbox label"
+    },
+    "autoStartCyclingAfterOpening": {
+        "message": "開啟後自動開始循環",
+        "description": "Auto-start cycling checkbox label"
+    },
+    "disableScheduleAfterOpening": {
+        "message": "開啟後停用排程 ",
+        "description": "Disable schedule checkbox label"
+    },
+    "repeat": {
+        "message": "重複",
+        "description": "Repeat checkbox label"
+    },
+    "interval": {
+        "message": "間隔",
+        "description": "Interval input placeholder"
+    },
+    "secondsUnit": {
+        "message": "秒",
+        "description": "Seconds unit capitalized"
+    },
+    "minutes": {
+        "message": "分鐘",
+        "description": "Minutes unit capitalized"
+    },
+    "hours": {
+        "message": "小時",
+        "description": "Hours unit capitalized"
+    },
+    "days": {
+        "message": "天",
+        "description": "Days unit capitalized"
+    },
+    "autoCloseLabel": {
+        "message": "自動關閉（秒）",
+        "description": "Auto-close label"
+    },
+    "cycleIntervalLabel": {
+        "message": "循環間隔（秒）",
+        "description": "Cycle interval label"
+    },
+    "open": {
+        "message": "開啟",
+        "description": "Open button"
+    },
+    "openTabNow": {
+        "message": "立即開啟分頁",
+        "description": "Open tab now button title"
+    },
+    "openThisTabNow": {
+        "message": "立即開啟此分頁",
+        "description": "Open this tab now button title"
+    },
+    "delete": {
+        "message": "X 刪除",
+        "description": "Delete button"
+    },
+    "deleteTitle": {
+        "message": "刪除",
+        "description": "Delete button title"
+    },
+    "openThisUrl": {
+        "message": "開啟此 URL",
+        "description": "Open URL button title"
+    },
+    "tabsCurrentlyOpen": {
+        "message": "目前開啟的分頁",
+        "description": "Tabs currently open heading"
+    },
+    "intervalSec": {
+        "message": "間隔（秒）：",
+        "description": "Interval label in playlist"
+    },
+    "window": {
+        "message": "視窗",
+        "description": "Window label"
+    },
+    "currentTab": {
+        "message": "目前分頁：",
+        "description": "Current tab label"
+    },
+    "noActiveTab": {
+        "message": "沒有使用中的分頁",
+        "description": "No active tab message"
+    },
+    "notScheduled": {
+        "message": "未排程",
+        "description": "Not scheduled message"
+    },
+    "openOn": {
+        "message": "開啟於",
+        "description": "Open on prefix"
+    },
+    "at": {
+        "message": "在",
+        "description": "At time separator"
+    },
+    "willReopenEvery": {
+        "message": "將每隔",
+        "description": "Will reopen every prefix"
+    },
+    "afterInitialLaunch": {
+        "message": "在初始啟動後重新開啟。",
+        "description": "After initial launch suffix"
+    },
+    "willOpenOnlyOnce": {
+        "message": "將在排程時間僅開啟一次。",
+        "description": "Will open only once message"
+    },
+    "autoCloseOff": {
+        "message": "自動關閉已關閉 – 將顯示直到循環。",
+        "description": "Auto-close off message"
+    },
+    "displayFor": {
+        "message": "顯示",
+        "description": "Display for prefix"
+    },
+    "second": {
+        "message": "秒",
+        "description": "Second singular"
+    },
+    "secondsPlural": {
+        "message": "秒",
+        "description": "Seconds plural"
+    },
+    "noValidDate": {
+        "message": "沒有有效日期",
+        "description": "No valid date message"
+    },
+    "welcomeToTabCycle": {
+        "message": "歡迎使用 TabCycle！",
+        "description": "Welcome heading"
+    },
+    "onboardingDescription": {
+        "message": "TabCycle 可協助您在開啟的分頁之間自動切換，非常適合在外部顯示器上監控儀表板、新聞摘要或即時更新。",
+        "description": "Onboarding description"
+    },
+    "gettingStarted": {
+        "message": "開始使用：",
+        "description": "Getting started heading"
+    },
+    "onboardingStep1": {
+        "message": "開啟您要循環瀏覽的分頁。",
+        "description": "Onboarding step 1"
+    },
+    "onboardingStep2": {
+        "message": "點擊工具列圖示並選擇開始。",
+        "description": "Onboarding step 2"
+    },
+    "onboardingStep3": {
+        "message": "要停止，請再次點擊圖示並選擇停止。",
+        "description": "Onboarding step 3"
+    },
+    "onboardingDefaultInterval": {
+        "message": "預設情況下，分頁每 15 秒切換一次（可設定），非常適合在外部顯示器（如電視）上使用。",
+        "description": "Onboarding default interval info"
+    },
+    "onboardingFullscreen": {
+        "message": "為了獲得最佳體驗，請將 Chrome 設為全螢幕模式：",
+        "description": "Onboarding fullscreen tip"
+    },
+    "onboardingWindowsLinux": {
+        "message": "Windows/Linux：按 F11",
+        "description": "Onboarding Windows/Linux fullscreen"
+    },
+    "onboardingMac": {
+        "message": "Mac：按 Fn + F",
+        "description": "Onboarding Mac fullscreen"
+    },
+    "whatsNew": {
+        "message": "TabCycle 的新功能",
+        "description": "What's new heading"
+    },
+    "newFeatures": {
+        "message": "新功能",
+        "description": "New features heading"
+    },
+    "bugFixes": {
+        "message": "錯誤修正",
+        "description": "Bug fixes heading"
+    },
+    "improvements": {
+        "message": "🔧 改進",
+        "description": "Improvements heading"
+    },
+    "openSettings": {
+        "message": "開啟設定",
+        "description": "Open settings button"
+    },
+    "close": {
+        "message": "關閉",
+        "description": "Close button"
+    },
+    "tabCycleUpdated": {
+        "message": "TabCycle 已更新！感謝您使用 TabCycle。",
+        "description": "Generic update message"
+    },
+    "saved": {
+        "message": "已儲存！",
+        "description": "Saved toast message"
+    },
+    "untitled": {
+        "message": "無標題",
+        "description": "Untitled tab title"
     }
 }
-

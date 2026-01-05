@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="assets/icons/settings-icon.png" type="image/png">
-<title>TabCycle Settings</title>
+<title data-i18n="optionsTitle">TabCycle Settings</title>
 <link rel="stylesheet" href="assets/css/options.css" />
 </head>
 <body>
-    <div id="toast" class="toast">Saved!</div>
+    <div id="toast" class="toast" data-i18n="saved">Saved!</div>
     <div class="settings-container">
         <!-- Sidebar Navigation -->
         <nav class="settings-sidebar">
@@ -19,15 +19,15 @@
             <ul class="sidebar-nav">
                 <li class="nav-item active" data-page="general">
                     <span class="nav-icon">⚙️</span>
-                    <span class="nav-text">General Settings</span>
+                    <span class="nav-text" data-i18n="generalSettings">General Settings</span>
                 </li>
                 <li class="nav-item" data-page="scheduled">
                     <span class="nav-icon">📅</span>
-                    <span class="nav-text">Scheduled Tabs</span>
+                    <span class="nav-text" data-i18n="scheduledTabsNav">Scheduled Tabs</span>
                 </li>
                 <li class="nav-item" data-page="cycling">
                     <span class="nav-icon">🔄</span>
-                    <span class="nav-text">Tab Cycling</span>
+                    <span class="nav-text" data-i18n="tabCycling">Tab Cycling</span>
                 </li>
             </ul>
         </nav>
@@ -36,10 +36,10 @@
         <main class="settings-content">
             <!-- General Settings Page -->
             <div class="settings-page active" id="page-general">
-                <h2>General Settings</h2>
+                <h2 data-i18n="generalSettings">General Settings</h2>
                 <div class="settings-card">
                     <div class="setting-row">
-                        <label for="reload-tab-toggle" class="setting-label">
+                        <label for="reload-tab-toggle" class="setting-label" data-i18n="reloadTabOnCycle">
                             Reload tab on cycle
                         </label>
                         <label class="switch">
@@ -48,7 +48,7 @@
                         </label>
                     </div>
                     <div class="setting-row">
-                        <label for="auto-start-toggle" class="setting-label">
+                        <label for="auto-start-toggle" class="setting-label" data-i18n="autoStartOnStartup">
                             Start cycling automatically on browser startup
                         </label>
                         <label class="switch">
@@ -57,7 +57,7 @@
                         </label>
                     </div>
                     <div class="setting-row">
-                        <label for="skip-pinned-toggle" class="setting-label">
+                        <label for="skip-pinned-toggle" class="setting-label" data-i18n="skipPinnedTabs">
                             Skip pinned tabs when cycling
                         </label>
                         <label class="switch">
@@ -70,44 +70,44 @@
 
             <!-- Scheduled Tab Configurations Page -->
             <div class="settings-page" id="page-scheduled">
-                <h2>Scheduled Tab Configurations</h2>
+                <h2 data-i18n="scheduledTabConfigurations">Scheduled Tab Configurations</h2>
                 <div class="page-actions">
-                    <button id="save-all">💾 Save</button>
-                    <span class="save-hint">Changes are saved automatically.</span>
+                    <button id="save-all" data-i18n="save">💾 Save</button>
+                    <span class="save-hint" data-i18n="changesSavedAutomatically">Changes are saved automatically.</span>
                 </div>
                 <div class="table-scroll" style="max-height: none; overflow-x: auto; overflow-y: visible;">
             <table id="scheduled-tabs">
                 <thead>
                 <tr>
-                    <th>Active</th>
-                    <th>Name</th>
-                    <th>URL</th>
-                    <th>Time & Days</th>
-                    <th>Timing Intervals (seconds)</th>
-                    <th>Actions</th>
+                    <th data-i18n="active">Active</th>
+                    <th data-i18n="name">Name</th>
+                    <th data-i18n="url">URL</th>
+                    <th data-i18n="timeAndDays">Time & Days</th>
+                    <th data-i18n="autoCloseSeconds">Timing Intervals (seconds)</th>
+                    <th data-i18n="actions">Actions</th>
                 </tr>
                 </thead>
                 <tbody id="schedule-body">
                 </tbody>
             </table>
                 </div>
-                <button id="add-schedule" class="add-button">➕ Add New Tab</button>
+                <button id="add-schedule" class="add-button" data-i18n="addNewTab">➕ Add New Tab</button>
     </div>
 
             <!-- Tab Cycling Configurations Page -->
             <div class="settings-page" id="page-cycling">
-            <h2>Tab Cycling Configurations</h2>
+            <h2 data-i18n="tabCyclingConfigurations">Tab Cycling Configurations</h2>
                 <div class="page-info">
-                <span>Empty cycle intervals will be set to the default cycle interval.</span>
+                <span data-i18n="emptyCycleIntervalsHint">Empty cycle intervals will be set to the default cycle interval.</span>
             </div>
                 <div class="table-scroll">
                     <table id="tab-intervals">
                         <thead>
                             <tr>
-                            <th>Icon</th>
-                            <th>Title</th>
-                            <th>URL</th>
-                            <th>Cycle Interval (seconds)</th>
+                            <th data-i18n="icon">Icon</th>
+                            <th data-i18n="title">Title</th>
+                            <th data-i18n="url">URL</th>
+                            <th data-i18n="cycleIntervalSeconds">Cycle Interval (seconds)</th>
                             </tr>
                         </thead>
                         <tbody id="tab-intervals-body"></tbody>
@@ -116,6 +116,27 @@
             </div>
         </main>
     </div>
+    <script>
+        // Localize all elements with data-i18n attributes
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (el.tagName === 'INPUT' && el.type === 'button') {
+                    el.value = chrome.i18n.getMessage(key);
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = chrome.i18n.getMessage(key);
+                } else {
+                    el.textContent = chrome.i18n.getMessage(key);
+                }
+            });
+            
+            const titleTag = document.querySelector('title[data-i18n]');
+            if (titleTag) {
+                document.title = chrome.i18n.getMessage(titleTag.getAttribute('data-i18n'));
+            }
+        });
+    </script>
     <script src="assets/js/options.js"></script>
     </body>
 </html>

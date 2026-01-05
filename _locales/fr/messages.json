@@ -1,11 +1,418 @@
 {
     "extName": {
-    "message": "TabCycle",
-    "description": "The name of the extension"
+        "message": "TabCycle",
+        "description": "The name of the extension"
     },
     "extDescription": {
-    "message": "Parcourir les onglets et planifier l'ouverture des onglets.",
-    "description": "Description of the extension"
+        "message": "Parcourir les onglets et planifier l'ouverture des onglets.",
+        "description": "Description of the extension"
+    },
+    "popupTitle": {
+        "message": "TabCycle",
+        "description": "Popup title"
+    },
+    "calendarTitle": {
+        "message": "Calendrier",
+        "description": "Calendar button title"
+    },
+    "homeTitle": {
+        "message": "Site web TabCycle.com",
+        "description": "Home button title"
+    },
+    "settingsTitle": {
+        "message": "Paramètres",
+        "description": "Settings button title"
+    },
+    "defaultCycleInterval": {
+        "message": "Intervalle de cycle par défaut :",
+        "description": "Label for default cycle interval"
+    },
+    "seconds": {
+        "message": "secondes",
+        "description": "Seconds unit"
+    },
+    "start": {
+        "message": "Démarrer",
+        "description": "Start button text"
+    },
+    "stop": {
+        "message": "Arrêter",
+        "description": "Stop button text"
+    },
+    "cycleTabsIn": {
+        "message": "Cycler les onglets dans :",
+        "description": "Label for window selection"
+    },
+    "activeWindow": {
+        "message": "Fenêtre active",
+        "description": "Active window option"
+    },
+    "resetAllToDefault": {
+        "message": "Réinitialiser tout par défaut",
+        "description": "Reset all intervals button"
+    },
+    "resetAll": {
+        "message": "Tout réinitialiser",
+        "description": "Reset all button"
+    },
+    "back": {
+        "message": "← Retour",
+        "description": "Back button text"
+    },
+    "scheduledTabs": {
+        "message": "Onglets programmés",
+        "description": "Scheduled tabs heading"
+    },
+    "openAll": {
+        "message": "Tout ouvrir",
+        "description": "Open all scheduled tabs button"
+    },
+    "active": {
+        "message": "Actif",
+        "description": "Active table header"
+    },
+    "name": {
+        "message": "Nom",
+        "description": "Name table header"
+    },
+    "whenToOpenNext": {
+        "message": "Quand ouvrir ensuite",
+        "description": "When to open next table header"
+    },
+    "action": {
+        "message": "Action",
+        "description": "Action table header"
+    },
+    "noTabsScheduledPopup": {
+        "message": "Aucun onglet programmé. Cliquez sur 'Paramètres TabCycle' pour ajouter des onglets programmés.",
+        "description": "Message when no tabs are scheduled in popup"
+    },
+    "additionalSettings": {
+        "message": "Paramètres supplémentaires",
+        "description": "Additional settings heading"
+    },
+    "darkTheme": {
+        "message": "Thème sombre",
+        "description": "Dark theme toggle label"
+    },
+    "help": {
+        "message": "Aide",
+        "description": "Help button text"
+    },
+    "showCustomCycleIntervals": {
+        "message": " Afficher les intervalles de cycle personnalisés",
+        "description": "Show custom cycle intervals button text"
+    },
+    "hideCustomCycleIntervals": {
+        "message": " Masquer les intervalles de cycle personnalisés",
+        "description": "Hide custom cycle intervals button text"
+    },
+    "collapseDetails": {
+        "message": " Réduire les détails",
+        "description": "Collapse details button text"
+    },
+    "tabCycleSettings": {
+        "message": "Paramètres TabCycle",
+        "description": "TabCycle settings button"
+    },
+    "optionsTitle": {
+        "message": "Paramètres TabCycle",
+        "description": "Options page title"
+    },
+    "generalSettings": {
+        "message": "Paramètres généraux",
+        "description": "General settings nav item and heading"
+    },
+    "scheduledTabsNav": {
+        "message": "Onglets programmés",
+        "description": "Scheduled tabs nav item"
+    },
+    "tabCycling": {
+        "message": "Cyclage des onglets",
+        "description": "Tab cycling nav item"
+    },
+    "reloadTabOnCycle": {
+        "message": "Recharger l'onglet à chaque cycle",
+        "description": "Reload tab on cycle setting label"
+    },
+    "autoStartOnStartup": {
+        "message": "Démarrer le cyclage automatiquement au démarrage du navigateur",
+        "description": "Auto start on startup setting label"
+    },
+    "skipPinnedTabs": {
+        "message": "Ignorer les onglets épinglés lors du cyclage",
+        "description": "Skip pinned tabs setting label"
+    },
+    "scheduledTabConfigurations": {
+        "message": "Configurations des onglets programmés",
+        "description": "Scheduled tab configurations heading"
+    },
+    "save": {
+        "message": "💾 Enregistrer",
+        "description": "Save button"
+    },
+    "changesSavedAutomatically": {
+        "message": "Les modifications sont enregistrées automatiquement.",
+        "description": "Auto-save hint"
+    },
+    "url": {
+        "message": "URL",
+        "description": "URL table header"
+    },
+    "timeAndDays": {
+        "message": "Heure et jours",
+        "description": "Time and days table header"
+    },
+    "autoCloseSeconds": {
+        "message": "Fermeture automatique (secondes)",
+        "description": "Auto-close table header"
+    },
+    "cycleIntervalSeconds": {
+        "message": "Intervalle de cycle (secondes)",
+        "description": "Cycle interval table header"
+    },
+    "actions": {
+        "message": "Actions",
+        "description": "Actions table header"
+    },
+    "noTabsScheduledOptions": {
+        "message": "Aucun onglet programmé. Cliquez sur 'Ajouter un nouvel onglet' pour programmer l'ouverture d'un onglet.",
+        "description": "Message when no tabs are scheduled in options"
+    },
+    "addNewTab": {
+        "message": "➕ Ajouter un nouvel onglet",
+        "description": "Add new tab button"
+    },
+    "tabCyclingConfigurations": {
+        "message": "Configurations du cyclage des onglets",
+        "description": "Tab cycling configurations heading"
+    },
+    "emptyCycleIntervalsHint": {
+        "message": "Les intervalles de cycle vides seront définis sur l'intervalle de cycle par défaut.",
+        "description": "Hint about empty cycle intervals"
+    },
+    "icon": {
+        "message": "Icône",
+        "description": "Icon table header"
+    },
+    "title": {
+        "message": "Titre",
+        "description": "Title table header"
+    },
+    "tabName": {
+        "message": "Nom de l'onglet",
+        "description": "Tab name placeholder"
+    },
+    "urlPlaceholder": {
+        "message": "https://exemple.com",
+        "description": "URL input placeholder"
+    },
+    "autofocusTabAfterOpening": {
+        "message": "Mettre l'onglet au focus automatiquement après l'ouverture",
+        "description": "Autofocus checkbox label"
+    },
+    "autoStartCyclingAfterOpening": {
+        "message": "Démarrer le cyclage automatiquement après l'ouverture",
+        "description": "Auto-start cycling checkbox label"
+    },
+    "disableScheduleAfterOpening": {
+        "message": "Désactiver la programmation après l'ouverture ",
+        "description": "Disable schedule checkbox label"
+    },
+    "repeat": {
+        "message": "Répéter",
+        "description": "Repeat checkbox label"
+    },
+    "interval": {
+        "message": "Intervalle",
+        "description": "Interval input placeholder"
+    },
+    "secondsUnit": {
+        "message": "Secondes",
+        "description": "Seconds unit capitalized"
+    },
+    "minutes": {
+        "message": "Minutes",
+        "description": "Minutes unit capitalized"
+    },
+    "hours": {
+        "message": "Heures",
+        "description": "Hours unit capitalized"
+    },
+    "days": {
+        "message": "Jours",
+        "description": "Days unit capitalized"
+    },
+    "autoCloseLabel": {
+        "message": "Fermeture automatique (s)",
+        "description": "Auto-close label"
+    },
+    "cycleIntervalLabel": {
+        "message": "Intervalle de cycle (s)",
+        "description": "Cycle interval label"
+    },
+    "open": {
+        "message": "Ouvrir",
+        "description": "Open button"
+    },
+    "openTabNow": {
+        "message": "Ouvrir l'onglet maintenant",
+        "description": "Open tab now button title"
+    },
+    "openThisTabNow": {
+        "message": "Ouvrir cet onglet maintenant",
+        "description": "Open this tab now button title"
+    },
+    "delete": {
+        "message": "X Supprimer",
+        "description": "Delete button"
+    },
+    "deleteTitle": {
+        "message": "Supprimer",
+        "description": "Delete button title"
+    },
+    "openThisUrl": {
+        "message": "Ouvrir cette URL",
+        "description": "Open URL button title"
+    },
+    "tabsCurrentlyOpen": {
+        "message": "Onglets actuellement ouverts",
+        "description": "Tabs currently open heading"
+    },
+    "intervalSec": {
+        "message": "Intervalle (sec) : ",
+        "description": "Interval label in playlist"
+    },
+    "window": {
+        "message": "Fenêtre",
+        "description": "Window label"
+    },
+    "currentTab": {
+        "message": "Onglet actuel :",
+        "description": "Current tab label"
+    },
+    "noActiveTab": {
+        "message": "Aucun onglet actif",
+        "description": "No active tab message"
+    },
+    "notScheduled": {
+        "message": "Non programmé",
+        "description": "Not scheduled message"
+    },
+    "openOn": {
+        "message": "Ouvrir le",
+        "description": "Open on prefix"
+    },
+    "at": {
+        "message": "à",
+        "description": "At time separator"
+    },
+    "willReopenEvery": {
+        "message": "Se rouvrira tous les",
+        "description": "Will reopen every prefix"
+    },
+    "afterInitialLaunch": {
+        "message": "après son lancement initial.",
+        "description": "After initial launch suffix"
+    },
+    "willOpenOnlyOnce": {
+        "message": "S'ouvrira une seule fois à l'heure programmée.",
+        "description": "Will open only once message"
+    },
+    "autoCloseOff": {
+        "message": "Fermeture automatique désactivée – s'affichera jusqu'à ce qu'il soit cyclé.",
+        "description": "Auto-close off message"
+    },
+    "displayFor": {
+        "message": "Afficher pendant",
+        "description": "Display for prefix"
+    },
+    "second": {
+        "message": "seconde",
+        "description": "Second singular"
+    },
+    "secondsPlural": {
+        "message": "secondes",
+        "description": "Seconds plural"
+    },
+    "noValidDate": {
+        "message": "Aucune date valide",
+        "description": "No valid date message"
+    },
+    "welcomeToTabCycle": {
+        "message": "Bienvenue dans TabCycle !",
+        "description": "Welcome heading"
+    },
+    "onboardingDescription": {
+        "message": "TabCycle vous aide à basculer automatiquement entre les onglets ouverts, parfait pour surveiller les tableaux de bord, les flux d'actualités ou les mises à jour en direct sur un écran externe.",
+        "description": "Onboarding description"
+    },
+    "gettingStarted": {
+        "message": "Pour commencer :",
+        "description": "Getting started heading"
+    },
+    "onboardingStep1": {
+        "message": "Ouvrez les onglets que vous souhaitez faire défiler.",
+        "description": "Onboarding step 1"
+    },
+    "onboardingStep2": {
+        "message": "Cliquez sur l'icône de la barre d'outils et sélectionnez Démarrer.",
+        "description": "Onboarding step 2"
+    },
+    "onboardingStep3": {
+        "message": "Pour arrêter, cliquez à nouveau sur l'icône et sélectionnez Arrêter.",
+        "description": "Onboarding step 3"
+    },
+    "onboardingDefaultInterval": {
+        "message": "Par défaut, les onglets changent toutes les 15 secondes (configurable), ce qui le rend idéal pour une utilisation sur un écran externe, comme une télévision.",
+        "description": "Onboarding default interval info"
+    },
+    "onboardingFullscreen": {
+        "message": "Pour la meilleure expérience, mettez Chrome en mode plein écran :",
+        "description": "Onboarding fullscreen tip"
+    },
+    "onboardingWindowsLinux": {
+        "message": "Windows/Linux : Appuyez sur F11",
+        "description": "Onboarding Windows/Linux fullscreen"
+    },
+    "onboardingMac": {
+        "message": "Mac : Appuyez sur Fn + F",
+        "description": "Onboarding Mac fullscreen"
+    },
+    "whatsNew": {
+        "message": "Nouveautés de TabCycle",
+        "description": "What's new heading"
+    },
+    "newFeatures": {
+        "message": "Nouvelles fonctionnalités",
+        "description": "New features heading"
+    },
+    "bugFixes": {
+        "message": "Corrections de bugs",
+        "description": "Bug fixes heading"
+    },
+    "improvements": {
+        "message": "🔧 Améliorations",
+        "description": "Improvements heading"
+    },
+    "openSettings": {
+        "message": "Ouvrir les paramètres",
+        "description": "Open settings button"
+    },
+    "close": {
+        "message": "Fermer",
+        "description": "Close button"
+    },
+    "tabCycleUpdated": {
+        "message": "TabCycle a été mis à jour ! Merci d'utiliser TabCycle.",
+        "description": "Generic update message"
+    },
+    "saved": {
+        "message": "Enregistré !",
+        "description": "Saved toast message"
+    },
+    "untitled": {
+        "message": "Sans titre",
+        "description": "Untitled tab title"
     }
 }
-

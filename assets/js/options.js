@@ -77,7 +77,7 @@ window.addEventListener('load', function() {
         const noTabsCell = document.createElement("td");
         noTabsCell.colSpan = 6;
         noTabsCell.className = "no-schedule-cell";
-        noTabsCell.textContent = "No tabs scheduled. Click 'Add New Tab' to schedule a tab to open.";
+        noTabsCell.textContent = chrome.i18n.getMessage("noTabsScheduledOptions");
             noTabsRow.appendChild(noTabsCell);
             scheduleBody.appendChild(noTabsRow);
         } else {
@@ -100,7 +100,7 @@ function updateNoTabsMessage() {
 
         const noTabsCell = document.createElement("td");
         noTabsCell.colSpan = 6;
-        noTabsCell.textContent = "No tabs scheduled. Click 'Add New Tab' to schedule a tab to open.";
+        noTabsCell.textContent = chrome.i18n.getMessage("noTabsScheduledOptions");
         noTabsCell.style.textAlign = "center";
         noTabsCell.style.padding = "12px";
         noTabsCell.style.color = "#000";
@@ -133,7 +133,7 @@ function loadTabIntervals() {
 
                 // Title
                 const titleCell = document.createElement("td");
-                titleCell.textContent = tab.title || "Untitled";
+                titleCell.textContent = tab.title || chrome.i18n.getMessage("untitled");
                 row.appendChild(titleCell);
 
                 // URL
@@ -164,7 +164,7 @@ function loadTabIntervals() {
                 const intervalInput = document.createElement("input");
                 intervalInput.type = "number";
                 intervalInput.min = "1";
-                intervalInput.placeholder = "Seconds";
+                intervalInput.placeholder = chrome.i18n.getMessage("secondsUnit");
                 // Use custom interval if exists, otherwise use default interval
                 const customInterval = tabIntervals[tab.id]?.value;
                 intervalInput.value = customInterval !== undefined ? customInterval : defaultInterval;
@@ -248,7 +248,7 @@ function createScheduleEntry(data = {
     const nameCell = document.createElement("td");
     const nameInput = document.createElement("input");
     nameInput.type = "text";
-    nameInput.placeholder = "Tab Name";
+    nameInput.placeholder = chrome.i18n.getMessage("tabName");
     nameInput.value = data.name || "";
     nameCell.appendChild(nameInput);
     row.appendChild(nameCell);
@@ -260,7 +260,7 @@ function createScheduleEntry(data = {
     
     const urlInput = document.createElement("input");
     urlInput.type = "url";
-    urlInput.placeholder = "https://example.com";
+    urlInput.placeholder = chrome.i18n.getMessage("urlPlaceholder");
     urlInput.value = data.url || "";
     
     // URL validation
@@ -280,7 +280,7 @@ function createScheduleEntry(data = {
     const openLinkBtn = document.createElement("button");
     openLinkBtn.className = "url-launch";
     openLinkBtn.textContent = "🔗";
-    openLinkBtn.title = "Open this URL";
+    openLinkBtn.title = chrome.i18n.getMessage("openThisUrl");
     openLinkBtn.onclick = () => {
         if (urlInput.value) {
             chrome.tabs.create({ url: urlInput.value });
@@ -317,21 +317,21 @@ function createScheduleEntry(data = {
     autofocusInput.type = "checkbox";
     autofocusInput.checked = data.focus;
     autofocusLabel.appendChild(autofocusInput);
-    autofocusLabel.append(" Autofocus tab after opening");
+    autofocusLabel.append(" " + chrome.i18n.getMessage("autofocusTabAfterOpening"));
 
     const autoStartLabel = document.createElement("label");
     const autoStartInput = document.createElement("input");
     autoStartInput.type = "checkbox";
     autoStartInput.checked = data.autoStartCycling || false;
     autoStartLabel.appendChild(autoStartInput);
-    autoStartLabel.append(" Auto-start cycling after opening");
+    autoStartLabel.append(" " + chrome.i18n.getMessage("autoStartCyclingAfterOpening"));
 
     const autodisableLabel = document.createElement("label");
     const autodisableInput = document.createElement("input");
     autodisableInput.type = "checkbox";
     autodisableInput.checked = data.autodisable;
     autodisableLabel.appendChild(autodisableInput);
-    autodisableLabel.append(" Disable schedule after opening ");
+    autodisableLabel.append(" " + chrome.i18n.getMessage("disableScheduleAfterOpening"));
 
     timeCell.appendChild(timeInput);
     timeCell.appendChild(daysDiv);
@@ -348,20 +348,26 @@ function createScheduleEntry(data = {
     repeatInput.type = "checkbox";
     repeatInput.checked = data.repeat;
     repeatLabel.appendChild(repeatInput);
-    repeatLabel.append(" Repeat");
+    repeatLabel.append(" " + chrome.i18n.getMessage("repeat"));
     
     const repeatEveryInput = document.createElement("input");
     repeatEveryInput.type = "number";
     repeatEveryInput.min = "1";
-    repeatEveryInput.placeholder = "Interval";
+    repeatEveryInput.placeholder = chrome.i18n.getMessage("interval");
     repeatEveryInput.value = data.repeatEvery || "";
     
     const repeatUnitSelect = document.createElement("select");
-    ["seconds", "minutes", "hours", "days"].forEach(unit => {
+    const units = [
+        { value: "seconds", key: "secondsUnit" },
+        { value: "minutes", key: "minutes" },
+        { value: "hours", key: "hours" },
+        { value: "days", key: "days" }
+    ];
+    units.forEach(unit => {
         const option = document.createElement("option");
-        option.value = unit;
-        option.textContent = unit.charAt(0).toUpperCase() + unit.slice(1);
-        if (data.repeatUnit === unit) option.selected = true;
+        option.value = unit.value;
+        option.textContent = chrome.i18n.getMessage(unit.key);
+        if (data.repeatUnit === unit.value) option.selected = true;
         repeatUnitSelect.appendChild(option);
     });
     
@@ -389,14 +395,14 @@ function createScheduleEntry(data = {
     autocloseWrapper.style.width = "100%";
     
     const autocloseLabel = document.createElement("label");
-    autocloseLabel.textContent = "Auto-Close (s)";
+    autocloseLabel.textContent = chrome.i18n.getMessage("autoCloseLabel");
     autocloseLabel.style.fontSize = "0.875rem";
     autocloseLabel.style.marginBottom = "4px";
     autocloseLabel.style.color = "#333";
     
     const autocloseInput = document.createElement("input");
     autocloseInput.type = "number";
-    autocloseInput.placeholder = "Seconds";
+    autocloseInput.placeholder = chrome.i18n.getMessage("secondsUnit");
     autocloseInput.value = data.autoclose || 0;
     autocloseInput.style.width = "100%";
     autocloseLabel.setAttribute("for", `autoclose-${index !== null ? index : Date.now()}`);
@@ -413,14 +419,14 @@ function createScheduleEntry(data = {
     cycleIntervalWrapper.style.width = "100%";
     
     const cycleIntervalLabel = document.createElement("label");
-    cycleIntervalLabel.textContent = "Cycle Interval (s)";
+    cycleIntervalLabel.textContent = chrome.i18n.getMessage("cycleIntervalLabel");
     cycleIntervalLabel.style.fontSize = "0.875rem";
     cycleIntervalLabel.style.marginBottom = "4px";
     cycleIntervalLabel.style.color = "#333";
     
     const cycleIntervalInput = document.createElement("input");
     cycleIntervalInput.type = "number";
-    cycleIntervalInput.placeholder = "Seconds";
+    cycleIntervalInput.placeholder = chrome.i18n.getMessage("secondsUnit");
     cycleIntervalInput.value = data.cycleInterval || 0;  // Default to 0 if no interval is provided
     cycleIntervalInput.style.width = "100%";
     cycleIntervalLabel.setAttribute("for", `cycleInterval-${index !== null ? index : Date.now()}`);
@@ -522,8 +528,8 @@ function createScheduleEntry(data = {
 
     // Open Button
     const openBtn = document.createElement("button");
-    openBtn.textContent = "Open";
-    openBtn.title = "Open this tab now";
+    openBtn.textContent = chrome.i18n.getMessage("open");
+    openBtn.title = chrome.i18n.getMessage("openThisTabNow");
     openBtn.style.marginBottom = "6px";
 
     openBtn.addEventListener("click", () => {
@@ -537,8 +543,8 @@ function createScheduleEntry(data = {
     });
     
     const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "X Delete";
-    deleteBtn.title = "Delete";
+    deleteBtn.textContent = chrome.i18n.getMessage("delete");
+    deleteBtn.title = chrome.i18n.getMessage("deleteTitle");
     deleteBtn.style.backgroundColor = "#dc3545"; // Bootstrap-style red
     deleteBtn.style.color = "white";
     deleteBtn.style.border = "none";
