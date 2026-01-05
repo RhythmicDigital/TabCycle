@@ -74,10 +74,10 @@ window.addEventListener('load', function() {
         if (schedules.length === 0) {
             const scheduleBody = document.querySelector("#schedule-body");
             const noTabsRow = document.createElement("tr");
-            const noTabsCell = document.createElement("td");
-            noTabsCell.colSpan = 7;
-            noTabsCell.className = "no-schedule-cell";
-            noTabsCell.textContent = "No tabs scheduled. Click 'Add New Tab' to schedule a tab to open.";
+        const noTabsCell = document.createElement("td");
+        noTabsCell.colSpan = 6;
+        noTabsCell.className = "no-schedule-cell";
+        noTabsCell.textContent = "No tabs scheduled. Click 'Add New Tab' to schedule a tab to open.";
             noTabsRow.appendChild(noTabsCell);
             scheduleBody.appendChild(noTabsRow);
         } else {
@@ -99,7 +99,7 @@ function updateNoTabsMessage() {
         noTabsRow.className = "no-schedule-row";
 
         const noTabsCell = document.createElement("td");
-        noTabsCell.colSpan = 7;
+        noTabsCell.colSpan = 6;
         noTabsCell.textContent = "No tabs scheduled. Click 'Add New Tab' to schedule a tab to open.";
         noTabsCell.style.textAlign = "center";
         noTabsCell.style.padding = "12px";
@@ -225,6 +225,7 @@ function createScheduleEntry(data = {
         repeatEvery: 0,        
         repeatUnit: "minutes", 
         focus: false,
+        autoStartCycling: false,
         cycleInterval: 0,
         lastOpened: 0,
         hasOpenedOnce: false
@@ -316,18 +317,26 @@ function createScheduleEntry(data = {
     autofocusInput.type = "checkbox";
     autofocusInput.checked = data.focus;
     autofocusLabel.appendChild(autofocusInput);
-    autofocusLabel.append(" Autofocus");
+    autofocusLabel.append(" Autofocus tab after opening");
+
+    const autoStartLabel = document.createElement("label");
+    const autoStartInput = document.createElement("input");
+    autoStartInput.type = "checkbox";
+    autoStartInput.checked = data.autoStartCycling || false;
+    autoStartLabel.appendChild(autoStartInput);
+    autoStartLabel.append(" Auto-start cycling after opening");
 
     const autodisableLabel = document.createElement("label");
     const autodisableInput = document.createElement("input");
     autodisableInput.type = "checkbox";
     autodisableInput.checked = data.autodisable;
     autodisableLabel.appendChild(autodisableInput);
-    autodisableLabel.append(" Autodisable");
+    autodisableLabel.append(" Disable schedule after opening ");
 
     timeCell.appendChild(timeInput);
     timeCell.appendChild(daysDiv);
     timeCell.appendChild(autofocusLabel);
+    timeCell.appendChild(autoStartLabel);
     timeCell.appendChild(autodisableLabel);
 
     // Repeat Options
@@ -366,33 +375,66 @@ function createScheduleEntry(data = {
 
     row.appendChild(timeCell);
 
-    // Auto-Close
+    // Auto-Close and Cycle Interval (combined in column 5)
     const autocloseCell = document.createElement("td");
+    const inputsContainer = document.createElement("div");
+    inputsContainer.style.display = "flex";
+    inputsContainer.style.flexDirection = "column";
+    inputsContainer.style.gap = "12px";
+    
+    // Auto-Close input with label
+    const autocloseWrapper = document.createElement("div");
+    autocloseWrapper.style.display = "flex";
+    autocloseWrapper.style.flexDirection = "column";
+    autocloseWrapper.style.width = "100%";
+    
+    const autocloseLabel = document.createElement("label");
+    autocloseLabel.textContent = "Auto-Close (s)";
+    autocloseLabel.style.fontSize = "0.875rem";
+    autocloseLabel.style.marginBottom = "4px";
+    autocloseLabel.style.color = "#333";
+    
     const autocloseInput = document.createElement("input");
     autocloseInput.type = "number";
     autocloseInput.placeholder = "Seconds";
     autocloseInput.value = data.autoclose || 0;
     autocloseInput.style.width = "100%";
-    autocloseInput.style.minWidth = "100px";
-    autocloseCell.appendChild(autocloseInput);
-    autocloseCell.style.width = "140px";
-    autocloseCell.style.minWidth = "140px";
-
-    row.appendChild(autocloseCell);
-
-    // Cycle Interval
-    const cycleIntervalCell = document.createElement("td");
+    autocloseLabel.setAttribute("for", `autoclose-${index !== null ? index : Date.now()}`);
+    autocloseInput.id = `autoclose-${index !== null ? index : Date.now()}`;
+    
+    autocloseWrapper.appendChild(autocloseLabel);
+    autocloseWrapper.appendChild(autocloseInput);
+    inputsContainer.appendChild(autocloseWrapper);
+    
+    // Cycle Interval input with label
+    const cycleIntervalWrapper = document.createElement("div");
+    cycleIntervalWrapper.style.display = "flex";
+    cycleIntervalWrapper.style.flexDirection = "column";
+    cycleIntervalWrapper.style.width = "100%";
+    
+    const cycleIntervalLabel = document.createElement("label");
+    cycleIntervalLabel.textContent = "Cycle Interval (s)";
+    cycleIntervalLabel.style.fontSize = "0.875rem";
+    cycleIntervalLabel.style.marginBottom = "4px";
+    cycleIntervalLabel.style.color = "#333";
+    
     const cycleIntervalInput = document.createElement("input");
     cycleIntervalInput.type = "number";
-    cycleIntervalInput.placeholder = "Cycle Interval (s)";
+    cycleIntervalInput.placeholder = "Seconds";
     cycleIntervalInput.value = data.cycleInterval || 0;  // Default to 0 if no interval is provided
     cycleIntervalInput.style.width = "100%";
-    cycleIntervalInput.style.minWidth = "100px";
-    cycleIntervalCell.appendChild(cycleIntervalInput);
-    cycleIntervalCell.style.width = "160px";
-    cycleIntervalCell.style.minWidth = "160px";
+    cycleIntervalLabel.setAttribute("for", `cycleInterval-${index !== null ? index : Date.now()}`);
+    cycleIntervalInput.id = `cycleInterval-${index !== null ? index : Date.now()}`;
+    
+    cycleIntervalWrapper.appendChild(cycleIntervalLabel);
+    cycleIntervalWrapper.appendChild(cycleIntervalInput);
+    inputsContainer.appendChild(cycleIntervalWrapper);
+    
+    autocloseCell.appendChild(inputsContainer);
+    autocloseCell.style.width = "160px";
+    autocloseCell.style.minWidth = "160px";
 
-    row.appendChild(cycleIntervalCell);
+    row.appendChild(autocloseCell);
 
     const save = (index, updatedEntry) => {
         chrome.storage.local.get("schedules", (res) => {
@@ -445,6 +487,7 @@ function createScheduleEntry(data = {
             autoclose: parseInt(autocloseInput.value) || 0,
             enabled: toggleEnabled.querySelector("input").checked,
             focus: autofocusInput.checked,
+            autoStartCycling: autoStartInput.checked,
             autodisable: autodisableInput.checked,
             cycleInterval: parseInt(cycleIntervalInput.value) || 0,  // Include cycle interval here
             repeat: repeatInput.checked,
@@ -463,6 +506,7 @@ function createScheduleEntry(data = {
     timeInput.addEventListener("input", updateSchedule);
     autocloseInput.addEventListener("input", updateSchedule);
     autofocusInput.addEventListener("change", updateSchedule);
+    autoStartInput.addEventListener("change", updateSchedule);
     autodisableInput.addEventListener("change", updateSchedule);
     cycleIntervalInput.addEventListener("input", updateSchedule);
     repeatInput.addEventListener("change", updateSchedule);
@@ -545,7 +589,8 @@ addButton.onclick = () => {
             days: [],
             autoclose: 0,
             autodisable: false,
-            focus: false
+            focus: false,
+            autoStartCycling: false
         });
         chrome.storage.local.set({ schedules }, () => {
             createScheduleEntry(schedules[schedules.length - 1], schedules.length - 1);
@@ -569,20 +614,24 @@ saveAllButton.onclick = () => {
         const time = row.querySelector("td:nth-child(4) input[type='time']").value;
         const fourthTd = row.querySelector("td:nth-child(4)");
         const checkboxes = fourthTd.querySelectorAll("input[type='checkbox']");
-        const focus = checkboxes[checkboxes.length - 2].checked;
-        const autodisable = checkboxes[checkboxes.length - 1].checked;
         const dayCheckboxes = row.querySelectorAll("td:nth-child(4) .days input[type='checkbox']");
         const days = [...dayCheckboxes].filter(cb => cb.checked).map(cb => parseInt(cb.dataset.index));
-        const repeat = checkboxes[checkboxes.length - 3].checked; // repeat checkbox is before focus/autodisable
+        // Checkboxes order: autofocus, autoStartCycling, autodisable, repeat
+        const focus = checkboxes[0]?.checked || false;
+        const autoStartCycling = checkboxes[1]?.checked || false;
+        const autodisable = checkboxes[2]?.checked || false;
+        const repeat = checkboxes[3]?.checked || false;
         const repeatEveryInput = fourthTd.querySelector("input[type='number']");
         const repeatEvery = parseInt(repeatEveryInput?.value) || 0;
         const repeatUnitSelect = fourthTd.querySelector("select");
         const repeatUnit = repeatUnitSelect?.value || "minutes";
-        const autoclose = parseInt(row.querySelector("td:nth-child(5) input").value) || 0;
-        const cycleInterval = parseInt(row.querySelector("td:nth-child(6) input").value) || 0;  // Get cycle interval value
+        const fifthTd = row.querySelector("td:nth-child(5)");
+        const inputs = fifthTd.querySelectorAll("input[type='number']");
+        const autoclose = parseInt(inputs[0]?.value) || 0;
+        const cycleInterval = parseInt(inputs[1]?.value) || 0;  // Get cycle interval value
         updatedSchedules.push({
             enabled, name, url, time, days,
-            autoclose, focus, autodisable, cycleInterval,
+            autoclose, focus, autoStartCycling, autodisable, cycleInterval,
             repeat, repeatEvery, repeatUnit
         });
     });

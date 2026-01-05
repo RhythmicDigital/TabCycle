@@ -3,7 +3,10 @@ const updates = {
     '2.5.0': {
         added: [
             'Reload tab on cycle.',
-            'Auto-start cycling on browser startup.'
+            'Auto-start cycling on browser startup.',
+            'Skip pinned tabs when cycling.',
+            'Auto-start tab cycling in schedule entry options.',
+
         ],
         fixed: [],
         changed: []

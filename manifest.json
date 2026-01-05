@@ -3,7 +3,7 @@
     "name": "TabCycle - Auto-Rotate Tabs for Dashboards and Wallboard Displays",
     "version": "2.5.0",
     "default_locale": "en",
-    "description": "Automatically switches browser tabs at a time of your choice, and schedules URLs to open at specific dates/times.",
+    "description": "Automatically cycles through browser tabs like a slideshow.",
     "permissions": ["storage", "alarms", "tabs"],
     "background": {
         "service_worker": "assets/js/background.js"

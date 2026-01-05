@@ -283,6 +283,11 @@ function scheduleTabs(alarm) {
         chrome.storage.local.set({ schedules });
         
         chrome.tabs.create({ url: entry.url, active: entry.focus || false}, (tab) => {
+            // Auto-start cycling if enabled
+            if (entry.autoStartCycling && !isCycling) {
+                startCycling();
+            }
+            
             if (entry.autoclose > 0) {
                 const alarmName = `autoclose-${tab.id}`;
                 // Add autoclose seconds to current time
@@ -455,6 +460,11 @@ chrome.alarms.onAlarm.addListener((alarm) => {
                         chrome.storage.local.set({ schedules: res.schedules });
                         
                         chrome.tabs.create({ url: entry.url, active: entry.focus || false }, (tab) => {
+                            // Auto-start cycling if enabled
+                            if (entry.autoStartCycling && !isCycling) {
+                                startCycling();
+                            }
+                            
                             if (entry.autoclose > 0) {
                                 chrome.alarms.create(`autoclose-${tab.id}`, {
                                     when: Date.now() + (entry.autoclose * 1000)
