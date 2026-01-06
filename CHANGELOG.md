@@ -4,10 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.5.1] - 2026-01-05
+### Fixed
+- Fix horizontal scrollbar in popup disappearing.
+- Fix "Reset All" button formatting in popup.
+
 ## [2.5.0] - 2026-01-03
 ### Added
 - Reload tab on cycle.
 - Auto-start cycling on browser startup.
+- Skip pinned tabs when cycling
+- Option to start cycling when a scheduled tab opens
 
 ## [2.4.4] - 2025-06-08
 ### Fixed
