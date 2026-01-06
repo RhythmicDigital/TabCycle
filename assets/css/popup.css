@@ -879,6 +879,12 @@ tbody tr {
   line-height: 1.5;
   padding: 6px 12px;
 }
+
+/* Override for reset button to use better styling */
+#reset-tab-intervals.popup-button.medium {
+  width: auto;
+  padding: 8px 16px;
+}
 .popup-button.large {
   width: 100%;
   font-size: 1rem;
@@ -957,9 +963,44 @@ tbody tr {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
+
 .playlist-header h3 {
   margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Reset All button styling */
+#reset-tab-intervals {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+#reset-tab-intervals:hover {
+  background-color: #005fa3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 122, 204, 0.3);
+}
+
+#reset-tab-intervals:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 #playlist-section ul {
@@ -1227,6 +1268,16 @@ body.dark .popup-button {
 body.dark .popup-button:hover {
   background-color: #3a3a3a;
   border-color: #777;
+}
+
+body.dark #reset-tab-intervals {
+  background-color: #007acc;
+  color: #fff;
+}
+
+body.dark #reset-tab-intervals:hover {
+  background-color: #005fa3;
+  box-shadow: 0 2px 6px rgba(0, 122, 204, 0.4);
 }
 
 .switch {
