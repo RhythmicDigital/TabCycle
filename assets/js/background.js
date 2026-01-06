@@ -27,11 +27,11 @@ chrome.runtime.onInstalled.addListener((details) => {
         chrome.tabs.create({
             url: chrome.runtime.getURL('onboarding.html')
         });
-    } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
+    } /* else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         chrome.tabs.create({
             url: chrome.runtime.getURL('update.html')
         });
-    }
+    } */
 });
 
 function updateInterval(newInterval) {
