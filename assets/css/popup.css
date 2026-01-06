@@ -120,20 +120,31 @@ body.dark .settings-box {
 /* Make playlist horizontal */
 .playlist-horizontal {
   display: flex;
-  overflow-x: auto;
+  overflow-x: scroll;
   gap: 10px;
   padding: 6px 0;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  scrollbar-width: auto;
   max-width: 100%;
 }
 
 .playlist-horizontal::-webkit-scrollbar {
-  height: 6px;
+  height: 8px;
+  display: block;
 }
-.playlist-horizontal::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
+
+.playlist-horizontal::-webkit-scrollbar-track {
+  background: #f1f1f1;
   border-radius: 4px;
+}
+
+.playlist-horizontal::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.playlist-horizontal::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .playlist-item {
@@ -919,8 +930,27 @@ tbody tr {
   max-height: 300px; /* Adjust as needed */
   overflow-y: auto;  /* Adds vertical scroll if needed */
   padding-right: 10px; /* To avoid scrollbar overlap */
-  overflow-x: auto;
+  overflow-x: scroll;
   white-space: nowrap;
+}
+
+#playlist-section::-webkit-scrollbar {
+  height: 8px;
+  display: block;
+}
+
+#playlist-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#playlist-section::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+#playlist-section::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .playlist-header {
@@ -1092,7 +1122,27 @@ tbody tr {
 
 #playlist-wrapper {
   transition: height 0.2s ease, opacity 0.2s ease;
-  overflow-x: auto;
+  overflow-x: scroll;
+  scrollbar-width: auto;
+}
+
+#playlist-wrapper::-webkit-scrollbar {
+  height: 8px;
+  display: block;
+}
+
+#playlist-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#playlist-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+#playlist-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 #scheduled-wrapper {
