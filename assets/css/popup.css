@@ -857,6 +857,24 @@ tbody tr {
   align-items: center;
   margin-top: 1em;
 }
+.feedback-link {
+  margin: 4px 0 10px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #4b5563;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.feedback-link:hover {
+  color: #1d4fa1;
+}
+body.dark .feedback-link {
+  color: #b0b8c4;
+}
+body.dark .feedback-link:hover {
+  color: #8ab4f8;
+}
+
 .popup-button {
   width: 160px;
   padding: 8px 16px;

@@ -111,6 +111,10 @@
         "message": " Collapse Details",
         "description": "Collapse details button text"
     },
+    "sendFeedback": {
+        "message": "Send feedback",
+        "description": "Link in the popup that opens the feedback form"
+    },
     "tabCycleSettings": {
         "message": "TabCycle Settings",
         "description": "TabCycle settings button"

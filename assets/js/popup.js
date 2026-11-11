@@ -73,6 +73,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const versionSpan = document.getElementById("version");
   const manifest = chrome.runtime.getManifest();
   versionSpan.textContent = `v${manifest.version}`;
+
+  // Feedback form link (opens in a new tab); pre-fills the form's version field
+  const feedbackLink = document.getElementById("feedback-link");
+  if (feedbackLink) {
+    feedbackLink.href =
+      "https://docs.google.com/forms/d/e/1FAIpQLSeehm37bWE-UuQUK4MbyvYRBhdde1BJ5n7X7CVsOUeE9LBbcA/viewform" +
+      `?usp=pp_url&entry.1980494835=${encodeURIComponent(manifest.version)}`;
+  }
   
   chrome.storage.local.get("isCollapsed", (data) => {
     const isCollapsed = data.isCollapsed;
